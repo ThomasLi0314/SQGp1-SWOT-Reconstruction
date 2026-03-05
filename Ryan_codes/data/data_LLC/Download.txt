@@ -1,0 +1,1 @@
+podaac-data-downloader -c MITgcm_LLC4320_Pre-SWOT_JPL_L4_CapeBasin_v1.0 -d ./data --start-date 2012-08-01T00:00:00Z --end-date 2012-08-15T00:00:00Z -e ""

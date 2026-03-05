@@ -1,0 +1,91 @@
+\documentclass[../SQG_notes.tex]{subfiles}
+
+\begin{document}
+
+\section{Optimization Methods}
+
+This chapter mainly introduces several optimization methods and their application with some benchmark.
+
+\subsection{Least Square Non Linear}
+
+In matlab we use 
+\begin{lstlisting}
+    lsqnonlin
+\end{lstlisting}
+To call the least square non linear solver. \par
+
+\subsubsection{The Problem}
+The primary problem the least square non linear solver is trying to solve is to minimize the sum of squares of a vector elements.
+\begin{equation}
+    \min_{\bm{x}} \sum_{i=1}^N (f_i(\bm{x}))^2
+\end{equation}
+where $f_i$ are functions of $\bm{x}$. For example we want to minimized the error at every single pixel of an image. So the solver inherently knows that we are summing squared errors. They actually knows more information than the standard quasi-newton method where we only know the scaler cost function which is the calculed sum of squares. 
+\subsubsection{Levenberg-Marquardt}
+The LM method is mainly used for solving generic curve-fitting problmes. The objective function is given by 
+\[ \bm{f}(\bm{\beta})\]
+And the goal is to minimized the sum of squares of the elements. 
+\[
+\begin{aligned}
+S(\boldsymbol{\beta}+\boldsymbol{\delta}) & \approx\|\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})-\mathbf{J} \boldsymbol{\delta}\|^2 \\
+& =[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})-\mathbf{J} \boldsymbol{\delta}]^{\mathrm{T}}[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})-\mathbf{J} \boldsymbol{\delta}] \\
+& =[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})]^{\mathrm{T}}[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})]-[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})]^{\mathrm{T}} \mathbf{J} \boldsymbol{\delta}-(\mathbf{J} \boldsymbol{\delta})^{\mathrm{T}}[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})]+\boldsymbol{\delta}^{\mathrm{T}} \mathbf{J}^{\mathrm{T}} \mathbf{J} \boldsymbol{\delta} \\
+& =[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})]^{\mathrm{T}}[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})]-2[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})]^{\mathrm{T}} \mathbf{J} \boldsymbol{\delta}+\boldsymbol{\delta}^{\mathrm{T}} \mathbf{J}^{\mathrm{T}} \mathbf{J} \boldsymbol{\delta} .
+\end{aligned}
+\]
+Take the derivative of this expression with respect to $\mathbf{\delta}$ and set the result to be 0 we have 
+\[
+\left(\mathbf{J}^{\mathrm{T}} \mathbf{J}\right) \boldsymbol{\delta}=\mathbf{J}^{\mathrm{T}}[\mathbf{y}-\mathbf{f}(\boldsymbol{\beta})],
+\]
+This tells us how to update the step $\bm{\delta}$. 
+\subsubsection{Trust-Region-Reflective}
+
+\subsubsection{Potential Problems}
+Since we are calculating the Jacobian of a very large input. In our case of the SWOT inversion, the objective (SSH) data has the size of potentially $400 \times 400$. So the Jacobian matrix will be of size $160000 \times 160000$. This would occupies a lot of memory and if the memory is not enough, the program will crash. \par
+However, if the grid size is small, then I believe the \text{lsqnonlin} function is significantly faster than the standard quasi-newton method. 
+
+\subsection{Newton Methods and Quasi-Newton Methods}
+In Ryan's note, he uses a L-BFGS function in Jax library. It provides hardware-accelerated and differentiable optimization algorithms in JAX. The core is the Quasi-Newton method for optimization.
+
+Traditionally, one uses the gradient descend, it saves memory but is not efficient. 
+
+The second order derivative also encodes information about minimum since the direction with positive second order derivative implies an increasing descend rate. However, computing the Hessian is requires $O(n^2)$ memory and $O(n^3)$ computation time.
+
+\[ f(x) \approx f(x_k) + \nabla f(x_k)^T (x - x_k) + \frac{1}{2} (x - x_k)^T H(x_k) (x - x_k)\]
+
+So the $x$ is defined so that the step minimize the quadratic approximation. So the derivative w.r.t $x$ should be 0. Then we have 
+\[
+\nabla f(x_k)^T + H(x_k) (x - x_k) = 0 
+\]
+Thus 
+\begin{equation}
+x - x_k = -H^{-1}(x_k) \nabla f(x_k)^T \label{eq:newton_step}
+\end{equation}
+
+The computation of that inverse is very time consuming given the parameter space very large. 
+
+\subsubsection{Quasi-Newton method}
+
+Strictly speaking, any method used to approximate that inverse of Hessian can be called a quasi-newton method. \par
+
+In Matlab, the default quasi-newton method has several feature. Sepecially, in the command window, there will be several variables displayed. 
+\begin{explanation}
+    \begin{itemize}
+        \item \textbf{Iter}: The number of iterations.
+        \item \textbf{f(x)}: The value of the objective function.
+        \item \textbf{Step-Size}: The is the factor in the following formula
+        \[ \mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \cdot \mathbf{p}_k\]
+        Where $\mathbf{p}_k$ is the search direction. Computed as the product of approximated hassian and the gradient as shown in Eq \ref{eq:newton_step}. The factor $\alpha_k$ is the key, it is the \textbf{step size} in the optimization. \par
+        \item \textbf{First Order Optimality}: This is the norm of the gradient. It is a measure of how close we are to the minimum. If it is close to 0, we are close to the minimum. 
+    \end{itemize}
+\end{explanation}
+
+\subsubsection{L-BFGS}
+In ryan's note, he uses a L-BFGS function in Jax library. It provides hardware-accelerated and differentiable optimization algorithms in JAX. The core is the Quasi-Newton method for optimization.\par
+Limited Memory BFGS uses a limited amount of computer memory to approximate the BFGS method. 
+
+\subsection{Our Problem}
+In our problem, the final objective is actually the surface sea height. We want if to match with the SSH from SWOT. In this case, the data is actually a giant matrix. However, since we are only optimizing the spectral of the SSH, but we actually wish the SSH to math with the SWOT data in the physical space. However, guranteed by the \textbf{Parseval's Theorem}. We have 
+\[\sum |SSH_{physical}|^2 \propto \sum |SSH_{spectral}|^2\]
+This means that minimizing the error in the spectral space is equivalent to minimizing the error in the physical space. 
+
+\end{document}

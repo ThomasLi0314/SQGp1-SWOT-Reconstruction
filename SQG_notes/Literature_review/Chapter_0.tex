@@ -1,0 +1,89 @@
+\documentclass[../SQG_notes.tex]{subfiles}
+
+\begin{document}
+    \section{Literature Review}
+    
+    \subsection{Ryan et.al.}
+    \textbf{Year: 2025} \par
+       The $\QGone$ model incorporates the first-order corrections that were neglected in the basic QG approximation. It essentially refines the QG equations by accounting for non-geostrophic (ageostrophic) flow components that are dependent on the Rossby number ($\epsilon$). \par
+    In \textbf{Chapter 2}, the $\text{QG}^{+1}$ model is introduced. In this paper, 
+    \[ N = f \equiv \text{Constant} \mn{page 8}\]
+    To facilitate the asymptotic approximation, a potential field is introduced. 
+    \[ \mbA = (-G, -F, \Phi)\]
+    By Incompressible condition we have 
+    \[ \mathbf{v} = \nabla_3 \times \mbA \mn{In this paper $\nabla_3$ is 3D gradient. 2D is just $\nabla$}\]
+    Some Physical implications of the model
+    \begin{enumerate}
+        \item Breaking Symmetry of QG model.
+        \item It Captures Cyclogeostrophic balance. 
+        \begin{center}
+        \scriptsize
+        \noindent
+        Cyclogeostrophic balance is a fundamental force balance approximation used in meteorology and physical oceanography to describe the motion of fluids (like air and water) in curved paths, where the Coriolis force is balanced by the pressure gradient force and the centrifugal force. It is an essential extension of the simpler geostrophic balance, which only considers straight flow. This balance is particularly important in systems with high curvature and strong winds, such as tropical cyclones (hurricanes/typhoons), mid-latitude low-pressure systems, and strong ocean eddies. The Governing Equation is 
+        \begin{equation}
+            \underbrace{f \mb{v}}_{\text{Coriolis Force}} + \underbrace{\frac{|\mb{v}|^2}{R}}_{\text{Centrifugal Force}} = \underbrace{-\frac{1}{\rho} \frac{\partial p}{\partial n}}_{\text{Pressure Gradient Force}}
+        \end{equation}
+        Here $n$ is the normal direction pointing toward the center of curvature.
+        \end{center}
+        \item Inclusiong of \textbf{Frontogenesis} \mn{Generation of Ocean Fronts}. 
+    \end{enumerate}
+    In \textbf{Chapter 3.} A simulation for $\QGone$ is conducted, showing several features:
+    \begin{enumerate}
+        \item More Vigorous due to captureing ageostrophic frontogenesis.
+        \item Since the Ageostrophic effects creates stronger surface velocity. Finer structure can be seen on surface using $\QGone$. \mn{See Figure 4 in page 24}.
+    \end{enumerate}
+    In summary, this paper provides a very detailed derivation to the $\QGone$ equation which is introduced more detailed in \ref{sec:QGone model}. This paper also demonstrate two simulation to show how $\QGone$ model captures balanced submesoscale dynamics and frontogenesis.
+
+    \begin{remark}
+        In my own derivation following Ryan's work in the later chapter, first half of the calcualtion is based on this paper, then I follow Ryan's note for the rest. 
+    \end{remark}
+
+    \subsubsection{Questions Regrading this Paper}
+
+    \begin{enumerate}
+        \item In page 10, Equation 15. How does the above derivation implies $F = G = 0$. Does this implies that 
+        \[ F^0 + \epsilon F^1 + \cdots = 0\]
+        Then each order term of $F$ and $G$ is 0. I just don't get the physical meaning here. 
+    \end{enumerate}
+
+    \subsection{J.Wang et.al. Reconstructing the Ocean's Interior from Surface Data}
+    \textbf{Year : 2013} \par
+
+    In the \textbf{Introduction}, the author discussed the current challenge of using SSH and SST \mn{Surface Sea Height and Surface Sea Temperature} measurement to reconstruct subsurface dynamics. \par
+    \begin{itemize}
+        \item     Traditional studies assume the signal is dominated by barotropic and first baroclinic modes. However, these modes are typically calculated by \textbf{assuming buoyancy anomalies vanish at the surface}. 
+        \item SQG theorys works as well. But it normaly assume $0$ interior PV. 
+    \end{itemize}
+    The author introduced the \textbf{Interior plus surface QG} method. It is quasigeostrophic. As introduced in Chapter 2: 
+    \begin{enumerate}
+        \item Surface buoyancy anomoly contributes to the surface part of streamfunction $\psi^s$ : 
+        \[
+        \begin{gathered}
+        \mathcal{L} \Psi+f_0+\beta y=Q, \\
+        \mathcal{L}=\left(\frac{\partial^2}{\partial x^2}+\frac{\partial^2}{\partial y^2}+\frac{\partial}{\partial z} \frac{f_0^2}{N^2} \frac{\partial}{\partial z}\right), \quad \text { and }-H<z<0,
+        \end{gathered}
+        \]
+        Governing equation is 
+        \[
+        \mathcal{L} \psi^s=0
+        \]
+        Essentially, this is same in the SQG theory where we assume $0$ interior PV. With boundary condition : 
+        \[
+        \frac{\partial}{\partial z} \psi^s(\mathbf{x}, z, t)=b(\mathbf{x}, z, t) / f_0 \quad \text { at } \quad z=0,-H,
+        \]
+        \item The interior part is governed by 
+        \[
+        \frac{\partial}{\partial z} \frac{f_0^2}{N^2} \frac{\partial}{\partial z} \hat{\psi}^i-\kappa^2 \hat{\psi}^i=\hat{q}^i \quad \text { with } \quad \frac{d \hat{\psi}^i}{d z}=0 \quad \text { at } \quad z=0,-H .
+        \]
+    \end{enumerate}
+    However, the interior $q^i$ is not clear. 
+    \begin{remark}
+        This is the essential modification of this isQG model. They project the interior induced PV equation onto baroclinic modes and \textbf{impose additional boundary conditions to deduce the gravest modes.}
+    \end{remark}
+
+    % \subsection{D.J. Muraki, C. Snyder & R. Rotunno 1999}
+
+    This is the origin of $\QGone$ theory. 
+
+    
+\end{document}

@@ -1,0 +1,204 @@
+\documentclass[../SQG_notes.tex]{subfiles}
+
+\begin{document}
+
+\section{Simulation Set Up}
+
+In this section, I briefly describe the simulation set up from the most trivial case all the way up to the true problem. We start with a brief introduction about how the inversion process proceed. 
+
+\subsection{Inversion Process (Primal Space)}
+From hydrostatic balance, the surface pressure is propotional to the surface sea height (SSH). 
+\begin{equation}
+    \eta = \frac{p\{z = 0\}}{g} \label{surface pressure}
+\end{equation}
+In all the QG models, the pressure is expanded asymptotically in the form of 
+\begin{equation}
+    p_{total} \sim p^0 + \epsilon p^1
+\end{equation}
+The first order pressure is directly related to the first order potential $\Phi^0$ by the formula 
+\[ p^0 = f\Phi^0\]
+As from geostrophic balance we have 
+\[ p^0_y = -f u^0 = -f \p_y \Phi^0 \qquad p^0_x = f v^0 = f \p_x \Phi^0\]
+Now we have 
+\[ \eta^0 = \frac{f\Phi^0}{g}\]
+Similarly from the first order correction we have 
+\[ \eta^1 = \frac{p^1}{g}\]
+So in general, considering the first order correction to the hydrostatic balance Eq \ref{surface pressure}, we have 
+\begin{equation}
+    \eta \sim \eta^0 + \epsilon\eta^1 = \frac{f\Phi^0}{g} +\epsilon \frac{p^1}{g} \label{True sea surface height}
+\end{equation}
+This is the equation 40 in Ryan's note. \par
+
+Now remember our goal is to use $\eta$ to invert for $\Phi^0$. What is the relationship between $p^1$ and $\Phi^0$? The relationship is given by eq \ref{cyclogeostrophic correction}. We copy it here 
+\[
+\boxed{\nabla^2 p^1 - f\zeta^1 = 2J(\Phi_x^0, \Phi_y^0)}
+\]
+Where $J$ is the Jacobian operator. This is a non-linear relationship, recall that $\zeta^1$ is related to the potentials via Eq \ref{vorticity in terms of potentials}. So 
+\[
+\nabla^2 p^1 = f\left(\nabla^2\Phi^1 + F_{zy}^1 - G_{zx}^1\right) + 2J(\Phi_x^0, \Phi_y^0) \quad \rightarrow \quad \Phi^{0,s} + \epsilon \mcalN(\Phi^{0,s}) = \eta(x,y)
+\]
+Where $\mcalN$ is a non-linear operator. Here the relationship between $\Phi^1, F^1$ and $G^1$ are given by Eq \ref{Fourier transform of Phi^1}, \ref{F^1 fourier transform} and \ref{G^1 fourier transform}. Then the whole inversion problem is clear. Given $\eta(x,y)$ we wish to find a $\Phi^{0,s}$ \mn{given $\Phi^{0,s}$ we can reconstruct the 3D $\Phi$ already. }
+
+\subsection{Inversion Process (Spectral Space)}
+
+The method introduced in the previous section isn't very efficient. As all the problem is solved mainlyin the physical space, however, the inversion would be much easier if we do it in the spectral space as all the calculation here would be 2D and thereform much easier. \par
+
+The key equation is still Eq \ref{cyclogeostrophic correction}. 
+\[ \nabla^2 p^1 - f \zeta^1 = 2J(\Phi_x^0, \Phi_y^0) \]
+We wish to obtain $p^1$ in the spectral space, then use Eq \ref{True sea surface height} to ge the surface SSH. 
+\[ \eta \sim \frac{f}{g} \Phi^{0,s} + \epsilon\frac{1}{g} p^{1, s} \]
+Since $p^{1,s}$ is related to the surface potential $\Phi^{0,s}$ nonlinearly, so we can write \mn{\color{red} I use the upper-index $s$ and $t$ interchangeably all for surface data. I should change this in the future. }
+\[ \eta(x,y)^s = \frac{f}{g}\Phi^{0,s} + \frac{\epsilon}{g} \mcalN(\Phi^{0,s}) \]
+and for the fourier component. 
+\[ \widehat{\eta^s} = \frac{f}{g}\widehat{\Phi}^{0,s} + \frac{\epsilon}{g}\mcalN(\widehat{\Phi}^{0,s})\]
+No we just need a why to get this $\mcalN$ operator. \par
+For the inversion process, we have the true SSH data 
+\[ \eta(x,y)^{true}\]
+And its fourier transform 
+\[ \widehat{\eta^{true}}\]
+Our goal is to find a $\Phi^{0,s}$ to minimize 
+\[ \sum_{k, l} \left( \hat{\eta} - \hat{\eta^{true}}\right)^2\]
+\subsubsection{First Order Potential}
+To get $\Phi^1$, we use Eq \ref{Fourier transform of Phi^1}. 
+\[  \boxed{\hat{\Phi}^1 =\underbrace{\frac{1}{2 \Bur} \widehat{\Phi_z^0 \Phi_z^0}}_{\text{Fourier transform of interior part}} - \underbrace{\frac{1}{\Bur} \widehat{\Phi_z^{0,t} \Phi_{zz}^{0,t}} \frac{e^{\mu z}}{\mu} + \frac{C_b}{\mu}e^{\mu z}}_{\text{Fourier transform of surface part}} }\]
+and to get $G^1$, similarly we use Eq \ref{G^1 fourier transform}. 
+\[ \boxed{    \widehat{G^1} = -\frac{1}{\Bur} \left( \widehat{\Phi_x^0\Phi_z^0} - \widehat{\Phi_x^{0,t}\Phi_z^{0,t}} e^{\mu z}\right) }\]
+and to get $F^1$, use Eq \ref{F^1 fourier transform} directly. 
+\[ \boxed{   \widehat{F^1} = \frac{1}{\Bur} \left( \widehat{\Phi_y^0\Phi_z^0} - \widehat{\Phi_y^{0,t}\Phi_z^{0,t}} e^{\mu z}\right)}\]
+\subsubsection{Surface Ageostrophic Vorticity}
+We will invert $p^1$ in the spectral space following Eq \ref{cyclogeostrophic correction}. The philosophy is that fourier transform is a linear operator, so whenever we see a product of two variables in the physical space, we need to complete this operation in the physical space first then do the fourier transform. \par
+
+From Eq \ref{vorticity in terms of potentials} we have 
+\begin{align*}
+    \widehat{\zeta}^1 &= \widehat{\nabla^2 \Phi^1} + \widehat{F_{yz}^1} - \widehat{G_{xz}^1} \mn{$\nabla^2$ here is 2D Laplacian operator}\\
+    &= -K^2 \widehat{\Phi^1} + ik_y \partial_z\widehat{F^1} - ik_x \partial_z\widehat{G^1}
+\end{align*}
+where $K^2 = k_x^2 + k_y^2$. We sepearate the derivation into interior part and surface part. 
+\begin{enumerate}
+    \item Interior part: 
+    \begin{enumerate}
+        \item For $\Phi^1$ its interior part is $\propto \Phi_z^0 \Phi_z^0 / 2$. So applying Laplacian to it we have 
+        \[ \|\nabla\Phi_z^0\|^2 + \Phi_z^0 \nabla^2 \Phi_z^0\]
+        \item From $F^1_{yz} - G_{xz}^1$, the interior part of $F^1$ is $\propto -\Phi_y^0 \Phi_z^0$ and the interior part of $G^1$ is $\propto \Phi_x^0 \Phi_z^0$. 
+        \[ \nabla \Phi^0 \cdot \nabla \Phi_{zz}^0 + \nabla^2 \Phi^0 \cdot \Phi_{zz}^0 + \underbrace{\|\nabla \Phi_z^0\|^2 + \Phi_z^0 \nabla^2 \Phi_z^0}_{\text{matches with interior part of $\Phi^1$}}\]
+    \end{enumerate}
+    \item Surface part : The surface part is already an exponential decay in the vertical direction starting from the surface first order potential fourier transform. 
+    \begin{enumerate}
+        \item For $\Phi^1$. The fourier transform of the surface part is $\propto -\widehat{\Phi_z^{0,t} \Phi_{zz}^{0,t}e^{\mu z} / \mu}$. So taking the laplacian is equivalent to mulfiply by $-K^2$ in the spectral space. Evaluate at $z = 0$, the exponential decay term is $1$.  
+        \[ \frac{1}{\Bur} \frac{K^2}{\mu} \widehat{\Phi_z^{0,t} \Phi_{zz}^{0,t}}\]
+        \item For $F^1_{yz} - G_{xz}^1$, the surface part of $\hat{F}_1$ is $\propto -\widehat{\Phi_y^{0,t} \Phi_z^{0,t}e^{\mu z}}$ and $\propto \widehat{\Phi_x^{0,t} \Phi_z^{0,t}e^{\mu z}}$. For $\hat{G}_1$. Then the surface part evaluate at $z = 0$ is 
+        \[ -\left( ik_y \mu \widehat{\Phi_y^{0,t} \Phi_z^{0,t}} + ik_x \mu \widehat{\Phi_x^{0,t} \Phi_z^{0,t}} \right)\]
+    \end{enumerate}
+\end{enumerate}
+\begin{formula}
+    So to sum up we have
+    \begin{equation}
+        \boxed{\widehat{\zeta^{1, s}} = \frac{1}{\Bur} \left[ I_1 + I_2 - I_3 \right]}
+    \end{equation}
+    where the three terms are defined as follows:
+    \begin{align}
+        I_1 &= \widehat{\nabla \Phi^{0,t} \cdot \nabla \Phi_{zz}^{0,t}} + \widehat{\nabla^2 \Phi^{0,t} \cdot \Phi_{zz}^{0,t}} + 2\widehat{\|\nabla \Phi_z^{0,t}\|^2} + 2\widehat{\Phi_z^{0,t} \nabla^2 \Phi_z^{0,t}} \\
+        I_2 &= \frac{K^2}{\mu}\widehat{\Phi_z^{0,t} \Phi_{zz}^{0,t}} \\
+        I_3 &= ik_y \mu \widehat{\Phi_y^{0,t} \Phi_z^{0,t}} + ik_x \mu \widehat{\Phi_x^{0,t} \Phi_z^{0,t}}
+    \end{align}
+    Everything here is evaluated at the surface $z = 0$. 
+\end{formula}
+
+\subsubsection{Surface Cyclogeostrophic Correction}
+We also need the cyclogeostrophic correction, evaluate at the surface $z = 0$. 
+\begin{formula}
+The result is simple, since derivative and fourier transform commute, we have 
+\begin{equation}
+\boxed{2J(\widehat{\Phi_x^{0,t}, \Phi_y^{0,t}})}
+\end{equation}
+\end{formula}
+
+\subsubsection{Derive the Velocity Field}
+Having the surface potential $\Phi^{0,t}$ we can derive the velocity field. 
+
+\subsection{Pre-Defined Velocity Fields}
+We start with a very simple case to play around with this model. \par
+
+\subsubsection{Toy Model Setup}
+The toy model start with a pre-defined potential $\Phi^0$. I use a random generator here and make the spectrum follow a power law with slope -3, which is typical for 3D turbulence. 
+\begin{lstlisting}
+rng(42); % Set seed for reproducibility
+% We produce a random $\Phi^0$ here. 
+k_peak = 4;
+slope = -3; % This slope matches the energy cascade in 3D turbulance
+phase = rand(N, N) * 2 * pi;
+amplitude = (K ./ k_peak).^(slope) .* exp(-(K./k_peak).^2);
+
+amplitude(1,1) = 0;
+% Compute the hat
+phi0_hat = amplitude .* exp(1i * phase);
+% Inverse transform to get to the physical space
+phi0_surf = real(ifft2(phi0_hat));
+% Normalize
+phi0_surf = phi0_surf / std(phi0_surf(:));
+\end{lstlisting}
+
+\subsubsection{Forward Process to get the true velocity fields}
+Then some functions are defined for different purposes.
+\begin{enumerate}
+    \item This function compute the 3D potential $\Phi^0$ from the surface data. The fourier components has an exponential decay in the vertical direction.
+    \begin{lstlisting}
+    phi0_3d_true = derive_phi0_3d(phi0_surf, K, z, Bu);
+    \end{lstlisting}
+    \item This function compute all the other first order potential $F^1, G^1$ and $\Phi^1$ using Eq \ref{Fourier transform of Phi^1}, \ref{F^1 fourier transform} and \ref{G^1 fourier transform}. A possion problem is solved in the spectral space.
+    \begin{lstlisting}
+    [F1_true, G1_true, Phi1_true] = calculate_higher_order(phi0_3d_true, K, kx, ky, z, Bu, N, nz);
+    \end{lstlisting}
+    \item This function computes the first order pressure $p^1$ using Eq \ref{cyclogeostrophic correction}.
+    \begin{lstlisting}
+    p1_true = solve_p1(f, dx, dz, kx, ky, z, Bu, Ro, phi0_3d_true, F1_true, G1_true, Phi1_true);
+    \end{lstlisting}
+    \item With all the data above, we can compute the true surface sea height using Eq \ref{True sea surface height}.
+    \begin{lstlisting}
+    p1_surf = p1_true(:, :, end);
+ssh_true = phi0_surf + Ro * p1_surf;
+    \end{lstlisting}
+    Here I use end because the $z$ corredinate starts from the bottom to the top. 
+\end{enumerate}
+Now we have the surface sea height. This is where the inversion starts.
+
+\subsubsection{Inversion Process solving the Optimization Problem}
+The inversion process starts with $\eta$. We make an initial guess for $\Phi^0$, in my code I use a zero initial $\Phi^0$. 
+\begin{lstlisting}
+phi0_guess_flat = zeros(N, N);
+\end{lstlisting}
+Then use the function 
+\begin{lstlisting}
+cost_func = @(phi0_flat) sqg_cost_function(phi0_flat, f, ssh_true, K, kx, ky, z, Bu, Ro, N, nz, dx, dz);
+\end{lstlisting}
+To compute the cost. In this \texttt{sqg\_cost\_function} basically do the same thing as the forward process, compute the 3D potential $\Phi^0$ first, then solve the Possion equation to get $F^1, G^1, \Phi^1$, then compute $p^1$ and finally compute the SSH. The difference is that at the final step, we compute the difference between the computed SSH and the true SSH to obtain the cost. 
+\begin{lstlisting}
+    % Cost
+    difference = ssh_guess - ssh_obs;
+    cost = sum(difference(:).^2);
+\end{lstlisting}
+This is the returned value of that function. I then use a built in Matlab toolbox to solve the optimization problem. 
+\begin{lstlisting}
+num_iteration = 20;
+options = optimoptions('fminunc', 'Display', 'iter', 'Algorithm', 'quasi-newton', 'MaxIterations', num_iteration);
+
+% Compute the cost function
+cost_func = @(phi0_flat) sqg_cost_function(phi0_flat, f, ssh_true, K, kx, ky, z, Bu, Ro, N, nz, dx, dz);
+
+% Run Optimization
+tic;
+try
+    [phi0_opt_flat, fval] = fminunc(cost_func, phi0_guess_flat, options);
+    phi0_surf_opt = reshape(phi0_opt_flat, N, N);
+    disp('Optimization Complete.');
+catch ME
+    disp('Optimization failed or interrupted.');
+    disp(ME.message);
+    phi0_surf_opt = reshape(phi0_guess_flat, N, N); % Fallback
+end
+toc;
+\end{lstlisting}
+Then plot the results. \mn{{\color{red} The plot part is writen by Gemini}}
+
+
+\end{document}

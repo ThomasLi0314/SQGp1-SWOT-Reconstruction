@@ -1,0 +1,254 @@
+\documentclass[../SQG_notes.tex]{subfiles}
+
+\begin{document}
+    \section{Quasi-Geostrophic Equations}
+    In this section, I introduce some basic equations in QG theories. Building a foundation for SQG, eSQG and other variations introduced later. The analysis is already in a \textbf{stratified ocean}. 
+    \subsection{Governing Equations}
+    Momentum Equation
+    \begin{equation}
+        \frac{\D \bu}{\D t} + \mathbf{f} \times \bu = -\frac{\nabla p}{\rho} \label{momentum equation}
+    \end{equation}
+    Mass Conservation 
+    \begin{equation}
+        \frac{\D \rho}{\D t} + \rho \nabla \cdot \mathbf{v} = 0
+    \end{equation}
+    We are in a \textbf{stratified ocean}. Breaking the total state variables into a "hydrostatic reference state" (which depends only on $z$) and a "dynamic perturbation" (which moves the fluid): 
+    
+    \begin{equation}
+        \rho = \tdrho(z) + \rho_1(x,y,z,t) \label{stratified density}
+    \end{equation}
+    and 
+    \begin{equation}
+        p = p_0(z) + p_1(x,y,z,t) \label{stratifies pressure}
+    \end{equation}
+    Then RHS of Eq \ref{momentum equation} becomes 
+    \[ -\frac{1}{\rho} \nabla p_1 \sim -\frac{1}{\rho_0}\nabla p_1\]
+    Define the \textbf{Kinematic Pressure}
+    \begin{equation}
+        \phi = \frac{p_1}{\rho_0}
+    \end{equation}
+    Momentum Equation becomes 
+    \begin{equation}
+        \boxed{\frac{\mathrm{D} \bu}{\mathrm{D} t}+\mathbf{f} \times \bu = -\nabla \phi} \label{momentum equation2}
+    \end{equation}
+    Hydrostatic balance is a state of equilibrium in a fluid where the upward force of pressure exactly balances the downward force of gravity.
+    \begin{equation}
+        -g\tdrho = \frac{\dr p_0}{\dr z} \label{hydrostatic balance}
+    \end{equation}
+    \subsubsection{Continuity Equation Approximatio}
+    The genearl continuity equation can always be expressed as 
+    \[ \frac{\D \rho}{\D t} + \rho \nabla \cdot u = 0\]
+    In Ocean, we assume that the fluid is \textbf{Incompressible} and wrote
+    \[ \frac{\D \rho}{\D t} = 0 \qquad \nabla \cdot \bu = 0\]
+    In Atmosphere, we use the \textbf{Anelastic Assumption}
+    Then the mass conservation yeilds
+    \[ \frac{\p \rho_1}{\p t} + \nabla \cdot ((\tdrho + \rho_1)\mathbf{v}) = 0 \qrq \boxed{\nabla \cdot (\tdrho\mathbf{v}) = 0} \]
+    \begin{remark}
+        Here we drop the $\p_t \rho_1$ term under the \textbf{Anelastic assumption}. Essentially by eliminating this partial derivative, we assume the fluid is anelastic, so sound wave is not supported \mn{or less important} in the system. However, this approximation is normally used for \textbf{deep atmospheric or stellar convertion} where density $\tilde{\rho}$ changes significantly with height.
+    \end{remark}
+    For Oceanography, 
+    Next we define the Buoyancy :
+    \begin{equation}
+        b = -g\frac{\rho}{\bar{\rho}_0} \label{Buoyancy}
+    \end{equation}
+    Here $\brho$ is a constant reference density. The the divergent free condition implies 
+    \begin{equation}
+        \boxed{\frac{\D b}{\D t} = 0} \label{Buoyancy equation}
+    \end{equation}
+    And thus the Hydrostatic balance equation Eq \ref{hydrostatic balance} implies 
+    \begin{equation}
+        \boxed{\frac{\p \phi}{\p z} = b}
+    \end{equation}
+    All the Boxed Equation together is the \textbf{Hydrostatic Anelastic Equations for Stratified Flow}. If we consider the perturbation of Buoyancy 
+    \[ b = \tilde{b}(z) + b_1(x,y,z,t)\]
+    Expand Eq \ref{Buoyancy equation} can be writen as 
+    \begin{equation}
+        \boxed{\frac{\D b_1}{\D t} + w \frac{\dr b}{\dr z} = 0}  \mn{this is the more familiar buoyancy equation we see in lecture}
+    \end{equation}
+    In a more familiar form we define 
+    \[ N^2 = \frac{\dr b}{\dr z} = -g \frac{\tdrho_z}{\brho}\]
+    Which is the \textbf{Brunt Vasala Frequency}.
+
+    \subsection{Scaling Analysis}
+    To simplify our equation, we introduce some scalings. 
+    \[
+    (x, y) \sim L, \quad(u, v) \sim U, \quad t \sim \frac{L}{U}, \quad z \sim H, \quad f \sim f_0
+    \]
+    Introduce the \textbf{Rosbby Number}:
+    \begin{equation}
+        \text{Ro} = \frac{U}{f_0 L}
+    \end{equation}
+    Now let $\phi = \tilde{\phi}(z) + \phi_1(x,y,z,t)$. Then since the gradient in Eq \ref{momentum equation} is horizontal, we can replace $\phi$ by $\phi_1$. Now suppose  
+    \[
+    |\mathbf{f} \times \bu| \sim\left|\nabla \phi_1\right|
+    \]
+    From Hydrostatic balance we have 
+    \[ b \sim \frac{f_0 UL}{H}\]
+    Then 
+    \[
+    \frac{\left(\partial b^{\prime} / \partial z\right)}{N^2}\sim \frac{f_0 UL}{(HN)^2} \sim R o \frac{L^2}{L_d^2}
+    \]
+    Where we have the deformation radius as a function of $z$. 
+    \[ L_d = \frac{NH}{f_0}\]
+    Introduce dimensionless variables
+    \[
+(\widehat{u}, \widehat{v})=U^{-1}(u, v) \quad \widehat{w}=\frac{L}{U H} w, \quad \widehat{f}=f_0^{-1} f, \quad \widehat{\phi}=\frac{\phi_1}{f_0 U L}, \quad \widehat{b}=\frac{H}{f_0 U L} b_1
+    \]
+    \begin{remark}
+    We then have dimensionless equation of motion for Atmosphere or Ocean.  \mn{often people drop the hat for simplicity. However in the first derivation I keep everything with a hat.}
+        \begin{align}
+            \text{Momentum Equation} :\quad & \Ro \frac{\D \widehat{\bu}}{\D t} + \hatf \times \hatu = -\nabla \hatphi \label{dimensionless momentum equation} \\
+            \text{Buoyancy Equation} :\quad& \Ro \frac{\D \widehat{b}}{\D t} + \Bu \widehat{w} = 0 \label{dimensionless buoyancy equation}\\
+            \text{Hydrostatic Balance}:\quad & \frac{\p \hatphi}{\p \widehat{z}} = \widehat{b} \label{dimensionless hydrostatic balance equation}\\
+            \text{Continuity(\textbf{Atmosphere})} :\quad& \widehat{\nabla} \cdot \hatu + \frac{1}{\tdrho} \frac{\p \tdrho \widehat{w}}{\p \widehat{z}} = 0 \label{dimensionless continuity equation for atmosphere}\\ 
+            \text{Continuity(\textbf{Oceanography})} : \quad& \widehat{\nabla} \cdot \widehat{\bu} = 0 \label{dimensionless contiuity equation for ocean}
+        \end{align}
+        From now on I will drop the hats.
+    \end{remark}
+    \subsection{Quasi-Geostrophic Potential Vorticity Equation}
+    We now derive the Quasi-Geostrophic Potential Vorticity Equations. Starting from asymptotic expansions \mn{hat is dropped}
+    \[ \bu = (u, v, w) = \bu_g + \Ro \bu_1 \quad \phi = \phi_0 + \Ro \phi_1 \quad b = b_0 + \Ro b_1\]
+    Here we consider the $\beta$ effect. 
+    \[ \mathbf{f} = f_0 \bm{k} + \beta y \bm{k}\]
+    Let $\epsilon = \Ro$.
+    \textbf{Momentum Equation} : \par
+    The $O(1)$ momentum equation gives the Geostrophic balance
+    \begin{equation}
+        f_0 \bm{k} \times \bu_g = -\nabla \phi_0 \label{Geostrophic balance equation}
+    \end{equation}
+    
+    Immediately this implies 
+    \[ \nabla \cdot \bu_g = 0\]
+    And $O(\epsilon)$ is 
+    \begin{equation}
+        \frac{\D_g \bu_g}{\D t} + \beta y \bm{k} \times \bu_g  + f_0\bm{k} \times \bu_1 = - \nabla \phi_1 \label{first order momentum equation}
+    \end{equation}
+    Here $\D_g$ is the geostrophic material derivative
+    \[ \D_g = \p_t + \bu_g \cdot \nabla \]
+    \textbf{Mass Equation} : \par
+    Since geostrophic velocity is divergent free then $O(1)$ mass equations is 
+    \[ \frac{\p \tdrho w_0}{\p z} = 0\]
+    and $O(\epsilon)$, 
+    \begin{equation}
+        \nabla \cdot \bu_1 + \frac{1}{\tdrho} \left( \frac{\p \tdrho w_1}{\p z}\right) = 0 \label{first order mass equation}
+    \end{equation}
+    \textbf{Buoyancy Equation} : \par
+    $O(1)$ :
+    \[ \Bu w_0 = 0\]
+    and $O(\epsilon)$:
+    \begin{equation}
+        \frac{\D_g b_0}{\D t} + \Bu w_1 = 0 \label{first order buoyancy equation}
+    \end{equation}
+    Now we take the \textbf{Curl} of Eq \ref{first order momentum equation}, note that 
+    \[\nabla \times (\bm{k} \times \bu_1) = \bm{k}\nabla \cdot \bu_1 - \underbrace{u_1 \nabla \cdot \bm{k}}_{=0} + \underbrace{(\bu_1 \cdot \nabla)\bm{k}}_{ =0} - \underbrace{(\bm{k} \cdot \nabla)\bu_1}_{=0} = \bm{k} \nabla \cdot \bu_1\] 
+    Define the geostrophic vorticity : 
+    \[ \xi_g = \nabla \times \bu_g\]
+    Then Eq \ref{first order momentum equation} becomes 
+    \begin{align*}
+        \frac{\D_g \xi_g}{\D t} + \beta v_0 &= -f_0\nabla \cdot \bu_1 \mn{this equation is already in $\bm{k}$ direction so the unit vector is dropped} \\
+        \intertext{Plug in Eq \ref{first order mass equation},}
+        &= \frac{f_0}{\tdrho} \frac{\p \tdrho w_1}{\p z}\\
+        \intertext{Plug in Eq \ref{first order buoyancy equation} to replace $w_1$} 
+        &= -\frac{f_0}{\tdrho} \underbrace{\frac{\p}{\p_z} \left(\tdrho \Bung \frac{\D_g b_0}{\D t}\right)}_{\equiv I}
+    \end{align*}
+    Now we examine $I$, normally in QG theory, we assume $L_d$ is a constant. Thought from its definition, $N$ cound actually depends on $z$. Since $\nabla \tdrho =0$, we can put the first two terms into the material derivative. \mn{Here we use the fact that $N$ is constant}
+    \[ I = \p_z \left(\tdrho \Bung\right) \Dg{b_0} + \tdrho \Bung \p_z \Dg{b_0} \equiv I_1 + I_2\]
+    Let's go back to the Hydrostatic balance equation, \mn{we haven't use it yet.}
+    For $O(1)$:
+    \[ \frac{\p \phi_0}{\p z} = b_0 \quad + \quad f_0 \bm{k} \times \bu_g = -\nabla \phi_0 \qrq \bm{k} \times \frac{\p \bu_g}{\p z} = -\frac{\nabla b_0}{f_0}\]
+    Then 
+    \[ I_2  =\tdrho \Bung \p_z \Dg{b_0}= \tdrho \Bung \left[\Dg{\p_z b_0} + \underbrace{\p_z \bu_g \cdot \nabla b_0}_{ = 0}\right]\]
+    Therefore
+    \[ I = \p_z \left(\tdrho \Bung\right) \Dg{b_0} +  \tdrho \Bung \Dg{\p_z b_0} = \frac{\D_g}{\D t} \left[\frac{\p}{\p_z}\left(\tdrho \Bung b_0\right)\right]\]
+    Then evantually we have 
+    \begin{equation}
+        \frac{\D_g}{\D t} \left[ \xi_g + f + \frac{f_0}{\tdrho}\frac{\p}{\p_z}\left(\tdrho \Bung b_0\right)\right] = 0 \label{temp QGPV}
+    \end{equation}
+    We can rewrite this equation using Streamfunction in a more simple form. Recall Eq \ref{Buoyancy equation}, we have 
+    \[ b_0 = \frac{\p \phi_0}{\p z}\]
+    From Eq \ref{Geostrophic balance equation}, the Kinematic Pressure can be expressed in terms of geostrophic streamfunction 
+    \[ u_g = -\p_y \psi_g \quad v_g = \p_x \psi_g \qquad \text{where} \quad \boxed{\phi_0 = f_0 \psi_g} \qrq \xi_g = \nabla^2 \psi_g\]
+    Then Eq \ref{temp QGPV} becomes 
+    \begin{equation}
+         \frac{\D_g}{\D t} \left[ \nabla^2 \psi_g + f + \frac{f_0^2}{\tdrho}\frac{\p}{\p_z}\left(\tdrho \Bung \frac{\p \psi_g}{\p z}\right)\right] = 0 \label{dimensionless QGPV}
+    \end{equation}
+    Restore the dimensions
+    \begin{equation}
+        \frac{\D g}{\D t} \left[ \nabla^2 \psi_g + f + \frac{f_0^2}{\tilde{\rho}}\frac{\p }{\p_z} \left( \frac{\tdrho}{N^2} \frac{\p \psi}{\p z}\right)\right] = 0 \label{QGPV equation}
+    \end{equation}
+
+    \subsection{Ertel PV Conservation}
+
+    \begin{theorem}
+        The Ertel PV, denoted usually as $q$ or $Q$, is defined as:
+        \begin{equation}
+        Q = \frac{\boldsymbol{\omega}_a \cdot \nabla \psi}{\rho} \label{Ertel PV}
+        \end{equation}Where:
+        \begin{enumerate}
+            \item $\boldsymbol{\omega}_a = \nabla \times \mathbf{u} + 2\boldsymbol{\Omega}$ is the absolute vorticity.
+            \item $\psi$ is a conserved scalar (like potential temperature $\theta$ or density).
+            \item $\rho$ is the density.
+        \end{enumerate}
+    \end{theorem}
+    The derivation starts from the Momentum Equation
+    \[\frac{\D \mathbf{u}}{\D t} + \frac{1}{\rho}\nabla p = -2\boldsymbol{\Omega} \times \mathbf{u}\]
+    Use the vector identity then take Curl
+    \[ (\mathbf{u} \cdot \nabla)\mathbf{u} = \nabla(\frac{1}{2}\mathbf{u}^2) - \mathbf{u} \times (\nabla \times \mathbf{u})\]
+    We have 
+    \[\frac{\partial \boldsymbol{\omega}_a}{\partial t} - \nabla \times (\mathbf{u} \times \boldsymbol{\omega}_a) = \nabla \times \left( -\frac{1}{\rho}\nabla p \right)\]
+    Then apply the vector identity
+    \[\nabla \times (\frac{1}{\rho}\nabla p) = \frac{1}{\rho^2} \nabla \rho \times \nabla p\]
+    We get 
+    \begin{equation}
+        \frac{\D \boldsymbol{\omega}_a}{\D t} = (\boldsymbol{\omega}_a \cdot \nabla)\mathbf{u} - \boldsymbol{\omega}_a (\nabla \cdot \mathbf{u}) + \frac{\nabla \rho \times \nabla p}{\rho^2}
+    \end{equation}
+
+    \section{Surface Quasi-Geostrophic Equations}
+    The surface Quasi-Geostrophic Equation takes the problem to the next step, how could we retrive the interior motion from surface measurements such as SSH and SST. Recall the Buoyancy Equation
+    \begin{equation}
+        \frac{\D b_1}{\D t} + wN^2 = 0
+    \end{equation}
+    At the surface, $z = \eta$, the boundary condition yeilds that $w = 0$. We denote the surface buoyancy as $b_s$ and surface velocity $\bu_s$ Then 
+    \[ \frac{\p b_s}{\p t} + \bu_s \cdot \nabla b_s = 0\]
+    and 
+    \[ b_s = f_0 \frac{\p \psi}{\p z}\Big|_{z = 0}\]
+    \begin{explanation}
+    The critical principle of SQG is to view surface buoyancy as a PV sheet. Since 
+    \[ \int_{0}^{\epsilon} f + \nabla^2 \psi_g +  \frac{f_0^2}{\tilde{\rho}}\frac{\p }{\p_z} \left( \frac{\tdrho}{N^2} \frac{\p \psi}{\p z}\right) \mathrm{d} z = 0\]
+    Then we impose a boundary condition
+    \[ \frac{\p \psi}{\p z} \Big|_{z = \epsilon} = \frac{b_s}{f_0} \qrq \int_{0}^{\epsilon} \frac{b_s}{f_0} = \frac{\p \psi}{\p z}\Big|^\epsilon_0\]
+    Compare the latter witht the integral, by defining 
+    \[ q_{\text{SQG}} = \nabla^2\psi_g + f + \frac{f_0^2}{\tilde{\rho}}\frac{\p }{\p_z} \left( \frac{\tdrho}{N^2} \frac{\p \psi}{\p z}\right)  + \frac{b_s}{f_0} \delta(z) \]
+    We have 
+    \[ \frac{\D q}{\D t} = 0 \qquad \frac{\p \psi}{\p z} = 0\]
+    Then the surface buoyancy appears in the QGPV equation naturally, it is as if adding an additional PV sheet at the surface. This inspires us to seperate the surface induced dynamics and interior dynamics. 
+    \end{explanation}
+    \textbf{Interior Dynamics}
+    \[\begin{cases}
+        q &= \nabla^2 \psi + f + \dfrac{f_0^2}{\tilde{\rho}}\dfrac{\p }{\p_z} \left( \dfrac{\tdrho}{N^2} \dfrac{\p \psi}{\p z}\right) \\
+        f_0 \dfrac{\p \psi}{\p z}\Big|_{z = 0} &= 0 \\
+        \dfrac{\D q}{\D t} &= 0
+    \end{cases}\]
+    \subsection{Surface Buoyancy Induced Dynamics}
+    \textbf{Surface Dynamics}, this is the Surface Quasi-Geostrophic Dynamics: 
+    \[ \begin{cases}
+        q &= \nabla^2 \psi + f + \dfrac{f_0^2}{\tilde{\rho}}\dfrac{\p }{\p_z} \left( \dfrac{\tdrho}{N^2} \dfrac{\p \psi}{\p z}\right) = 0 \mn{no interior Potential vorticity} \\
+        f_0 \dfrac{\p \psi}{\p z}\Big|_{z = 0} &= b_s \\
+        \dfrac{\D b_s}{\D t} &= 0
+    \end{cases}\]
+    The key assumption for SQG theories is that all the Potential vorticity is injected into the system by surface buoyancy. \mn{surface buoyancy is actually first order, so it is also called surface buoyancy anomoly in some context. }\par
+
+    The horizontal Fourier coefficients of the solution is 
+    \[ \hat{\Phi}^0(k,l,z) = A e^{\mu z}\]
+    Where
+    \[ \mu = \frac{NK}{f}\sqrt{\Bur} \qquad K^2 = k^2 + l^2\]
+    
+    
+    \subsection{Retriving Vertical Velocity}
+
+
+
+
+
+   
+\end{document}

@@ -1,0 +1,227 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[left=1in,right=1in,top=1in,bottom=1in]{geometry}
+\usepackage{amsfonts,amsmath}
+\usepackage{graphicx,float}
+\usepackage{natbib}
+% \usepackage{yhmath}
+% -----------------------------------
+\usepackage{hyperref}\href{}{}
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue,
+  linkbordercolor={0 0 1}
+}
+% -----------------------------------
+\title{Reconstructing dynamical fields from SWOT altimetry measurement using SQG\pl}
+\author{Ryan Sh\`iji\'e D\`u}
+\date{\today}
+% -----------------------------------
+\setlength{\parindent}{0.2in}
+\setlength{\parskip}{0.0in}
+% -----------------------------------
+\newcommand{\pl}{\textsuperscript{+1}}
+\newcommand{\Ro}{\{\epsilon\}}
+\newcommand{\Busqrt}{\left\{\frac{\epsilon}{F}\right\}}
+\newcommand{\Ubsqrt}{\left\{\frac{F}{\epsilon}\right\}}
+\newcommand{\Ub}{\left\{\frac{F^2}{\epsilon^2}\right\}}
+\newcommand{\Bu}{\left\{\frac{\epsilon^2}{F^2}\right\}}
+\newcommand{\Bt}{\left\{\gamma\epsilon\right\}}
+\newcommand{\Gm}{\left\{\gamma\right\}}
+% \newcommand{\Gg}{\left\{\text{Gg}\right\}}
+\DeclareMathOperator{\argmax}{argmax}
+\DeclareMathOperator{\argmin}{argmin}
+\begin{document}
+\input{command.tex}
+% -----------------------------------
+
+
+\maketitle
+
+\section{Introduction}
+SWOT offers swath observation of sea surface height (SSH) with unprecedented resolution \citep{CalliesWu_19,Chelton_24} (maybe some other papers that're less skeptical). It is desirable to infer from SSH the three-dimensional dynamics of the upper ocean, in particular the vertical component of vorticity ($\zeta$) and the vertical velocity ($w$). Because of the refined resolution of the SWOT SSH measurement, there is hope that it can accurately measure the submesoscale, defined as being below $O(100 \text{km})$. 
+
+Since the advent of satellite altimetry, geostrophic balance has been used to reconstruct surface velocity from SSH measurement \citep{Stammer_97}. \cite{LapeyreKlein_06} proposed the effective surface quasi-geostrophic (eSQG) framework to allow for three-dimensional reconstruction of velocity in three dimensions, in particular vertical velocity. Based on the quasi-geostrophic (QG) theory, they argue that the surface buoyancy is correlated to the interior PV. The velocity from PV inversion is then a partial cancellation between the contribution due to surface buoyancy and interior PV. One can make a simplification and relate the surface buoyancy and the three-dimensional dynamical fields using the SQG model, assuming interior PV zero \citep{Blumen_78,Johnson_78}. The original eSQG method uses the surface buoyancy observation. More relevant to SWOT, \cite{KleinEtAl_09} apply eSQG to SSH observation and found that it works well for inverting vorticity and vertical velocity for the upper ocean. \cite{CarliEtAl_24} found that eSQG works well on simulated results in the SWOT regime.
+
+\cite{WangEtAl_13} further extended the eSQG method to include interior PV effects. By using sea surface buoyancy and SSH data, they were able to capture a few interior modes that have no sea surface buoyancy signature. This method is now commonly called the interior $+$ surface quasigeostrophic (isQG) method. 
+\cite{LiuEtAl_19} combines the two methods, arguing that isQG is more effective for larger mesoscales while eSQG is more appropriate for the small submesoscales. 
+
+However, all the above procedures assume the quasi-geostrophic (QG) model. However, it is known that the submesoscale is significantly ageostrophic, with the flow Rossby number $\zeta/f>1$ and order $f$ convergence ($\delta/f=O(1)$) \citep{ShcherbinaEtAl_13,BalwadaEtAl_18}. QG theory cannot capture these ageostrophic effects without violating its asymptotic assumptions. This manifests in the fact that geostrophic balanced performance badly for inverting surface velocity from SSH at small scales and ageostrophic regions \citep{XiaoEtAl_23}. \cite{PenvenEtAl_14}'s method accounts for part of the ageostrophic effects by using the cyclogeostrophic balance in the barotropic setting. They show that it improves the reconstruction of surface velocity compared to geostrophic balance. For vertical velocity, \cite{PonteEtAl_13} further improves on the vertical velocity diagnostics in the mixed-layer by adding diabatic mixing terms in the omega-equation \citep{GiordaniEtAl_06}. 
+% \cite{LiuEtAl_21} shows that this improves vertical velocity diagnostics in the mixed-layer in a SWOT-like setting.
+
+Not all of the dynamical fields are the target of reconstruction, or even possible. \cite{BalwadaEtAl_18} show that submesoscale vertical velocity that is ``balanced'' largely accounts for the vertical subduction of tracers. In contrast, inertial-gravity waves' (IGW) signal can dominate the vertical velocity, but its high time-frequency oscillatory behavior means it does not contribute to the advection of tracers. Additionally, near-inertial waves, signified by their near $f$ frequency and large horizontal extent, do not have an SSH signal. Therefore they are not detectable by SSH measurement of SWOT. The imprint of IGW on the SSH starts to become important at the horizontal resolution that SWOT is able to resolve. The IGW continuum called the Garret-Munk spectrum at small scales has a -2 slope SSH signal, compared to the -4 -- -5 slope SSH signal of what is expected for balanced motion \citep{GarrettMunk_72}. Therefore eventually the IGW signal will dominate the balanced flow signal in the SSH. Additionally, tide signals can have a large contribution to the SSH as well \citep{CalliesWu_19}. IGW poses challenges to retrieving balanced motions from SWOT observations since the low-in-time resolution of SWOT samples precludes time filtering as a tool to remove waves. 
+
+Here we propose a new method to invert three-dimensional velocity fields from SSH data. It is based on the QG\pl~model \citep{Vallis_96a,MurakiEtAl_99}, an asymptotic model that includes the balanced but ageostrophic effects of flow with finite Rossby numbers. It can capture the typical phenomena of the submesoscale surface ocean in nonlinear simulations, including surface restratification, vorticity asymmetry, and particle dispersion \citep{HakimEtAl_02,MaaloulyEtAl_23,DuEtAl_24}. This suggests that it has the potential to capture the ageostrophic submesoscale component of the dynamical fields from SSH measurement that resolves the submesoscale. As a first sign of this, at the sea surface, horizontal velocity is no longer in geostrophic balance with the SSH in the higher Rossby number correction. QG\pl~include cyclogeostrophic balance in its correction. It also account for the baroclinicity in depth. For the three-dimensional velocities, we follow the assumption of eSQG, that interior PV is zero. We call this method eSQG\pl. 
+
+Because of the nonlinear ageostrophic high-order-in-Rossby corrections in the inversions, eSQG\pl~needs to solve a nonlinear equation to match the model SSH field to the provided observed data. Additionally, we need to deal with errors in the observed SSH signal due to SWOT error as well as the aforementioned IGW ``contamination'' of the balanced signal. To deal with both challenges, we pose the model-data matching problem as a Bayesian inverse problem where we can account for the ``errors'' in the data, as well as any priors we know about the SSH fields. The task of solving the nonlinear problem instead is translated to minimizing the mismatch between the model and data, using automatic differentiation of the model to implement a gradient-based optimization algorithm. 
+
+The paper is organized as follows...
+
+\section{The effective SQG\pl~model}
+Here we develop the effective SQG\pl~model for reconstructing three-dimensional velocities from SSH measurement. For this, we first summarize the QG\pl~model in the form with zero interior PV, SQG\pl~\citep{MurakiEtAl_99,HakimEtAl_02,DuEtAl_24}. We focus on the representation of pressure in SQG\pl, which at the sea surface is proportional to sea surface height (SSH). 
+
+In the QG\pl~model, all physical variables are represented using potentials, which are then expanded asymptotically in the Rossby number. 
+\begin{subequations}\label{eq:var_expan}
+\begin{align}
+    u &= -\Phi^0_y-\Ro(\Phi^1_y+F^1_z),\\
+    v &= \Phi^0_x+\Ro(\Phi^1_x-G^1_z),\\
+    w &= 0+\Ro(F_x^1+G_y^1),\label{eq:w_expan}\\
+    b &= f\Phi^0_z+\Ro f\left(\Phi^1_z+\Bu \frac{N^2}{f^2} G^1_x- \Bu \frac{N^2}{f^2} F^1_y\right).
+\end{align}
+\end{subequations}
+For application to SSH inversion, we need surface pressure, which is proportional to SSH. We have from the hydrostatic balance
+\begin{align}
+    &p_z = b\\
+    &\eta = \frac{p(z=0)}{g}.
+\end{align}
+For now, we introduced more unknowns in the form of potentials. QG\pl~is a balanced model in the sense that, all potentials can be inverted from PV and surface buoyancy. Assuming PV to be zero (SQG\pl), all physical variables only depend on the information at the sea surface. This physics-based simplification is crucial for reconstruction. 
+
+Under the assumption of the SQG model, we can reconstruct the QG-level velocities given sea surface measurements. For $\Phi^0$, one needs to solve the homogeneous problem\footnote{$\nabla$ is only horizontal gradient in this note.}
+\begin{align}
+    \mathcal{L}(\Phi^0) = N^2\nabla^2 \Phi^0+\Ub f^2\Phi^0_{zz} = 0
+    &\quad \qdt{w/} f\Phi^0_z = b.
+\end{align}
+The horizontal Fourier coefficients of the solution is,
+\begin{align}
+    \hat\Phi^0(k,\ell,z) =  \frac{\hat b^{0,\mathrm{t}}}{f\mu}\exp\left(\mu z\right)\label{eq:SQG_fromb}
+\end{align}
+where we define a scaled wave number
+\begin{align}\label{eq:SQG_scalewavenum}
+    \mu := \left\{\sqrt{\text{Bu}}\right\}\frac{N}{f}K
+\end{align}
+and the superscript $\text{t}$ denoting evaluating at the sea surface $z=0$.
+This is the model behind eSQG of \cite{LapeyreKlein_06}. If one has SSH observations instead, we can use the form of $\Phi^0$ above and match the surface Dirichlet boundary condition
+\begin{align}
+    \hat\Phi^0(k,\ell,z) &= \hat\Phi^{0,\text{t}}\exp\left(\mu z\right)\\
+    &= \frac{g}{f}\hat\eta^\text{data}(k,\ell)\exp\left(\mu z\right).
+\end{align}
+This recovers the model used in \cite{KleinEtAl_09}. 
+
+eSQG has been successful in reconstructing velocity from SSH in the mesoscale. For SWOT, with the possibility of observing the submesoscale, it would be desirable to include ageostrophic balanced effects by using the QG\pl~model.
+For using SSH, pressure is the essential physical field, It has not received much focus in previous QG\pl~studies, which focus on the evolution of the model and pressure is not a prognostic variable. The original paper of \cite{MurakiEtAl_99} states a three-dimensional elliptic problem for pressure, with the QG-level $\Phi^0$ on the right-hand side. \cite{Vallis_96a}'s alternative derivation relates the horizontal Laplacian of pressure to other variables 
+\begin{align}
+    &\nabla^2 p^1-f\zeta^1 = 2J(\Phi^0_x,\Phi^0_y).\label{eq:p_eq}
+    % \\\thus &\nabla^2 p^1 = f(\nabla^2\Phi^1+F^1_{yz}-G^1_{xz})+2J(\Phi^0_x,\Phi^0_y)
+\end{align}
+It models the cyclo-geostrophic balance asymptotically. Including cyclo-geostrophic balance has been shown to improve diagnosing surface velocity from SSH \citep{PenvenEtAl_14}. We prefer to use \eqref{eq:p_eq} since it is an elliptic problem in the horizontal only. It turns out we can obtain the first-order vorticity by doing calculations only in two dimensions as well. Therefore, the entire calculation can be done just at the surface and avoid three-dimensional computation. 
+
+The higher order corrections for vorticity in QG\pl~is
+\begin{align}
+    \zeta^1 = \nabla^2\Phi^1+F^1_{yz}-G^1_{xz}.
+\end{align}
+For the potentials, we need to solve the elliptic problems where quadratics of $\Phi^0$ are on the right-hand side
+\begin{align}
+    &\mathcal{L}(\Phi^1)
+    = \Ub \frac{f}{N^2} \left[\Ub f^2\Phi^0_{zz}\Phi^0_{zz}+N^2|\nabla\Phi^0_z|^2\right],\label{eq:Phi_inv}\\
+    &\quad \qdt{w/} \Phi^{1}_z(z=0) = 0.
+\end{align}
+and
+\begin{align}
+    &\mathcal{L}(F^1) = \Ub 2f J(\Phi_z^0,\Phi_x^0),\label{eq:F_inv}\\
+    &\mathcal{L}(G^1) = \Ub 2f J(\Phi_z^0,\Phi_y^0),\label{eq:G_inv}\\
+    &\quad \qdt{w/} F^1(z=0)=G^1(z=0)=0.
+\end{align}
+
+\begin{align}
+    &\mathcal{L}(F^1) = \Ub 2f J(\Phi_z^0,\Phi_x^0),\label{eq:F_inv}\\
+    &\quad \qdt{w/} F^1(z=0)=0.
+\end{align}
+All potential has decay conditions for infinite depth. Luckily, under the assumption of SQG, we can avoid three-dimensional elliptic inversions to save computational costs. This is due to the ingenious solutions from \citet[Appendix A]{HakimEtAl_02} where the right-hand sides of the inversion problems have convenient specific ``interior'' solutions. Then, one only needs to solve the surface problem to correct for the boundary condition. We demonstrate this for $\Phi^1$.
+\begin{align}
+    \Phi^1_\text{int} = \frac{1}{2}\Ub \frac{f}{N^2} \Phi^0_z\Phi^0_z
+\end{align}
+gives
+\begin{align}
+    &\mathcal{L}(\Phi^1_\text{int})
+    = \Ub \frac{f}{N^2} \left[\Ub f^2\Phi^0_{zz}\Phi^0_{zz}+N^2|\nabla\Phi^0_z|^2\right].
+\end{align}
+Then it remains to solve the surface problem
+\begin{align}
+    &\mathcal{L}(\Phi^1_\text{sur})
+    = 0,\\
+    &\quad \qdt{w/} \Phi^{1,\text{t}}_{\text{sur},z} = C_b-\Ub \frac{f}{N^2}\Phi^{0,\text{t}}_z\Phi^{0,\text{t}}_{zz}.
+\end{align}
+This problem is now familiar to us and has a solution with the Fourier modes
+\begin{align}
+    \hat\Phi^1_\text{sur} = \left[C_b-\Ub \frac{f}{N^2}\widehat{\Phi^{0,\text{t}}_z\Phi^{0,\text{t}}_{zz}}\right]\frac{1}{\mu}\exp\left(\mu z\right)
+\end{align}
+where we remind the reader $\mu = \Busqrt NK/f$ is the scaled wavenumber \eqref{eq:SQG_scalewavenum}. A careful reader might worry about the division by zero at the $(k,\ell)=(0,0)$ mode. However, this is exactly the function of $C_b$, and our choice ensures the horizontal mean of the terms in the square bracket is zero. For the rest of the section, we suppress $C_b$ to save on notation. Confusion will not arise as long as one remembers that whenever there is a division by $\mu$, we always set the $(k,\ell)=(0,0)$ mode to zero. All together the solution for the SQG\pl~version of \eqref{eq:PV1_inv} is
+\begin{align}
+    \hat\Phi^1 = \hat\Phi^1_\text{int}+\hat\Phi^1_\text{sur}.
+\end{align}
+
+Following the same technique we have for $F^1$ and $G^1$
+\begin{align}
+    \hat{F}^1 &= \hat{F}^1_\text{int} + \hat{F}^1_\text{sur}\\
+    &= \Ub \frac{f}{N^2} \left[\widehat{\Phi^0_y\Phi^0_z} - \widehat{\Phi^{0,\text{t}}_y\Phi^{0,\text{t}}_z} \exp\left(\mu z\right) \right],\\
+    \hat{G}^1 &= \hat{G}^1_\text{int} + \hat{G}^1_\text{sur}\\
+    &= -\Ub \frac{f}{N^2} \left[\widehat{\Phi^0_x\Phi^0_z} - \widehat{\Phi^{0,\text{t}}_x\Phi^{0,\text{t}}_z} \exp\left(\mu z\right) \right].
+\end{align}
+At the surface, this recovers the result of \citet[Appendix A]{HakimEtAl_02} but for the ocean case, where the active boundary is the top.
+
+From here, we can evaluate the advective velocities at the top surface 
+% (!!! note to triple check this)
+\begin{align}
+    \hat u^\text{t} = -&\hat{\Phi}^{0,\text{t}}_y-\Ro \Ub \frac{f}{N^2} \left(\widehat{\Phi^{0,\text{t}}_y\Phi^{0,\text{t}}_{zz}}+2\widehat{\Phi^{0,\text{t}}_{yz}\Phi^{0,\text{t}}_z} + \frac{i\ell}{\mu}\widehat{\Phi^{0,\text{t}}_z\Phi^{0,\text{t}}_{zz}}  +\mu\widehat{\Phi^{0,\text{t}}_y \Phi^{0,\text{t}}_z} \right)\\
+    \hat v^\text{t} =\; &\hat \Phi^{0,\text{t}}_x+\Ro \Ub \frac{f}{N^2} \left(\widehat{\Phi^{0,\text{t}}_{x}\Phi_{zz}^{0,\text{t}}}+2\widehat{\Phi^{0,\text{t}}_{xz}\Phi_z^{0,\text{t}}}- \frac{ik}{\mu}\widehat{\Phi^{0,\text{t}}_z\Phi^{0,\text{t}}_{zz}}  +\mu\widehat{\Phi^{0,\text{t}}_x \Phi^{0,\text{t}}_z}  \right).
+\end{align}
+An additional numerical savings is possible. When one evaluates the buoyancy tendency, a cancellation happens
+\begin{align}
+    ub_x+vb_y &= \dots+\Ro\Ub \frac{f}{N^2}\left[ -2\Phi^{0,\text{t}}_{yz}\Phi^{0,\text{t}}_zb_x+2\Phi^{0,\text{t}}_{xz}\Phi^{0,\text{t}}_zb_y \right]+ \dots\\
+    &= \dots+\Ro\Ub \frac{f}{N^2}\left[ -2\Phi^{0,\text{t}}_{yz}\Phi^{0,\text{t}}_z\Phi^{0,\text{t}}_{xz}+2\Phi^{0,\text{t}}_{xz}\Phi^{0,\text{t}}_z\Phi^{0,\text{t}}_{yz} \right]+ \dots
+\end{align}
+Therefore, for the purpose of the evolution of the model, one can not calculate the second term in the expression for $u$ and $v$.
+
+For diagnostic purposes, we desire the vertical velocity and the modeled sea surface height. We have from the $\omega$-equation
+\begin{align}
+    \hat w &= \Ro(\hat{F}_x^1+\hat{G}_y^1)\\
+    &= \Ro\Ub \frac{f}{N^2} \left[-\widehat{J(\Phi^0,\Phi^0_z)} + \widehat{J(\Phi^0,\Phi^0_z)}\exp\left(\mu z\right) \right].
+\end{align}
+This is an alternative derivation of the solution presented in \citet{LapeyreKlein_06}. For sea surface height, we use the QG\pl~level of the cyclogeostrophic balance
+\begin{align}
+    \nabla^2 p^1-f\zeta^1 &= 2J(\Phi^0_x,\Phi^0_y).
+\end{align}
+Only two-dimensional calculations need to be performed to obtain pressure. This is in contrast to \citet[(33)]{MurakiEtAl_99} where one needs to solve for a three-dimensional inversion. Written out explicitly, we have
+\begin{align}
+    K^2 \hat p^1 =& f(\nabla^2\hat \Phi^1+\hat F^1_{yz}-\hat G^1_{xz})+2\widehat{J(\Phi^0_x,\Phi^0_y)}\\
+    =& 2\widehat{J(\Phi^0_x,\Phi^0_y)}\\
+    & + \Ub \frac{f^2}{N^2}\left(2\widehat{|\nabla\Phi^0_z|^2}+2\widehat{\nabla^2\Phi^0_z\Phi^0_z}+\widehat{\nabla^2\Phi^0\Phi^0_{zz}}+\widehat{\nabla\Phi^0\cdot\nabla\Phi^0_{zz}}\right)\\
+    & + \Ub\Ubsqrt \frac{f^3}{N^3} K\widehat{\Phi^0_z\Phi^0_{zz}} \\
+    & - \left[  i\ell \mu \widehat{\Phi^0_y\Phi^0_z}+ik \mu \widehat{\Phi^0_x\Phi^0_z} \right].
+\end{align}
+
+In summary, SQG\pl~represent SSH as 
+\begin{align}
+    \frac{f}{g}\Phi^0(x,y,z=0)+\Ro\frac{1}{g}p^1(x,y,z=0) = \eta(x,y).
+\end{align}
+The first-order pressure $p^1$ is related to $\Phi^0$ via a nonlinear function that involves some elliptic inversions sketched above. Abstractly, we can write
+\begin{align}
+    \frac{f}{g}\Phi^{0,s}+\Ro\frac{1}{g}\mcal{N}(\Phi^{0,s}) = \eta(x,y).\label{eq:SQGpl_abs}
+\end{align}
+This is the forward model. Then the inversion problem is: given data $\eta$, we need to solve for $\Phi^0(x,y,z=0)$ that makes $\eta(x,y) = \eta^\text{data}(x,y)$.
+
+\section{Using JAX to solve the inverse problem}
+To solve the above nonlinear problem, we phrase it as a minimization problem and use numerical minimization tools to solve it. We aim to solve
+\begin{align}
+    &\min \norm{\eta-\eta^\text{data}}^2\\
+    =&\min \sum_{k,\ell}\left(\hat\eta-\hat\eta^\text{data}\right)^2
+\end{align}
+where we used Parseval's identity. Since the SSH field is red, the small scales are ignored when we minimize this error function. Therefore, we tried a whitening of the form
+\begin{align}
+    \min \sum_{k,\ell}\left(\hat\eta-\hat\eta^\text{data}\right)^2\cdot K^2.
+\end{align}
+Much more exploration can be done here.
+
+We take advantage of the recent advances in automatic differentiation for minimization. Using JAX, we can take the gradient of the above error function against $\Phi^0$. A gradient-based method can solve the minimization problem. We chose Limited-memory BFGS, a gradient-based, quasi-Newton minimization algorithm \citep{LiuNocedal_89}. JAX implements many other minimization algorithms that one can swap out and try. 
+
+
+
+
+
+\vfill
+\bibliographystyle{abbrvnat}
+\bibliography{citation}
+
+\end{document}

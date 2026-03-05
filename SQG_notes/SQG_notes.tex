@@ -1,0 +1,110 @@
+\documentclass{article}
+
+\usepackage{D:/Documents/Latex/Latex_Template/NotesTeXV3_test}
+\usepackage{subfiles}
+\usepackage{natbib}
+\usepackage{booktabs} % For professional table rules (lines)
+\usepackage{ltablex}
+
+\special{dvipdfmx:config z 0}
+
+\input{D:/Documents/Latex/Latex_Template/Custom_Commands.tex}
+\input{../SQG_commands.tex}
+
+\begin{document}
+    \title{{Lecture Notes on Surface Quasi-Geostrophic}\\{\normalsize{\itshape Academic Semester: Fall 2025}}}
+	\author{Thomas Li}
+	\affiliation{
+	Undergrauate Student at New York University Shanghai\\
+	}
+	\emailAdd{jl15535@nyu.edu}
+	\maketitle
+    \pagestyle{fancynotes}
+	\newpage
+
+\begin{tabularx}{\textwidth}{@{} c X c X @{}} 
+
+% --- Header ---
+\caption{Glossary of Variables and Operators}\\
+\toprule
+\multicolumn{2}{c}{\textbf{Variables and Operators}} & \multicolumn{2}{c}{\textbf{}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+\textbf{Symbol} & \textbf{Variable and Operators} & \textbf{Symbol} & \textbf{Description} \\
+\midrule
+\endfirsthead
+
+% --- Header for Subsequent Pages (if it spans multiple pages) ---
+\toprule
+\multicolumn{2}{c}{\textbf{Group 1 (Cont.)}} & \multicolumn{2}{c}{\textbf{Group 2 (Cont.)}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+\textbf{Symbol} & \textbf{Description} & \textbf{Symbol} & \textbf{Description} \\
+\midrule
+\endhead
+
+% --- Footer ---
+\bottomrule
+\multicolumn{4}{r}{\textit{Continued on next page...}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+
+% --- CONTENT ROWS ---
+% Use & to separate columns and \\ to end the row.
+
+$\mathbf{v}(x,y,z,t) = (u,v,w)$          & Full 3-dimensional Velocity & $\nabla$ & 2D Gradient Operator 
+               \\ 
+\addlinespace[10pt] % Adds vertical space between rows
+
+$\mathbf{u}(x,y,z,t) = (u,v)$& 2-dimensional velocity, in $x$ and $y$ direction& $\nabla_3$  
+&  3D Gradient  \\ 
+\addlinespace[10pt]
+
+ $\widehat{\cdot}$& Dimensionless Variable & $\dfrac{\D}{\D t}$& Material Derivative \\
+\addlinespace[10pt]
+
+$\psi$& Geostrophic Streamfunction defined in Eq& $\nabla^2$& 2D laplacian operator (zonal and meridional) \\
+\addlinespace[10pt]
+
+$(\bm{i}, \bm{j}, \bm{k})$& Unit vector in zonal, meridional and vertical direction& $\widehat{\cdot}$& Wide hat for Fourier Transform \\
+\addlinespace[10pt]
+
+&&& \\
+\addlinespace[10pt]
+
+&&& \\
+\addlinespace[10pt]
+% ... Add more rows here ...
+
+\end{tabularx}
+
+\section{Question for Meetings}
+
+\subsection{0108}
+
+\begin{enumerate}
+	\item So the $\QGone$ model is still geostrphic? How does it improve the accuracy of submesoscale dynamics prediction who is not geostrophic?
+	\item What is the Physical Meaning of the $\mcalL$ operator acting on $\Gamma$ which is the Gauge transform is 0. 
+	\item Leading order of the Potential Terms are about Geostrophiic Balanace?
+	\item Sign Difference?
+	\item Briefly walk me through how is the code constructed? What are some of the potential \textbf{difficulties}? How do we overcome this. 
+\end{enumerate}
+
+Rewrite all the equation, should be all non-dimensionalized. Only $\epsilon$ and $\Bur$ should show up. 
+\newpage
+\subfile{Literature_review/Chapter_0.tex}
+
+\newpage
+\subfile{Chapter1_SQG/Chapter1.tex}
+
+\newpage
+\subfile{Chapter_2_SQG1/Chapter2.tex}
+
+\newpage
+\subfile{Chapter_3_SQG/Chapter3.tex}
+
+add something here
+\vfill
+\bibliographystyle{abbrvnat}
+\bibliography{citation}
+
+\end{document}
