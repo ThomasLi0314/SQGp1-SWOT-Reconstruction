@@ -1,0 +1,182 @@
+\begin{thebibliography}{26}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Balwada et~al.(2018)Balwada, Smith, and Abernathey]{BalwadaEtAl_18}
+D.~Balwada, K.~S. Smith, and R.~Abernathey.
+\newblock Submesoscale {{Vertical Velocities Enhance Tracer Subduction}} in an {{Idealized Antarctic Circumpolar Current}}.
+\newblock \emph{Geophysical Research Letters}, 45\penalty0 (18):\penalty0 9790--9802, 2018.
+\newblock ISSN 1944-8007.
+\newblock \doi{10.1029/2018GL079244}.
+
+\bibitem[Blumen(1978)]{Blumen_78}
+W.~Blumen.
+\newblock Uniform {{Potential Vorticity Flow}}: {{Part I}}. {{Theory}} of {{Wave Interactions}} and {{Two-Dimensional Turbulence}}.
+\newblock \emph{Journal of the Atmospheric Sciences}, 35\penalty0 (5):\penalty0 774--783, May 1978.
+\newblock ISSN 0022-4928, 1520-0469.
+\newblock \doi{10.1175/1520-0469(1978)035<0774:UPVFPI>2.0.CO;2}.
+
+\bibitem[Boyd(1992)]{Boyd_92}
+J.~P. Boyd.
+\newblock The {{Energy Spectrum}} of {{Fronts}}: {{Time Evolution}} of {{Shocks}} in {{Burgers}} {{Equation}}.
+\newblock \emph{Journal of the Atmospheric Sciences}, 49\penalty0 (2):\penalty0 128--139, Jan. 1992.
+\newblock ISSN 0022-4928, 1520-0469.
+\newblock \doi{10.1175/1520-0469(1992)049<0128:TESOFT>2.0.CO;2}.
+
+\bibitem[Callies and Wu(2019)]{CalliesWu_19}
+J.~Callies and W.~Wu.
+\newblock Some {{Expectations}} for {{Submesoscale Sea Surface Height Variance Spectra}}.
+\newblock \emph{Journal of Physical Oceanography}, 49\penalty0 (9):\penalty0 2271--2289, Sept. 2019.
+\newblock ISSN 0022-3670, 1520-0485.
+\newblock \doi{10.1175/JPO-D-18-0272.1}.
+
+\bibitem[Carli et~al.(2024)Carli, Siegelman, Morrow, and Vergara]{CarliEtAl_24}
+E.~Carli, L.~Siegelman, R.~A. Morrow, and O.~Vergara.
+\newblock Surface {{Quasi Geostrophic Reconstruction}} of {{Vertical Velocities}} and {{Vertical Heat Fluxes}} in the {{Southern Ocean}}: {{Perspectives}} for {{SWOT}}, Apr. 2024.
+
+\bibitem[Chelton(2024)]{Chelton_24}
+D.~B. Chelton.
+\newblock A {{Post-Launch Update}} on the {{Effects}} of {{Instrumental Measurement Errors}} on {{SWOT Estimates}} of {{Sea-Surface Height}}, {{Velocity}} and {{Vorticity}}.
+\newblock \emph{Journal of Atmospheric and Oceanic Technology}, -1\penalty0 (aop), Aug. 2024.
+\newblock ISSN 0739-0572, 1520-0426.
+\newblock \doi{10.1175/JTECH-D-24-0035.1}.
+
+\bibitem[Dù et~al.(2025)Dù, Smith, and Bühler]{DuEtAl_24}
+R.~S. Dù, K.~S. Smith, and O.~Bühler.
+\newblock Next-order balanced model captures submesoscale physics and statistics, 2025.
+\newblock URL \url{https://arxiv.org/abs/2408.03422}.
+
+\bibitem[Garrett and Munk(1972)]{GarrettMunk_72}
+C.~Garrett and W.~Munk.
+\newblock Space-{{Time}} scales of internal waves.
+\newblock \emph{Geophysical Fluid Dynamics}, 3\penalty0 (3):\penalty0 225--264, May 1972.
+\newblock ISSN 0016-7991.
+\newblock \doi{10.1080/03091927208236082}.
+
+\bibitem[Giordani et~al.(2006)Giordani, Prieur, and Caniaux]{GiordaniEtAl_06}
+H.~Giordani, L.~Prieur, and G.~Caniaux.
+\newblock Advanced insights into sources of vertical velocity in the ocean.
+\newblock \emph{Ocean Dynamics}, 56\penalty0 (5):\penalty0 513--524, Dec. 2006.
+\newblock ISSN 1616-7228.
+\newblock \doi{10.1007/s10236-005-0050-1}.
+
+\bibitem[Hakim et~al.(2002)Hakim, Snyder, and Muraki]{HakimEtAl_02}
+G.~J. Hakim, C.~Snyder, and D.~J. Muraki.
+\newblock A {{New Surface Model}} for {{Cyclone}}–{{Anticyclone Asymmetry}}.
+\newblock \emph{Journal of the Atmospheric Sciences}, 59\penalty0 (16):\penalty0 2405--2420, 2002.
+\newblock ISSN 0022-4928, 1520-0469.
+\newblock \doi{10.1175/1520-0469(2002)059<2405:ANSMFC>2.0.CO;2}.
+
+\bibitem[Hoskins et~al.(1978)Hoskins, Draghici, and Davies]{HoskinsEtAl_78a}
+B.~J. Hoskins, I.~Draghici, and H.~C. Davies.
+\newblock A new look at the {$\omega$}-equation.
+\newblock \emph{Quarterly Journal of the Royal Meteorological Society}, 104\penalty0 (439):\penalty0 31--38, Jan. 1978.
+\newblock ISSN 00359009, 1477870X.
+\newblock \doi{10.1002/qj.49710443903}.
+
+\bibitem[Johnson(1978)]{Johnson_78}
+E.~R. Johnson.
+\newblock Topographicaily bound vortices.
+\newblock \emph{Geophysical \& Astrophysical Fluid Dynamics}, 11\penalty0 (1):\penalty0 61--71, Jan. 1978.
+\newblock ISSN 0309-1929.
+\newblock \doi{10.1080/03091927808242652}.
+
+\bibitem[Klein et~al.(2009)Klein, {Isern-Fontanet}, Lapeyre, Roullet, Danioux, Chapron, Le~Gentil, and Sasaki]{KleinEtAl_09}
+P.~Klein, J.~{Isern-Fontanet}, G.~Lapeyre, G.~Roullet, E.~Danioux, B.~Chapron, S.~Le~Gentil, and H.~Sasaki.
+\newblock Diagnosis of vertical velocities in the upper ocean from high resolution sea surface height.
+\newblock \emph{Geophysical Research Letters}, 36\penalty0 (12), 2009.
+\newblock ISSN 1944-8007.
+\newblock \doi{10.1029/2009GL038359}.
+
+\bibitem[Lapeyre and Klein(2006)]{LapeyreKlein_06}
+G.~Lapeyre and P.~Klein.
+\newblock Dynamics of the {{Upper Oceanic Layers}} in {{Terms}} of {{Surface Quasigeostrophy Theory}}.
+\newblock \emph{Journal of Physical Oceanography}, 36\penalty0 (2):\penalty0 165--176, Feb. 2006.
+\newblock ISSN 0022-3670, 1520-0485.
+\newblock \doi{10/c68m6r}.
+
+\bibitem[Liu and Nocedal(1989)]{LiuNocedal_89}
+D.~C. Liu and J.~Nocedal.
+\newblock On the limited memory {{BFGS}} method for large scale optimization.
+\newblock \emph{Mathematical Programming}, 45\penalty0 (1):\penalty0 503--528, Aug. 1989.
+\newblock ISSN 1436-4646.
+\newblock \doi{10.1007/BF01589116}.
+
+\bibitem[Liu et~al.(2019)Liu, Xue, and Sasaki]{LiuEtAl_19}
+L.~Liu, H.~Xue, and H.~Sasaki.
+\newblock Reconstructing the {{Ocean Interior}} from {{High-Resolution Sea Surface Information}}.
+\newblock \emph{Journal of Physical Oceanography}, 49\penalty0 (12):\penalty0 3245--3262, Dec. 2019.
+\newblock ISSN 0022-3670, 1520-0485.
+\newblock \doi{10.1175/JPO-D-19-0118.1}.
+
+\bibitem[Liu et~al.(2021)Liu, Xue, and Sasaki]{LiuEtAl_21}
+L.~Liu, H.~Xue, and H.~Sasaki.
+\newblock Diagnosing {{Subsurface Vertical Velocities}} from {{High-Resolution Sea Surface Fields}}.
+\newblock \emph{Journal of Physical Oceanography}, 51\penalty0 (5):\penalty0 1353--1373, May 2021.
+\newblock ISSN 0022-3670, 1520-0485.
+\newblock \doi{10.1175/JPO-D-20-0152.1}.
+
+\bibitem[Maalouly et~al.(2023)Maalouly, Lapeyre, Cozian, Mompean, and Berti]{MaaloulyEtAl_23}
+M.~Maalouly, G.~Lapeyre, B.~Cozian, G.~Mompean, and S.~Berti.
+\newblock Particle dispersion and clustering in surface ocean turbulence with ageostrophic dynamics, Sept. 2023.
+
+\bibitem[Muraki et~al.(1999)Muraki, Snyder, and Rotunno]{MurakiEtAl_99}
+D.~J. Muraki, C.~Snyder, and R.~Rotunno.
+\newblock The {{Next-Order Corrections}} to {{Quasigeostrophic Theory}}.
+\newblock \emph{Journal of the Atmospheric Sciences}, 56\penalty0 (11):\penalty0 1547--1560, 1999.
+\newblock ISSN 0022-4928, 1520-0469.
+\newblock \doi{10.1175/1520-0469(1999)056<1547:TNOCTQ>2.0.CO;2}.
+
+\bibitem[Penven et~al.(2014)Penven, Halo, Pous, and Marié]{PenvenEtAl_14}
+P.~Penven, I.~Halo, S.~Pous, and L.~Marié.
+\newblock Cyclogeostrophic balance in the {{Mozambique Channel}}.
+\newblock \emph{Journal of Geophysical Research: Oceans}, 119\penalty0 (2):\penalty0 1054--1067, 2014.
+\newblock ISSN 2169-9291.
+\newblock \doi{10.1002/2013JC009528}.
+
+\bibitem[Ponte et~al.(2013)Ponte, Klein, Capet, Traon, Chapron, and Lherminier]{PonteEtAl_13}
+A.~L. Ponte, P.~Klein, X.~Capet, P.-Y.~L. Traon, B.~Chapron, and P.~Lherminier.
+\newblock Diagnosing {{Surface Mixed Layer Dynamics}} from {{High-Resolution Satellite Observations}}: {{Numerical Insights}}.
+\newblock \emph{Journal of Physical Oceanography}, 43\penalty0 (7):\penalty0 1345--1355, July 2013.
+\newblock ISSN 0022-3670, 1520-0485.
+\newblock \doi{10.1175/JPO-D-12-0136.1}.
+
+\bibitem[Shcherbina et~al.(2013)Shcherbina, D'Asaro, Lee, Klymak, Molemaker, and McWilliams]{ShcherbinaEtAl_13}
+A.~Y. Shcherbina, E.~A. D'Asaro, C.~M. Lee, J.~M. Klymak, M.~J. Molemaker, and J.~C. McWilliams.
+\newblock Statistics of vertical vorticity, divergence, and strain in a developed submesoscale turbulence field.
+\newblock \emph{Geophysical Research Letters}, 40\penalty0 (17):\penalty0 4706--4711, 2013.
+\newblock ISSN 1944-8007.
+\newblock \doi{10.1002/grl.50919}.
+
+\bibitem[Stammer(1997)]{Stammer_97}
+D.~Stammer.
+\newblock Global {{Characteristics}} of {{Ocean Variability Estimated}} from {{Regional TOPEX}}/{{POSEIDON Altimeter Measurements}}.
+\newblock \emph{Journal of Physical Oceanography}, 27\penalty0 (8):\penalty0 1743--1769, Aug. 1997.
+\newblock ISSN 0022-3670, 1520-0485.
+\newblock \doi{10.1175/1520-0485(1997)027<1743:GCOOVE>2.0.CO;2}.
+
+\bibitem[Vallis(1996)]{Vallis_96a}
+G.~K. Vallis.
+\newblock Potential vorticity inversion and balanced equations of motion for rotating and stratified flows.
+\newblock \emph{Quarterly Journal of the Royal Meteorological Society}, 122\penalty0 (529):\penalty0 291--322, 1996.
+\newblock ISSN 1477-870X.
+\newblock \doi{10.1002/qj.49712252912}.
+
+\bibitem[Wang et~al.(2013)Wang, Flierl, LaCasce, McClean, and Mahadevan]{WangEtAl_13}
+J.~Wang, G.~R. Flierl, J.~H. LaCasce, J.~L. McClean, and A.~Mahadevan.
+\newblock Reconstructing the {{Ocean}}'s {{Interior}} from {{Surface Data}}.
+\newblock \emph{Journal of Physical Oceanography}, 43\penalty0 (8):\penalty0 1611--1626, Aug. 2013.
+\newblock ISSN 0022-3670, 1520-0485.
+\newblock \doi{10.1175/JPO-D-12-0204.1}.
+
+\bibitem[Xiao et~al.(2023)Xiao, Balwada, Jones, {Herrero-Gonz{\'a}lez}, Smith, and Abernathey]{XiaoEtAl_23}
+Q.~Xiao, D.~Balwada, C.~S. Jones, M.~{Herrero-Gonz{\'a}lez}, K.~S. Smith, and R.~Abernathey.
+\newblock Reconstruction of {{Surface Kinematics From Sea Surface Height Using Neural Networks}}.
+\newblock \emph{Journal of Advances in Modeling Earth Systems}, 15\penalty0 (10):\penalty0 e2023MS003709, 2023.
+\newblock ISSN 1942-2466.
+\newblock \doi{10.1029/2023MS003709}.
+
+\end{thebibliography}

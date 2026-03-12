@@ -1,14 +1,19 @@
 \documentclass{article}
 
-\usepackage{D:/Documents/Latex/Latex_Template/NotesTeXV3_test}
+% \usepackage{D:/Documents/Latex/Latex_Template/NotesTeXV3_test}
+\usepackage{NotesTeXV3_test}
 \usepackage{subfiles}
 \usepackage{natbib}
 \usepackage{booktabs} % For professional table rules (lines)
 \usepackage{ltablex}
+\usepackage{cancel}
+
+% %% Some new command for relationships
+% \newcommand{\qrq}{\quad \Rightarrow \quad}
 
 \special{dvipdfmx:config z 0}
 
-\input{D:/Documents/Latex/Latex_Template/Custom_Commands.tex}
+% \input{D:/Documents/Latex/Latex_Template/Custom_Commands.tex}
 \input{../SQG_commands.tex}
 
 \begin{document}
@@ -103,6 +108,7 @@ Rewrite all the equation, should be all non-dimensionalized. Only $\epsilon$ and
 \subfile{Chapter_3_SQG/Chapter3.tex}
 
 add something here
+\nocite{*}
 \vfill
 \bibliographystyle{abbrvnat}
 \bibliography{citation}
