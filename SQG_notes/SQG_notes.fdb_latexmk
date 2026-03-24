@@ -1,17 +1,17 @@
 # Fdb version 4
-["bibtex SQG_notes"] 1773286730.13774 "SQG_notes.aux" "SQG_notes.bbl" "SQG_notes" 1773286731.73717 0
+["bibtex SQG_notes"] 1773679602.03912 "SQG_notes.aux" "SQG_notes.bbl" "SQG_notes" 1773679711.3352 0
   "./citation.bib" 1772685183.01289 12767 761eaacdb3398a27749953ade63a0b2e ""
   "/usr/local/texlive/2026/texmf-dist/bibtex/bst/natbib/abbrvnat.bst" 1233624470 26532 66bed5cc59495faaa3f9ae9af9fa5e42 ""
-  "SQG_notes.aux" 1773286731.48347 13964 3277f55b13cd5908363e00cbdcd52392 "pdflatex"
+  "SQG_notes.aux" 1773679711.08104 13964 c68ffa19b44912bb3ef429751b9b3294 "pdflatex"
   (generated)
   "SQG_notes.bbl"
   "SQG_notes.blg"
   (rewritten before read)
-["pdflatex"] 1773286730.21048 "/Users/thomas/Documents/Research/Oceanography/Shafer_Project/SQG_notes/SQG_notes.tex" "SQG_notes.pdf" "SQG_notes" 1773286731.73728 0
+["pdflatex"] 1773679709.82224 "/Users/thomas/Documents/Research/Oceanography/Shafer_Project/SQG_notes/SQG_notes.tex" "SQG_notes.pdf" "SQG_notes" 1773679711.33532 0
   "../SQG_commands.tex" 1772685182.99408 960 22a158c38576e2887cc7bf9d9c5ec4dd ""
-  "/Users/thomas/Documents/Research/Oceanography/Shafer_Project/SQG_notes/SQG_notes.tex" 1773286726.90456 3567 5de4897ce701e4146a32c269bbfd83ab ""
+  "/Users/thomas/Documents/Research/Oceanography/Shafer_Project/SQG_notes/SQG_notes.tex" 1773343104.69932 3549 26b8641d1683ec6021f23473b4a82b15 ""
   "/Users/thomas/Library/texmf/tex/latex/custom/Commands_math.tex" 1770926061.10914 3933 22948bbe62423ac7b7224c5737e90776 ""
-  "/Users/thomas/Library/texmf/tex/latex/custom/NotesTeXV3_test.sty" 1773286580.41909 33984 a702b1acd0299bc8f5e22bc08d85565d ""
+  "/Users/thomas/Library/texmf/tex/latex/custom/NotesTeXV3_test.sty" 1773343049.62201 29734 8cdeeea10236ebee4afad7f131217b43 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1136849721 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -298,15 +298,15 @@
   "/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1773271092 5541377 04880c840ca220163a28f1a3af0ee662 ""
   "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1772409757 3636768 9f94d239f422c02416e379a36a852ffd ""
   "/usr/local/texlive/2026/texmf.cnf" 1772409725 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
-  "Chapter1_SQG/Chapter1.tex" 1773272228.16415 15256 c36fdd07622077fee0cbc8913aed44eb ""
+  "Chapter1_SQG/Chapter1.tex" 1773679709.6685 15303 bce695abd919d83b98c7dca5731ed110 ""
   "Chapter_2_SQG1/Chapter2.tex" 1773286726.90574 18345 f276411cad9236b484a0048fd1710056 ""
   "Chapter_3_SQG/Chapter3.tex" 1772685183.00312 12273 3d88a607d5a3028b3f1337e20ebbab43 ""
   "Literature_review/Chapter_0.tex" 1773286468.26394 5743 37c2ec9f56f0fe02e59257c6537434b4 ""
-  "SQG_notes.aux" 1773286731.48347 13964 3277f55b13cd5908363e00cbdcd52392 "pdflatex"
-  "SQG_notes.bbl" 1773286730.20785 9804 5678370435ab1bed2779231b6b47e5c6 "bibtex SQG_notes"
-  "SQG_notes.out" 1773286731.48435 6380 bc911703eea8d3e85c0659e41df2e222 "pdflatex"
-  "SQG_notes.tex" 1773286726.90456 3567 5de4897ce701e4146a32c269bbfd83ab ""
-  "SQG_notes.toc" 1773286731.4845 3072 c18c0ab550da5566dd35da4d293751f3 "pdflatex"
+  "SQG_notes.aux" 1773679711.08104 13964 c68ffa19b44912bb3ef429751b9b3294 "pdflatex"
+  "SQG_notes.bbl" 1773679602.11246 9804 5678370435ab1bed2779231b6b47e5c6 "bibtex SQG_notes"
+  "SQG_notes.out" 1773679711.08194 6380 bc911703eea8d3e85c0659e41df2e222 "pdflatex"
+  "SQG_notes.tex" 1773343104.69932 3549 26b8641d1683ec6021f23473b4a82b15 ""
+  "SQG_notes.toc" 1773679711.0821 3072 c18c0ab550da5566dd35da4d293751f3 "pdflatex"
   (generated)
   "SQG_notes.aux"
   "SQG_notes.log"

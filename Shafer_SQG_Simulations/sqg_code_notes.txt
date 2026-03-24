@@ -1,0 +1,12 @@
+ 
+Look at the contents of runsqg_random_IC first - I've added comments to explain code. Then execute:
+
+runsqg_random_IC  
+
+You'll see some info on the screen and in the end it will plot the spectra and make a movie of the buoyancy field.   At the end of a simulation the main output is the buoyancy field bout(:,:,:) which is sized  256,256,51. You could just grab the last frame of that bout(:,:,end) to use as your input O(0) field.  You could run it at higher resolution (change: kmax = 255 to make a 512^2 simulation - it will be slower). 
+
+To get the streamfunction:
+
+bk = grid2spec(b(:,:,end));
+psik = bk./K_;
+psi0 = spec2grid(psik);

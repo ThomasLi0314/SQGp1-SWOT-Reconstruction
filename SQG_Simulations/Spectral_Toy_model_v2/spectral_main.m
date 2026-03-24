@@ -14,9 +14,52 @@ Ly = 2 * pi;
 
 Ro = 0.01; %Rossby number same as epsilon
 
+%% Optional: Select and Load external SSH Data File
+disp('Select an SSH data file (.mat)... Press Cancel to use default SSH_setup');
+[file, path] = uigetfile({'*.mat', 'MATLAB Data Files (*.mat)'}, 'Select the SSH data file');
+if ischar(file)
+    data = load(fullfile(path, file));
+    
+    % Try to find the common buoyancy/streamfunction variable names
+    if isfield(data, 'bout')
+        ssh_data = data.bout;
+    elseif isfield(data, 'phi0_s')
+        ssh_data = data.phi0_s;
+    else
+        fields = fieldnames(data);
+        ssh_data = data.(fields{1}); % Fallback to the first variable
+    end
+    
+    % Check if it is 3D data (time-dependent) and get the last frame
+    if ndims(ssh_data) == 3
+        phi0_s = ssh_data(:, :, end);
+        fprintf('Loaded 3D data from %s, using the last time period.\n', file);
+    elseif ismatrix(ssh_data)
+        phi0_s = ssh_data;
+        fprintf('Loaded 2D data from %s.\n', file);
+    else
+        error('The selected data is neither a matrix nor a 3D array.');
+    end
+    
+    % Update grid sizes automatically based on data size
+    [Nx, Ny] = size(phi0_s);
+    fprintf('Grid size adjusted automatically to Nx=%d, Ny=%d.\n', Nx, Ny);
+    
+    use_custom_ssh = true;
+else
+    use_custom_ssh = false;
+end
+
+% Initialize variables based on the final Nx and Ny values
 initialize;
 
-SSH_setup;
+if use_custom_ssh
+    % Recompute the fourier transform of the selected field
+    phi0_s_hat = fft2(phi0_s);
+else
+    SSH_setup;
+end
+
 %% Forward Part
 % This part derives the true fourier SSH 
 
@@ -168,4 +211,12 @@ xlabel('x'); ylabel('y'); axis equal tight;
 
 colormap jet;
 sgtitle(sprintf('Surface Fields — %s  (%.1f s)', method_label, elapsed));
-saveas(gcf, 'surface_comparison.png');
+
+% Define output directory
+output_dir = 'D:\Documents\College\Research\Oceangrophy\Shafer_Project\Output';
+if ~exist(output_dir, 'dir')
+    mkdir(output_dir);
+end
+
+% Save the figure to the output directory
+saveas(gcf, fullfile(output_dir, 'surface_comparison.png'));

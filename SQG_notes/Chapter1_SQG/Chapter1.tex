@@ -46,11 +46,12 @@
     \begin{remark}
         Here we drop the $\p_t \rho_1$ term under the \textbf{Anelastic assumption}. Essentially by eliminating this partial derivative, we assume the fluid is anelastic, so sound wave is not supported \mn{or less important} in the system. However, this approximation is normally used for \textbf{deep atmospheric or stellar convertion} where density $\tilde{\rho}$ changes significantly with height.
     \end{remark}
-    For Oceanography, 
-    Next we define the Buoyancy :
-    \begin{equation}
+    For Oceanography, next we define the Buoyancy :
+    \begin{highlight}
+        \begin{equation}
         b = -g\frac{\rho}{\bar{\rho}_0} \label{Buoyancy}
     \end{equation}
+    \end{highlight}
     Here $\brho$ is a constant reference density. The the divergent free condition implies 
     \begin{equation}
         \boxed{\frac{\D b}{\D t} = 0} \label{Buoyancy equation}
@@ -110,7 +111,7 @@
     \[ \bu = (u, v, w) = \bu_g + \Ro \bu_1 \quad \phi = \phi_0 + \Ro \phi_1 \quad b = b_0 + \Ro b_1\]
     Here we consider the $\beta$ effect. 
     \[ \mathbf{f} = f_0 \bm{k} + \beta y \bm{k}\]
-    Let $\epsilon = \Ro$.
+    Let $\epsilon = \Ro$. \par
     \textbf{Momentum Equation} : \par
     The $O(1)$ momentum equation gives the Geostrophic balance
     \begin{equation}
@@ -174,7 +175,7 @@
     \end{equation}
     Restore the dimensions
     \begin{equation}
-        \frac{\D g}{\D t} \left[ \nabla^2 \psi_g + f + \frac{f_0^2}{\tilde{\rho}}\frac{\p }{\p_z} \left( \frac{\tdrho}{N^2} \frac{\p \psi}{\p z}\right)\right] = 0 \label{QGPV equation}
+        \frac{\D_g}{\D t} \left[ \nabla^2 \psi_g + f + \frac{f_0^2}{\tilde{\rho}}\frac{\p }{\p_z} \left( \frac{\tdrho}{N^2} \frac{\p \psi}{\p z}\right)\right] = 0 \label{QGPV equation}
     \end{equation}
 
     \subsection{Ertel PV Conservation}
