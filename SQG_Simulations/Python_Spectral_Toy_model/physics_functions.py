@@ -67,7 +67,7 @@ def calculate_surface_u(phi0_s_hat, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu)
     """
     # Phi1 terms
     phi0_s_z  = jnp.real(jnp.fft.ifft2(phi0_s_hat * mu))
-    Phi_1_term1 = jnp.fft.fft2(0.5 * phi0_s_z**2)
+    Phi_1_term1 = jnp.fft.fft2(0.5 * phi0_s_z**2 / Bu)
     phi0_s_zz = jnp.real(jnp.fft.ifft2(phi0_s_hat * mu * mu))
     Phi_1_term2 = -jnp.fft.fft2(phi0_s_z * phi0_s_zz) * inv_mu
 
@@ -82,7 +82,7 @@ def calculate_surface_u(phi0_s_hat, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu)
 
     F1_term1 = jnp.fft.fft2(phi0_s_y * phi0_s_zz + phi0_s_yz * phi0_s_z)
     F1_term2 = -jnp.fft.fft2(phi0_s_y * phi0_s_z) * mu
-    F1_s_hat_z = F1_term1 + F1_term2
+    F1_s_hat_z = (F1_term1 + F1_term2) / Bu
 
     # G1 terms
     phi0_s_x  = jnp.real(jnp.fft.ifft2(phi0_s_hat * 1j * kx))
@@ -90,7 +90,7 @@ def calculate_surface_u(phi0_s_hat, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu)
 
     G1_term1 = jnp.fft.fft2(phi0_s_x * phi0_s_zz + phi0_s_xz * phi0_s_z)
     G1_term2 = -jnp.fft.fft2(phi0_s_x * phi0_s_z) * mu
-    G1_s_hat_z = G1_term1 + G1_term2
+    G1_s_hat_z = (G1_term1 + G1_term2) / Bu
 
     # Sum up
     phi0_s_hat_y = phi0_s_hat * 1j * ky

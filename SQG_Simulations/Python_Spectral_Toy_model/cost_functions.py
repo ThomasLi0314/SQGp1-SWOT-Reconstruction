@@ -10,8 +10,9 @@ def cost_function_fmin(phi0_s, f, kx, ky, mu, inv_mu, Bu, epsilon, K2, inv_K2, e
     eta_s_hat_guess = forward_ssh(phi0_s_hat_guess, f, kx, ky, mu, inv_mu, K2, inv_K2, Bu, epsilon)
 
     diff_hat = jnp.abs(eta_s_hat_guess - eta_s_hat_true)
-    err_spec = 1.0 + K2
-    cost = jnp.sum(diff_hat**2 * err_spec)
+    # err_spec = 1.0 + K2
+    # cost = jnp.sum(diff_hat**2 * err_spec)
+    cost = jnp.sum(diff_hat ** 2)
     return jnp.real(cost)
 
 

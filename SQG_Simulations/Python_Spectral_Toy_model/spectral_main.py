@@ -92,7 +92,7 @@ def main():
 
     Lx = 2.0 * jnp.pi
     Ly = 2.0 * jnp.pi
-    Ro = 0.01
+    Ro = 0.1
     Bu = 1.0
     f = 1.0
     epsilon = Ro
@@ -177,7 +177,7 @@ def main():
         params, state = solver.update(params, state)
         loss_val = float(loss_fn(params))
         g_norm = float(jnp.linalg.norm(grad_fn(params)))
-        if (i + 1) % 10 == 0 or i == 0:
+        if (i + 1) % 100 == 0 or i == 0:
             print(f"  Iter {i+1:4d} | Loss = {loss_val:.6e} | |grad| = {g_norm:.6e}")
         if loss_val < 1e-12:
             print(f"  Converged at iter {i+1} (Loss = {loss_val:.6e})")
@@ -187,27 +187,46 @@ def main():
     print(f"Optimization Complete. Elapsed: {elapsed:.2f}s")
 
     phi0_s_opt = params.reshape(Nx, Ny)
-    phi0_s_hat_opt = jnp.fft.fft2(phi0_s_opt)
 
-    # ── Validation: Surface Velocities ──
-    u_surface_opt, v_surface_opt = calculate_surface_u(
-        phi0_s_hat_opt, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu
+    # ── Calculate Pure QG field ──
+    # In nondimensional SQG+1, SSH eta =~ f * phi + O(epsilon).
+    # Therefore pure QG potential is eta / f.
+    phi_qg_hat = eta_s_hat_true / f
+    u_qg = jnp.real(jnp.fft.ifft2(-1j * ky * phi_qg_hat))
+    v_qg = jnp.real(jnp.fft.ifft2( 1j * kx * phi_qg_hat))
+
+    # ── Save Data to Run Folder ──
+    import glob
+    base_output = r"D:\Documents\College\Research\Oceangrophy\Shafer_Project\Output"
+    data_dir = os.path.join(base_output, data_name)
+    os.makedirs(data_dir, exist_ok=True)
+
+    # Determine run number (increment based on existing run_* folders)
+    existing_runs = sorted(glob.glob(os.path.join(data_dir, "run_*")))
+    run_num = len(existing_runs) + 1
+    run_dir = os.path.join(data_dir, f"run_{run_num}")
+    os.makedirs(run_dir)
+
+    # Save potentials and parameters
+    np.savez(
+        os.path.join(run_dir, "potentials.npz"),
+        phi0_s_opt=np.array(phi0_s_opt),
+        phi0_s_true=np.array(phi0_s),
+        eta_s_hat_true=np.array(eta_s_hat_true),
+        u_qg=np.array(u_qg), v_qg=np.array(v_qg),
+        x=np.array(x), y=np.array(y),
+        kx=np.array(kx), ky=np.array(ky),
+        mu=np.array(mu), inv_mu=np.array(inv_mu),
+        K2=np.array(K2), inv_K2=np.array(inv_K2),
+        epsilon=float(epsilon), Bu=float(Bu),
+        Nx=Nx, Ny=Ny, elapsed=elapsed,
     )
-    u_surface_true, v_surface_true = calculate_surface_u(
-        phi0_s_hat, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu
-    )
-
-    # Surface vorticity: zeta = dv/dx - du/dy
-    u_opt_hat = jnp.fft.fft2(u_surface_opt)
-    v_opt_hat = jnp.fft.fft2(v_surface_opt)
-    u_true_hat = jnp.fft.fft2(u_surface_true)
-    v_true_hat = jnp.fft.fft2(v_surface_true)
-
-    zeta_opt  = jnp.real(jnp.fft.ifft2(1j * kx * v_opt_hat  - 1j * ky * u_opt_hat))
-    zeta_true = jnp.real(jnp.fft.ifft2(1j * kx * v_true_hat - 1j * ky * u_true_hat))
+    print(f"Data saved to {run_dir}")
 
     # ── Plotting ──
-    plot_surface_fields(x, y, u_surface_opt, u_surface_true, zeta_opt, zeta_true, Nx, Ny, elapsed, data_name=data_name)
+    plot_surface_fields(phi0_s_opt, phi0_s, u_qg, v_qg, x, y,
+                        kx, ky, mu, inv_mu, K2, inv_K2, epsilon, Bu,
+                        Nx, Ny, elapsed, run_dir)
 
 
 if __name__ == "__main__":
