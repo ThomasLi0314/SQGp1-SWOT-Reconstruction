@@ -47,38 +47,38 @@ def main():
         )
     
     use_custom_ssh = False
-    phi0_s_custom = None
+    b_s_custom = None
     
     if file_path:
         mat_contents = sio.loadmat(file_path)
-        # Find the relevant array
-        ssh_data = None
-        for key in ['bout', 'phi0_s', 'ssh_data', 'b2spec']:
+        # Find the relevant array (expecting buoyancy 'bout')
+        b_s_data = None
+        for key in ['bout', 'b_s', 'buoyancy']:
             if key in mat_contents:
-                ssh_data = mat_contents[key]
-                if ssh_data.ndim >= 2: # ensure it's a spatial array
+                b_s_data = mat_contents[key]
+                if b_s_data.ndim >= 2: # ensure it's a spatial array
                     break
         else:
             keys = [k for k in mat_contents.keys() if not k.startswith('__')]
             if keys:
                 for k in keys:
                     if mat_contents[k].ndim >= 2:
-                        ssh_data = mat_contents[k]
+                        b_s_data = mat_contents[k]
                         break
-                if ssh_data is None:
+                if b_s_data is None:
                     raise ValueError("No valid 2D matrix found in the selected .mat file.")
             else:
                 raise ValueError("No variables found in the selected .mat file.")
 
-        if ssh_data.ndim == 3:
-            phi0_s_custom = ssh_data[:, :, -1]
-            print(f"Loaded 3D data from {file_path}, using the last time period.")
-        elif ssh_data.ndim == 2:
-            phi0_s_custom = ssh_data
-            print(f"Loaded 2D data from {file_path}.")
-        phi0_s_custom = phi0_s_custom / jnp.max(jnp.abs(phi0_s_custom))
+        if b_s_data.ndim == 3:
+            b_s_custom = b_s_data[:, :, -1]
+            print(f"Loaded 3D buoyancy data from {file_path}, using the last time period.")
+        elif b_s_data.ndim == 2:
+            b_s_custom = b_s_data
+            print(f"Loaded 2D buoyancy data from {file_path}.")
+        b_s_custom = b_s_custom / jnp.max(jnp.abs(b_s_custom))
         
-        Nx, Ny = phi0_s_custom.shape
+        Nx, Ny = b_s_custom.shape
         print(f"Grid size adjusted automatically to Nx={Nx}, Ny={Ny}.")
         use_custom_ssh = True
         data_name = os.path.splitext(os.path.basename(file_path))[0]
@@ -123,8 +123,13 @@ def main():
 
     # ── SSH Setup ──
     if use_custom_ssh:
-        phi0_s = jnp.array(phi0_s_custom)
-        phi0_s_hat = jnp.fft.fft2(phi0_s)
+        # Phi_hat = b_hat / mu
+        b_s = jnp.array(b_s_custom)
+        b_s_hat = jnp.fft.fft2(b_s)
+        
+        phi0_s_hat = b_s_hat * inv_mu
+        phi0_s = jnp.real(jnp.fft.ifft2(phi0_s_hat))
+
     else:
         # Use the case_num defined above
         key = jax.random.PRNGKey(42)
@@ -161,7 +166,6 @@ def main():
     )
 
     print(f"Running optimization: LBFGS (auto-diff gradients, {Nx}x{Ny})")
-    print("JIT compiling (first call may be slow)...")
     t0 = time.time()
 
     phi0_flat_guess = phi0_s_guess.ravel()

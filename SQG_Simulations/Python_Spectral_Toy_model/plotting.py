@@ -5,6 +5,30 @@ import jax.numpy as jnp
 
 from physics_functions import calculate_surface_u
 
+def compute_isotropic_spectrum(u, v, K_2d):
+    """
+    Computes the 1D isotropic kinetic energy spectrum from 2D velocity fields.
+    """
+    Nx, Ny = u.shape
+    # Compute 2D FFT and normalize
+    u_hat = np.fft.fft2(np.array(u)) / (Nx * Ny)
+    v_hat = np.fft.fft2(np.array(v)) / (Nx * Ny)
+    
+    # 2D Kinetic Energy
+    E_2d = 0.5 * (np.abs(u_hat)**2 + np.abs(v_hat)**2)
+    
+    K_flat = np.array(K_2d).flatten()
+    E_flat = E_2d.flatten()
+    
+    # Create radial bins for wavenumber K
+    bins = np.linspace(0, K_flat.max(), min(Nx, Ny)//2 + 1)
+    K_1d = 0.5 * (bins[:-1] + bins[1:])
+    
+    # Sum energy in each radial bin
+    E_1d, _ = np.histogram(K_flat, bins=bins, weights=E_flat)
+    return K_1d, E_1d
+
+
 
 def plot_surface_fields(phi0_s_opt, phi0_s_true, u_qg, v_qg, x, y,
                         kx, ky, mu, inv_mu, K2, inv_K2, epsilon, Bu,
@@ -94,6 +118,32 @@ def plot_surface_fields(phi0_s_opt, phi0_s_true, u_qg, v_qg, x, y,
         (u_qg, r"Pure QG $u_{QG}$"),
         (u_surface_true - u_qg, r"Ageostrophic Correction ($u_{SQG+1} - u_{QG}$)")
     ], f"QG vs SQG+1 Zonal Velocity — {method_label}  ({elapsed:.1f}s)", "qg_vs_sqg_comparison")
+
+    # 4. Isotropic Kinetic Energy Spectrum
+    K_1d, E1d_opt = compute_isotropic_spectrum(u_surface_opt, v_surface_opt, jnp.sqrt(K2))
+    _, E1d_true   = compute_isotropic_spectrum(u_surface_true, v_surface_true, jnp.sqrt(K2))
+    _, E1d_qg     = compute_isotropic_spectrum(u_qg, v_qg, jnp.sqrt(K2))
+    
+    fig_ke, ax_ke = plt.subplots(figsize=(7, 5))
+    ax_ke.loglog(K_1d, E1d_true, 'k-', linewidth=2, label='True SQG+1')
+    ax_ke.loglog(K_1d, E1d_opt, 'r--', linewidth=2, label='Optimized SQG+1')
+    ax_ke.loglog(K_1d, E1d_qg, 'b:', linewidth=2, label='Pure QG')
+    
+    # Only keep wavenumbers greater than 0 for log-log plot to avoid log(0) warning
+    valid_idx = K_1d > 0
+    ax_ke.set_xlim(left=K_1d[valid_idx].min(), right=K_1d.max())
+    
+    ax_ke.set_xlabel('Wavenumber $K$')
+    ax_ke.set_ylabel('Kinetic Energy Spectral Density')
+    ax_ke.set_title(f"Isotropic Kinetic Energy Spectrum\n{method_label}")
+    ax_ke.grid(True, which='both', linestyle='--', alpha=0.5)
+    ax_ke.legend()
+    plt.tight_layout()
+    
+    save_ke_path = os.path.join(run_dir, f"ke_spectrum_grid_{Nx}x{Ny}_date_{date_str}.png")
+    fig_ke.savefig(save_ke_path, dpi=150)
+    print(f"Plot saved to {save_ke_path}")
+    figs.append(fig_ke)
 
     import sys
     if "--default" not in sys.argv:
