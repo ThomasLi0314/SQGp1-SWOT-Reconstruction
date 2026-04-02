@@ -21,3 +21,5 @@ Simulation_Results/
 # Output files
 *.mat
 *.mp4
+*.png
+*.npz

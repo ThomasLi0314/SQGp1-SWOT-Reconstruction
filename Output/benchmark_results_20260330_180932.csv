@@ -1,0 +1,2 @@
+N,scale,elapsed_time_s,num_iters,final_loss,final_grad_norm,relative_error
+128,0.05,76.48412942886353,10000,70.56669194344974,4414.0156241454415,0.030094061082837627

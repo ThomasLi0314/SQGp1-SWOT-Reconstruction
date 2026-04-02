@@ -108,6 +108,6 @@ def forward_ssh(phi0_s_hat, f, kx, ky, mu, inv_mu, K2, inv_K2, Bu, epsilon):
     """Full forward model: phi0_s_hat -> eta_s_hat (SSH in spectral space)."""
     cyc = cyclogeo_term(phi0_s_hat, kx, ky)
     vort = vorticity_term(phi0_s_hat, mu, inv_mu, kx, ky, K2, Bu)
-    p1_s_hat = -(f * vort + cyc) * inv_K2
-    eta_s_hat = f * phi0_s_hat + p1_s_hat * epsilon
+    p1_s_hat = -(vort + cyc) * inv_K2 # take twice integral. 
+    eta_s_hat = phi0_s_hat + p1_s_hat * epsilon
     return eta_s_hat

@@ -38,6 +38,25 @@ Where $J$ is the Jacobian operator. This is a non-linear relationship, recall th
 \nabla^2 p^1 = f\left(\nabla^2\Phi^1 + F_{zy}^1 - G_{zx}^1\right) + 2J(\Phi_x^0, \Phi_y^0) \quad \rightarrow \quad \Phi^{0,s} + \epsilon \mcalN(\Phi^{0,s}) = \eta(x,y)
 \]
 Where $\mcalN$ is a non-linear operator. Here the relationship between $\Phi^1, F^1$ and $G^1$ are given by Eq \ref{Fourier transform of Phi^1}, \ref{F^1 fourier transform} and \ref{G^1 fourier transform}. Then the whole inversion problem is clear. Given $\eta(x,y)$ we wish to find a $\Phi^{0,s}$ \mn{given $\Phi^{0,s}$ we can reconstruct the 3D $\Phi$ already. }
+\begin{explanation}
+    If perform non-dimensionalization : 
+    \scriptsize
+    \[x = L \tilde{x} \quad y = L \tilde{y} \quad u = U \tilde{u} \quad v = U \tilde{v} \quad p = f_0 U L \tilde{p} \quad \Phi = UL \tilde{\Phi} \quad \eta = \frac{f_0 UL}{g} \tilde{\eta}\]
+    Then surface see pressure is \mn{we drop the tilde for simplicity} 
+    \[ \eta^s = p^s\]
+    and 
+    \[ p_{total} = p^0 + \epsilon p^1\]
+    First order pressure is 
+    \[ p^0 = \Phi^0\]
+    Thus 
+    \[ \eta^0 = \Phi^0\]
+    Similarly 
+    \[ \eta^1 = p^1\]
+    Therefore 
+    \[ \eta = \Phi^0 + \epsilon p^1\]
+    The non-dimensional cyclogeostrophic correction is 
+    \[ \nabla^2 p^1 - \zeta = 2J(\Phi_x^0, \Phi_y^0)\]
+\end{explanation}
 
 \subsection{Inversion Process (Spectral Space)}
 
@@ -58,6 +77,16 @@ And its fourier transform
 \[ \widehat{\eta^{true}}\]
 Our goal is to find a $\Phi^{0,s}$ to minimize 
 \[ \sum_{k, l} \left( \hat{\eta} - \hat{\eta^{true}}\right)^2\]
+\begin{explanation}
+    Non-dimensionalized version : \par
+    \scriptsize
+    First two line identical. THen 
+    \[ \eta(x,y)^s = \Phi^{0,s} + \epsilon \mcalN(\Phi^{0,s})\]
+    So the fourier component has relationship 
+    \[ \hat{\eta}^s = \hat{\Phi}^{0,s} + \epsilon \mcalN(\hat{\Phi}^{0,s})
+    \]
+    
+\end{explanation}
 \subsubsection{First Order Potential}
 To get $\Phi^1$, we use Eq \ref{Fourier transform of Phi^1}. 
 \[  \boxed{\hat{\Phi}^1 =\underbrace{\frac{1}{2 \Bur} \widehat{\Phi_z^0 \Phi_z^0}}_{\text{Fourier transform of interior part}} - \underbrace{\frac{1}{\Bur} \widehat{\Phi_z^{0,t} \Phi_{zz}^{0,t}} \frac{e^{\mu z}}{\mu}}_{\text{Fourier transform of surface part}} }\]

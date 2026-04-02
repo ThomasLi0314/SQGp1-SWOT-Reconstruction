@@ -5,7 +5,7 @@ import jax.numpy as jnp
 
 from physics_functions import calculate_surface_u
 
-
+# Main function
 def plot_surface_fields(phi0_s_opt, phi0_s_true, u_qg, v_qg, x, y,
                         kx, ky, mu, inv_mu, K2, inv_K2, epsilon, Bu,
                         Nx, Ny, elapsed, run_dir):
@@ -27,28 +27,24 @@ def plot_surface_fields(phi0_s_opt, phi0_s_true, u_qg, v_qg, x, y,
     run_dir     : path to the run folder where the plot is saved
     """
     # ── Compute surface velocities from potentials ──
-    phi0_s_hat_opt  = jnp.fft.fft2(phi0_s_opt)
+    phi0_s_hat_opt = jnp.fft.fft2(phi0_s_opt)
     phi0_s_hat_true = jnp.fft.fft2(phi0_s_true)
 
-    u_surface_opt, v_surface_opt = calculate_surface_u(
-        phi0_s_hat_opt, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu
-    )
-    u_surface_true, v_surface_true = calculate_surface_u(
-        phi0_s_hat_true, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu
-    )
+    u_surface_opt, v_surface_opt = calculate_surface_u(phi0_s_hat_opt, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu)
+    u_surface_true, v_surface_true = calculate_surface_u(phi0_s_hat_true, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu)
 
-    # ── Compute surface vorticity: zeta = dv/dx - du/dy ──
-    u_opt_hat  = jnp.fft.fft2(u_surface_opt)
-    v_opt_hat  = jnp.fft.fft2(v_surface_opt)
+    # ── Compute surface vorticity ──
+    u_opt_hat = jnp.fft.fft2(u_surface_opt)
+    v_opt_hat = jnp.fft.fft2(v_surface_opt)
     u_true_hat = jnp.fft.fft2(u_surface_true)
     v_true_hat = jnp.fft.fft2(v_surface_true)
 
-    zeta_opt  = jnp.real(jnp.fft.ifft2(1j * kx * v_opt_hat  - 1j * ky * u_opt_hat))
+    zeta_opt = jnp.real(jnp.fft.ifft2(1j * kx * v_opt_hat - 1j * ky * u_opt_hat))
     zeta_true = jnp.real(jnp.fft.ifft2(1j * kx * v_true_hat - 1j * ky * u_true_hat))
 
     # ── Plot ──
     x_np, y_np = np.array(x), np.array(y)
-    method_label = f"LBFGS (jax auto-diff, {Nx}x{Ny})"
+    method_label = f"LBFGS (jax, {Nx}x{Ny})"
 
     import datetime
     date_str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

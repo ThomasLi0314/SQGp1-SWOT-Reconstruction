@@ -3,7 +3,7 @@ clc;
 close all;
 
 
-kmax = 255;  % Equivalent to 256^2 in grid space
+kmax = 31;  % Equivalent to 256^2 in grid space
 K0 = 9.5;     % Initial wavenumber peak
 delk = 3;    % Width of initial peak
 E0 = 1;      % Initial energy

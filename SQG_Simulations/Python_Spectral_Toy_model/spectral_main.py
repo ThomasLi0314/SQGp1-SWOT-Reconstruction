@@ -48,34 +48,42 @@ def main():
     
     use_custom_ssh = False
     b_s_custom = None
+
     
-    if file_path:
+    
+    if file_path: 
         mat_contents = sio.loadmat(file_path)
         # Find the relevant array (expecting buoyancy 'bout')
         b_s_data = None
-        for key in ['bout', 'b_s', 'buoyancy']:
-            if key in mat_contents:
-                b_s_data = mat_contents[key]
-                if b_s_data.ndim >= 2: # ensure it's a spatial array
-                    break
-        else:
-            keys = [k for k in mat_contents.keys() if not k.startswith('__')]
-            if keys:
-                for k in keys:
-                    if mat_contents[k].ndim >= 2:
-                        b_s_data = mat_contents[k]
-                        break
-                if b_s_data is None:
-                    raise ValueError("No valid 2D matrix found in the selected .mat file.")
-            else:
-                raise ValueError("No variables found in the selected .mat file.")
+        key = 'bout'
+        b_s_data = mat_contents[key]
+        b_s_custom = b_s_data[:, :, -1]
+        print(f"Loaded 3D buoyancy data from {file_path}, using the last time period.")
+        # for key in ['bout', 'b_s', 'buoyancy']:
+        #     if key in mat_contents:
+        #         b_s_data = mat_contents[key]
+        #         if b_s_data.ndim >= 2: # ensure it's a spatial array
+        #             break
+        # else:
+        #     keys = [k for k in mat_contents.keys() if not k.startswith('__')]
+        #     if keys:
+        #         for k in keys:
+        #             if mat_contents[k].ndim >= 2:
+        #                 b_s_data = mat_contents[k]
+        #                 break
+        #         if b_s_data is None:
+        #             raise ValueError("No valid 2D matrix found in the selected .mat file.")
+        #     else:
+        #         raise ValueError("No variables found in the selected .mat file.")
 
-        if b_s_data.ndim == 3:
-            b_s_custom = b_s_data[:, :, -1]
-            print(f"Loaded 3D buoyancy data from {file_path}, using the last time period.")
-        elif b_s_data.ndim == 2:
-            b_s_custom = b_s_data
-            print(f"Loaded 2D buoyancy data from {file_path}.")
+        # if b_s_data.ndim == 3:
+        #     b_s_custom = b_s_data[:, :, -1]
+        #     print(f"Loaded 3D buoyancy data from {file_path}, using the last time period.")
+        # elif b_s_data.ndim == 2:
+        #     b_s_custom = b_s_data
+        #     print(f"Loaded 2D buoyancy data from {file_path}.")
+
+        # Normalization 
         b_s_custom = b_s_custom / jnp.max(jnp.abs(b_s_custom))
         
         Nx, Ny = b_s_custom.shape
@@ -136,6 +144,9 @@ def main():
         phi0_s = ssh_setup(case_num, X, Y, K, Nx, Ny, key)
         phi0_s_hat = jnp.fft.fft2(phi0_s)
 
+    ## Data Processiong Add Some White Noise to the Original Field
+    phi0_s_hat = phi0_s_hat + 0.01 * jax.random.normal(key, (Nx, Ny))
+
     # ── Forward Part: Generate True SSH ──
     eta_s_hat_true = forward_ssh(phi0_s_hat, f, kx, ky, mu, inv_mu, K2, inv_K2, Bu, epsilon)
     print("True SSH data generated")
@@ -156,6 +167,7 @@ def main():
             phi0_s_2d, f, kx, ky, mu, inv_mu, Bu, epsilon, K2, inv_K2, eta_s_hat_true
         )
 
+    # Compute the gradient for the lost function
     grad_fn = jit(jax.grad(loss_fn))
 
     # Use L-BFGS (matches MATLAB's fminunc quasi-newton)
@@ -198,6 +210,7 @@ def main():
     phi_qg_hat = eta_s_hat_true / f
     u_qg = jnp.real(jnp.fft.ifft2(-1j * ky * phi_qg_hat))
     v_qg = jnp.real(jnp.fft.ifft2( 1j * kx * phi_qg_hat))
+    zeta_qg = jnp.real(jnp.fft.ifft2(1j * kx * v_qg - 1j * ky * u_qg))
 
     # ── Save Data to Run Folder ──
     import glob
@@ -227,8 +240,44 @@ def main():
     )
     print(f"Data saved to {run_dir}")
 
+    # ── Generate Run Summary Markdown ──
+    from datetime import datetime
+    summary_path = os.path.join(run_dir, "run_summary.md")
+    with open(summary_path, "w") as md:
+        md.write(f"# Run {run_num} Summary\n\n")
+        md.write(f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        md.write(f"## Data Source\n")
+        md.write(f"- **Simulation name:** `{data_name}`\n")
+        md.write(f"- **Custom SSH file:** `{file_path if file_path else 'N/A (default case)'}`\n\n")
+        md.write(f"## Grid Parameters\n")
+        md.write("|Parameter|Value|\n")
+        md.write("|---|---|\n")
+        md.write(f"| Nx | {Nx} |\n")
+        md.write(f"| Ny | {Ny} |\n")
+        md.write(f"| Lx | {float(Lx):.4f} |\n")
+        md.write(f"| Ly | {float(Ly):.4f} |\n\n")
+        md.write(f"## Physical Parameters\n")
+        md.write("|Parameter|Value|\n")
+        md.write("|---|---|\n")
+        md.write(f"| Ro (Rossby) | {float(Ro)} |\n")
+        md.write(f"| Bu (Burger) | {float(Bu)} |\n")
+        md.write(f"| f (Coriolis) | {float(f)} |\n")
+        md.write(f"| epsilon | {float(epsilon)} |\n\n")
+        md.write(f"## Optimization Settings\n")
+        md.write("|Parameter|Value|\n")
+        md.write("|---|---|\n")
+        md.write(f"| Solver | L-BFGS (jaxopt) |\n")
+        md.write(f"| Max iterations | {num_iterations} |\n")
+        md.write(f"| Tolerance (tol) | {solver.tol:.1e} |\n")
+        md.write(f"| Convergence cutoff (loss) | 1e-12 |\n")
+        md.write(f"| Final loss | {loss_val:.6e} |\n")
+        md.write(f"| Final |grad| | {g_norm:.6e} |\n")
+        md.write(f"| Converged iter | {i+1} |\n")
+        md.write(f"| Elapsed time | {elapsed:.2f}s |\n\n")
+    print(f"Run summary saved to {summary_path}")
+
     # ── Plotting ──
-    plot_surface_fields(phi0_s_opt, phi0_s, u_qg, v_qg, x, y,
+    plot_surface_fields(phi0_s_opt, phi0_s, u_qg, v_qg, zeta_qg, x, y,
                         kx, ky, mu, inv_mu, K2, inv_K2, epsilon, Bu,
                         Nx, Ny, elapsed, run_dir)
 
