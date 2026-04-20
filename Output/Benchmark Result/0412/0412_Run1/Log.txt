@@ -1,0 +1,28 @@
+Grid size : 
+N = 128;
+Rossby Number
+Ro = 0.02;
+
+For perturbation case C1 and C2. The thereshold is half of K0 = 9.5 (Presumebally this is the maximum wavenumber in Shafer simulation). 
+
+num_iterations = 100000
+loss_threshold = 1e-5
+grad_threshold = 1e-6  
+
+The workspace kernel is stored in the skl format folder. To call it, replace the second cell with the following. 
+
+
+import dill
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+# Define the path to your saved kernel
+path = r"D:\Documents\College\Research\Oceangrophy\Shafer_Project\Output\Benchmark Result\0412\0412_Run1\workspace_0412_run1.pkl"
+
+# Reload data
+with open(path, 'rb') as f:
+    ws = dill.load(f)
+
+# Update global variables with the loaded workspace
+globals().update(ws)
+

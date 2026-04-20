@@ -66,7 +66,9 @@ def vorticity_term(phi0_s_hat, mu, inv_mu, kx, ky, K2, Bu):
     I_4 = jnp.fft.fft2(2.0 * phi0_s_z * phi0_s_lap_z)
 
     # I5: K2^2 / mu * Phi_z * Phi_zz
-    I_5 = jnp.fft.fft2(phi0_s_z * phi0_s_zz) * K2**2 * inv_mu
+    # I_5 = jnp.fft.fft2(phi0_s_z * phi0_s_zz) * K2**2 * inv_mu
+    # Fix a bug should be K2 not K2 ** 2
+    I_5 = jnp.fft.fft2(phi0_s_z * phi0_s_zz) * K2 * inv_mu
 
     # I6: i*ky*mu * Phi_y * Phi_z
     I_6 = jnp.fft.fft2(phi0_s_y * phi0_s_z) * 1j * ky * mu

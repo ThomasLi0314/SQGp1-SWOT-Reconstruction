@@ -1,0 +1,169 @@
+\documentclass[11pt]{article}
+
+\usepackage{proposal}
+
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+% My macros
+\newcommand{\<}{\langle}
+\renewcommand{\>}{\rangle}
+\newcommand{\ul}{\underline}
+\newcommand{\ol}{\overline}
+\newcommand{\ca}[1]{\mathcal{#1}}
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\renewcommand{\vec}[1]{\bs{#1}} % bold vectors
+\newcommand{\uvec}[1]{\bs{\hat{#1}}}
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\dd}[2]{\frac{\d #1}{\d #2}}
+\newcommand{\DD}[2]{\frac{D #1}{D #2}}
+\newcommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+\newcommand{\mat}[1]{\mathsf{#1}} % matrices
+\newcommand{\T}{\scriptstyle \mathsf{T}}
+\newcommand{\tran}[1]{\mat{#1}^{\T}}
+\newcommand{\matel}[1]{\mathsf{#1}}
+
+\proposaltitle{Use of the $\text{SQG}^{+1}$ model to reconstruct upper-ocean flows from sea surface height}
+\proposalauthor{Jinchang Li}
+\proposaladvisor{Prof. Shafer Smith}
+\proposaldate{\today}
+
+\makeatletter
+
+\renewcommand{\makeproposaltitle}{%
+\begin{center}
+    \vspace*{0.5cm}
+    {\Large\bfseries\color{ProposalNavy}\@proposaltitle \\[4pt]} {\normalsize\color{ProposalSteel}\textsc{Project Outline}}
+    \\[8pt]
+    \textbf{Author:} \@proposalauthor \\
+    \textbf{Advisor:} \@proposaladvisor \\
+    \textbf{Date:} \@proposaldate
+\end{center}
+\vspace{0.2cm}
+}
+\makeatother
+
+\begin{document}
+    \makeproposaltitle
+
+    \section{Introduction}
+    Building upon Ryan's notes, I have developed code in both MATLAB and Python (using the JAX library for hardware-accelerated automatic differentiation) to perform the inversion process. The source code is available on \href{https://github.com/ThomasLi0314/SQGp1-SWOT-Reconstruction}{GitHub}.
+
+    The primary objective is to find the surface quasi-geostrophic potential $\Phi^{0}$ that minimizes the objective function:
+    \begin{equation}
+        \min_{\Phi^{0}}\sum \Big( \hat{\eta}^{s}(\Phi^{0}) - \hat{\eta}^{\text{true}}\Big)^{2}.
+    \end{equation}
+    This is essentially the $\ell_{2}$ norm of the surface sea height difference.
+    Here the superscript $\cdot^{s}$ means evaluate at surface ($z = 0$) and
+    $\hat{\cdot}$ is the fourier transform. In the $\text{SQG}^{+1}$ model. In
+    the most compact form we can write
+    \begin{equation}
+        \hat{\eta}^{s} = \mcalN(\hat{\Phi}^{0,s}) + \hat{\Phi}^{0,s} = \mcalN^{tot}(\hat{\Phi}^{0,s}). \label{eq:objective}
+    \end{equation}
+
+    \subsection{Forward Process}
+    Given the $\Phi^{0,s}$ field. The process of computing the nonlinear
+    operator $\mcalN^{tot}$ and obtain the surface sea height is called the
+    \textbf{Forward Process}.
+
+    \section{General Structure}
+    Currently I am in the phase of testing the codes and model. It is a two part
+    process.
+    \subsection{Data Preparation}
+    First, a ''true'' surface potential field, $\Phi^{0,s}_{\text{true}}$, is established. This is obtained either from idealized synthetic fields or from outputs of SQG simulations provided by Prof.\ Smith.
+
+    \subsection{Forward Simulation}
+    Using the $\text{SQG}^{+1}$ model described above, the forward process generates a corresponding ''true'' sea surface height field, $\eta^{\text{true}}$, from $\Phi^{0,s}_{\text{true}}$. This synthetic SSH serves as the observational data target for the inversion.
+
+    \subsection{Inversion Process}
+    The inversion is the core of the project. The optimizer is initialized with a suitable first guess, $\Phi^{0,s}_{\text{guess}}$. To evaluate robustness, I often construct this guess by adding scaled white noise to the true field (or using pure noise for idealized tests):
+    \[
+        \Phi^{0,s}_{\text{guess}} = \Phi^{0,s}_{\text{true}} + \delta \cdot W,
+    \]
+    where $\delta$ is a scaling factor and $W$ is white noise. A Quasi-Newton optimization algorithm (specifically L-BFGS, implemented natively in JAX) iteratively updates $\Phi^{0,s}$ to minimize the cost function defined in Eq.\ \ref{eq:objective}.
+
+    \section{Specific Adjustments and Results}
+    \subsection{Case 1}
+    To start, I make up some fields to test different optimization methods algorithms.
+    \subsubsection{Different Optimizer}
+    There is a \texttt{lsqnonlin} in short for Least Square Non-linear optimizer
+    supported in MATLAB. Instead taking a scaler computed by Eq
+    \ref{eq:objective} as the objective, the objective is
+    \[
+        \hat{\eta}^{s}(\Phi^{0}) - \hat{\eta}^{\text{true}}.
+    \]
+    This solver relies on the Levenberg-Marquardt algorithm.
+
+    Benchmark runs demonstrated that optimizing the scalar $\ell_2$-norm objective using a Quasi-Newton method is generally much faster than the nonlinear least-squares approach. Furthermore, the L-BFGS algorithm within the Python JAX package works better than MATLAB's \texttt{fminunc} (Unconstrained Minimization).
+
+    \subsection{Case 2: SQG Simulation Data}
+    Subsequent tests utilized full SQG simulation data provided by Prof.\ Smith, which outputs a surface buoyancy field. Under SQG theory, spectral variables decay exponentially with depth, making it straightforward to invert the surface buoyancy into a surface potential field, $\Phi^{0,s}_{\text{SQG}}$.
+
+    Since this field is purely governed by SQG dynamics, an ideal optimizer should perfectly recover $\Phi^{0,s}_{\text{SQG}}$. To explore the model's sensitivity, I perturbed the potential field to act as the ''true'' observational target:
+    \begin{equation}
+        \Phi^{0,s}_{\text{true}} = \Phi^{0,s}_{\text{SQG}} + \delta \cdot \|\Phi^{0,s}_{\text{SQG}}\|_{\infty} \cdot W,
+    \end{equation}
+    where $\|\cdot\|_{\infty}$ denotes the maximum absolute amplitude, $\delta$ is a scaling factor controlling the noise level, and $W$ is normalized filtered white noise. The optimizer is then initialized with the unperturbed SQG field:
+    \[
+        \Phi^{0,s}_{\text{guess}} = \Phi^{0,s}_{\text{SQG}}.
+    \]
+
+    \subsubsection{Findings}
+    The scale of the perturbation, $\delta$, dramatically alters the resulting surface vorticity reconstruction. Setting $\delta = 0.05$ produces a highly noisy surface vorticity field (see Fig.\ \ref{fig:fig1}), which in turn significantly increases the required optimization runtime (see Fig.\ \ref{fig:fig2}).
+    
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.85\linewidth]{figure/512_0.05.png}
+        \caption{Grid size $N = 512$, scale factor $\delta = 0.05$. Comparison of the true field and the recovered SQG simulation field.}
+        \label{fig:fig1}
+    \end{figure}
+    
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.85\linewidth]{figure/benchmark_plots_20260330_160931.png}
+        \caption{Influence of grid size and noise scale factor on the optimization run-time.}
+        \label{fig:fig2}
+    \end{figure}
+    However, if given enough run time. The optimization can still find the original
+    field. Figure \ref{fig:fig3} shows a result with grid size $128 \times 128$
+    and a very small scale $\delta$.
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.85\linewidth]{figure/128_0.0001.png}
+        \caption{Grid Size $N = 128$, scale factor $\delta = 0.0001$.}
+        \label{fig:fig3}
+    \end{figure}
+
+    \section{Further Approach}
+    There are several potential options I would like to explore.
+    \subsection{Physical Perturbations to SQG Simulations}
+    Instead of simple white noise, I plan to introduce some physically meaningful perturbations representing submesoscale dynamics ($\Phi^{0,s}_{\text{submeso}}$) and internal gravity waves ($\Phi^{0,s}_{\text{wave}}$) to the SQG base field:
+    \[
+        \Phi^{0,s}_{\text{true}} = \Phi^{0,s}_{\text{SQG}} + \Phi^{0,s}_{\text{submeso}} + \Phi^{0,s}_{\text{wave}}.
+    \]
+    Passing this composite field through the forward model to generate SSH data would provide a more realistic scenario for testing the inversion scheme.
+
+    \subsection{Validation via Channel Models}
+    A limitation of the current approach is that the forward model used to generate the ''true'' SSH is the exact same $\text{SQG}^{+1}$ mathematical model used during the inversion process. So the result is that the exact potential $\Phi^{0,s}_{\text{true}}$ is mathematically guaranteed to yield an objective function of exactly 0. So the true field is actually, at least one of, the optimal solution. Regardless of the applied perturbations, a optimizer will predictably converge to $\Phi^{0,s}_{\text{true}}$ under these ideal conditions just a matter of time.
+
+    To evaluate the true physical validity of the $\text{SQG}^{+1}$ reconstruction, it is crucial to test the inversion against independent, physically complex simulation data. Tatsu has prepared me a Channel model run on primitive equations that generates both SSH and I can use the geostrophic surface potential as the initial guess and perform the inversion process \textbf{only}. Because the SSH and surface potential in a full primitive equation model are not strictly bound by simplified $\text{SQG}^{+1}$ constraints. It is expected that the reconstruction surface velocity field would not match the original field exactly.
+
+    \subsection{Alternating the Objective}
+    Currently we are using the $\ell_2$-norm of the difference between the reconstruction and true surface sea height as in Eq \ref{eq:objective}. Would it be more efficient to actually minimize the $\ell_2$-norm of the difference between the reconstruction and true surface vorticity? That is 
+    \begin{equation}
+    \min_{\Phi^{0,s}} \sum \Big( \hat{\zeta}^{s}(\Phi^{0,s}) - \hat{\zeta}^{\text{true}} \Big)^2
+    \end{equation} 
+    Or the surface strain.
+
+    \subsection{Filtered Data}
+    I saw in Ryan's notebook there is a low-pass filter : 
+    \begin{lstlisting}
+lowpass_filter = np.ones(Kamat_cpkm.shape); 
+pass_k = 1/30 # this is the filter scale
+lowpass_filter = np.array(  np.exp(-(Kamat_cpkm-pass_k)**2*20)  ) # This is the shape, I made this up from Smith 2002
+lowpass_filter[Kamat_cpkm<pass_k] = 1
+    \end{lstlisting}
+    I am still not quite clear about how efficient this filter. I know it is mainly used to attenuate instrument noise and unbalanced submesoscale motions so that they won't adhere the SQG dynamics, i.e. the third and fourth term below.
+    \[ u_{ocean} = u_{qg} + u_{aqg, non-wave} + u_{wave} + u_{noise}\]
+    However I am also interested in other way of accomplishing similar target. 
+
+\end{document}

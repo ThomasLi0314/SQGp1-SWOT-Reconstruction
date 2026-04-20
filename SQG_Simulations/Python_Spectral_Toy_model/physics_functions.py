@@ -8,30 +8,29 @@ def cyclogeo_term(phi0_s_hat, kx, ky):
     Cyclogeostrophic correction: 2 * J(Phi_x, Phi_y) in spectral space.
     J = Phi_xx * Phi_yy - Phi_xy^2
     """
-    phi0_s_xx = jnp.fft.ifft2(phi0_s_hat * (-1.0) * kx**2)
-    phi0_s_yy = jnp.fft.ifft2(phi0_s_hat * (-1.0) * ky**2)
-    phi0_s_xy = jnp.fft.ifft2(phi0_s_hat * (-1.0) * ky * kx)
+    phi0_s_xx = jnp.real(jnp.fft.ifft2(phi0_s_hat * (-1.0) * kx**2))
+    phi0_s_yy = jnp.real(jnp.fft.ifft2(phi0_s_hat * (-1.0) * ky**2))
+    phi0_s_xy = jnp.real(jnp.fft.ifft2(phi0_s_hat * (-1.0) * ky * kx))
 
     J_Phi_s = phi0_s_xx * phi0_s_yy - phi0_s_xy**2
     J_Phi_s_hat = 2.0 * jnp.fft.fft2(J_Phi_s)
     return J_Phi_s_hat
-
 
 @jit
 def vorticity_term(phi0_s_hat, mu, inv_mu, kx, ky, K2, Bu):
     """
     Surface vorticity term: zeta_s_hat = (I1 + I2 + ... + I7) / Bu
     """
-    phi0_s_x   = jnp.fft.ifft2(phi0_s_hat * 1j * kx)
-    phi0_s_y   = jnp.fft.ifft2(phi0_s_hat * 1j * ky)
-    phi0_s_zzx = jnp.fft.ifft2(phi0_s_hat * mu * mu * 1j * kx)
-    phi0_s_zzy = jnp.fft.ifft2(phi0_s_hat * mu * mu * 1j * ky)
-    phi0_s_zz  = jnp.fft.ifft2(phi0_s_hat * mu * mu)
-    phi0_s_lap = jnp.fft.ifft2(phi0_s_hat * (-1.0) * K2)
-    phi0_s_zx  = jnp.fft.ifft2(phi0_s_hat * mu * 1j * kx)
-    phi0_s_zy  = jnp.fft.ifft2(phi0_s_hat * mu * 1j * ky)
-    phi0_s_z   = jnp.fft.ifft2(phi0_s_hat * mu)
-    phi0_s_lap_z = jnp.fft.ifft2(phi0_s_hat * (-1.0) * K2 * mu)
+    phi0_s_x     = jnp.real(jnp.fft.ifft2(phi0_s_hat * 1j * kx))
+    phi0_s_y     = jnp.real(jnp.fft.ifft2(phi0_s_hat * 1j * ky))
+    phi0_s_zzx   = jnp.real(jnp.fft.ifft2(phi0_s_hat * mu * mu * 1j * kx))
+    phi0_s_zzy   = jnp.real(jnp.fft.ifft2(phi0_s_hat * mu * mu * 1j * ky))
+    phi0_s_zz    = jnp.real(jnp.fft.ifft2(phi0_s_hat * mu * mu))
+    phi0_s_lap   = jnp.real(jnp.fft.ifft2(phi0_s_hat * (-1.0) * K2))
+    phi0_s_zx    = jnp.real(jnp.fft.ifft2(phi0_s_hat * mu * 1j * kx))
+    phi0_s_zy    = jnp.real(jnp.fft.ifft2(phi0_s_hat * mu * 1j * ky))
+    phi0_s_z     = jnp.real(jnp.fft.ifft2(phi0_s_hat * mu))
+    phi0_s_lap_z = jnp.real(jnp.fft.ifft2(phi0_s_hat * (-1.0) * K2 * mu))
 
     # I1: nabla Phi_z . nabla Phi_zz
     I_1 = jnp.fft.fft2(phi0_s_x * phi0_s_zzx + phi0_s_y * phi0_s_zzy)
@@ -45,8 +44,8 @@ def vorticity_term(phi0_s_hat, mu, inv_mu, kx, ky, K2, Bu):
     # I4: 2 Phi_z nabla^2 Phi_z
     I_4 = jnp.fft.fft2(2.0 * phi0_s_z * phi0_s_lap_z)
 
-    # I5: K2^2 / mu * Phi_z * Phi_zz
-    I_5 = jnp.fft.fft2(phi0_s_z * phi0_s_zz) * K2**2 * inv_mu
+    # I5: K2 / mu * Phi_z * Phi_zz
+    I_5 = jnp.fft.fft2(phi0_s_z * phi0_s_zz) * K2 * inv_mu
 
     # I6: i*ky*mu * Phi_y * Phi_z
     I_6 = jnp.fft.fft2(phi0_s_y * phi0_s_z) * 1j * ky * mu
@@ -104,7 +103,7 @@ def calculate_surface_u(phi0_s_hat, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu)
     return u_surface, v_surface
 
 
-def forward_ssh(phi0_s_hat, f, kx, ky, mu, inv_mu, K2, inv_K2, Bu, epsilon):
+def forward_ssh(phi0_s_hat, kx, ky, mu, inv_mu, K2, inv_K2, Bu, epsilon):
     """Full forward model: phi0_s_hat -> eta_s_hat (SSH in spectral space)."""
     cyc = cyclogeo_term(phi0_s_hat, kx, ky)
     vort = vorticity_term(phi0_s_hat, mu, inv_mu, kx, ky, K2, Bu)

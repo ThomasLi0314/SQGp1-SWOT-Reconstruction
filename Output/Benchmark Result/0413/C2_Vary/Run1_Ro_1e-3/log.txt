@@ -1,0 +1,11 @@
+Ro = 0.001
+
+High k filter. Filter high k above a given wavenumber. List of cutoff. 
+
+DEFAULT_K_CUTOFFS = [10.0, 12.5, 15.0, 20.0, 25.0, 30.0]
+
+
+
+Result found : 
+
+Optimization time converge monotonically as k cutoff grow. 

@@ -1,0 +1,5 @@
+Ro = 1e-3
+
+Different slope of the WHite noise with energy spectrum.
+
+Grid size 128. 

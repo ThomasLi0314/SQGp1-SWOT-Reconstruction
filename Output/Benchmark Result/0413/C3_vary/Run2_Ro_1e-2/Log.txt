@@ -1,0 +1,5 @@
+Ro = 0.01
+
+N = 128
+
+Different k-slope white noise energy spectrum. 

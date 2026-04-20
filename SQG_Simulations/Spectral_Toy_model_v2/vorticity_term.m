@@ -31,7 +31,7 @@ function zeta_s_hat = vorticity_term(phi0_s_hat, mu, inv_mu, kx, ky, K2, Bu)
 
     % Fiftth term % K2^2 / \mu \Phi_z \Phi_zz
     I_5_temp = phi0_s_z .* phi0_s_zz;
-    I_5 = fft2(I_5_temp) .* K2.^2 .* inv_mu;
+    I_5 = fft2(I_5_temp) .* K2 .* inv_mu;
 
     % Sixth term $kiy \mu \Phi_y \Phi_z$
     I_6_temp = phi0_s_y .* phi0_s_z;

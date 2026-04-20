@@ -1,0 +1,441 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 2.0 (March 8, 2022)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Author:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+	11pt, % Set the default font size, options include: 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, 20pt
+	%t, % Uncomment to vertically align all slide content to the top of the slide, rather than the default centered
+	%aspectratio=169, % Uncomment to set the aspect ratio to a 16:9 ratio which matches the aspect ratio of 1080p and 4K screens and projectors
+]{beamer}
+
+\graphicspath{{Images/}{./}} % Specifies where to look for included images (trailing slash required)
+
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule for better rules in tables
+
+%----------------------------------------------------------------------------------------
+%	SELECT LAYOUT THEME
+%----------------------------------------------------------------------------------------
+
+% Beamer comes with a number of default layout themes which change the colors and layouts of slides. Below is a list of all themes available, uncomment each in turn to see what they look like.
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+%----------------------------------------------------------------------------------------
+%	SELECT COLOR THEME
+%----------------------------------------------------------------------------------------
+
+% Beamer comes with a number of color themes that can be applied to any layout theme to change its colors. Uncomment each of these in turn to see how they change the colors of your selected layout theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{monarca}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{spruce}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%----------------------------------------------------------------------------------------
+%	SELECT FONT THEME & FONTS
+%----------------------------------------------------------------------------------------
+
+% Beamer comes with several font themes to easily change the fonts used in various parts of the presentation. Review the comments beside each one to decide if you would like to use it. Note that additional options can be specified for several of these font themes, consult the beamer documentation for more information.
+
+%\usefonttheme{default} % Typeset using the default sans serif font
+\usefonttheme{serif} % Use serif font throughout (required for mathpazo)
+%\usefonttheme{structurebold} % Typeset important structure text (titles, headlines, footlines, sidebar, etc) in bold
+%\usefonttheme{structureitalicserif} % Typeset important structure text (titles, headlines, footlines, sidebar, etc) in italic serif
+%\usefonttheme{structuresmallcapsserif} % Typeset important structure text (titles, headlines, footlines, sidebar, etc) in small caps serif
+
+%------------------------------------------------
+
+\usepackage[T1]{fontenc}   % Font encoding for proper glyph rendering
+\usepackage{mathrsfs}      % \mathscr script letters
+\usepackage{mathpazo}      % Palatino for text + Pazo math fonts
+%\usepackage{mathptmx}     % Times New Roman look (alternative)
+
+%\usepackage{helvet} % Use the Helvetica font for sans serif text
+%\usepackage[default]{opensans} % Use the Open Sans font for sans serif text
+%\usepackage[default]{FiraSans} % Use the Fira Sans font for sans serif text
+%\usepackage[default]{lato} % Use the Lato font for sans serif text
+
+%----------------------------------------------------------------------------------------
+%	SELECT INNER THEME
+%----------------------------------------------------------------------------------------
+
+% Inner themes change the styling of internal slide elements, for example: bullet points, blocks, bibliography entries, title pages, theorems, etc. Uncomment each theme in turn to see what changes it makes to your presentation.
+
+%\useinnertheme{default}
+\useinnertheme{circles}
+%\useinnertheme{rectangles}
+%\useinnertheme{rounded}
+%\useinnertheme{inmargin}
+
+%----------------------------------------------------------------------------------------
+%	SELECT OUTER THEME
+%----------------------------------------------------------------------------------------
+
+% Outer themes change the overall layout of slides, such as: header and footer lines, sidebars and slide titles. Uncomment each theme in turn to see what changes it makes to your presentation.
+
+%\useoutertheme{default}
+%\useoutertheme{infolines}
+%\useoutertheme{miniframes}
+%\useoutertheme{smoothbars}
+%\useoutertheme{sidebar}
+%\useoutertheme{split}
+%\useoutertheme{shadow}
+%\useoutertheme{tree}
+%\useoutertheme{smoothtree}
+
+%\setbeamertemplate{footline} % Uncomment this line to remove the footer line in all slides
+%\setbeamertemplate{footline}[page number] % Uncomment this line to replace the footer line in all slides with a simple slide count
+
+%\setbeamertemplate{navigation symbols}{} % Uncomment this line to remove the navigation symbols from the bottom of all slides
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title[Project Outline]{Inferring Submesoscale Surface Velocity and Vertical Velocity from SWOT Surface Sea Height Data} % The short title in the optional parameter appears at the bottom of every slide, the full title in the main parameter is only on the title page
+
+% \subtitle{Optional Subtitle} % Presentation subtitle, remove this command if a subtitle isn't required
+
+\author[Jinchang Li]{Jinchang Li \and Instructed by Professor Shafer Smith} % Presenter name(s), the optional parameter can contain a shortened version to appear on the bottom of every slide, while the main parameter will appear on the title slide
+
+\institute[NYU]{New York University \\ \smallskip \textit{jl15535@nyu.edu}} % Your institution, the optional parameter can be used for the institution shorthand and will appear on the bottom of every slide after author names, while the required parameter is used on the title slide and can include your email address or additional information on separate lines
+
+\date[\today]{\today} % Presentation date or conference/meeting name, the optional parameter can contain a shortened version to appear on the bottom of every slide, while the required parameter value is output to the title slide
+
+%----------------------------------------------------------------------------------------
+\newcommand{\SQGp}{$\text{SQG}^{+1}$}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SLIDE
+%----------------------------------------------------------------------------------------
+
+\begin{frame}
+	\titlepage % Output the title slide, automatically created using the text entered in the PRESENTATION INFORMATION block above
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS SLIDE
+%----------------------------------------------------------------------------------------
+
+% The table of contents outputs the sections and subsections that appear in your presentation, specified with the standard \section and \subsection commands. You may either display all sections and subsections on one slide with \tableofcontents, or display each section at a time on subsequent slides with \tableofcontents[pausesections]. The latter is useful if you want to step through each section and mention what you will discuss.
+
+\begin{frame}
+	\frametitle{Presentation Overview} % Slide title, remove this command for no title
+	
+	\tableofcontents % Output the table of contents (all sections on one slide)
+	%\tableofcontents[pausesections] % Output the table of contents (break sections up across separate slides)
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION BODY SLIDES
+%----------------------------------------------------------------------------------------
+
+\section{Text Examples} % Sections are added in order to organize your presentation into discrete blocks, all sections and subsections are automatically output to the table of contents as an overview of the talk but NOT output in the presentation as separate slides
+
+%------------------------------------------------
+
+\subsection{Paragraphs and Lists}
+
+\begin{frame}
+    \frametitle{Motivation}
+    \begin{columns}[c]
+        \begin{column}{0.4\textwidth}
+            \textbf{Submesoscale} acts as the bridge in the energy cascade, moving energy from the geostrophic mesosclae down to the small scales where dissipation occurs. The \textbf{SWOT} resolvees sea surface height (SSH) down to $\mathcal{O}(10 \text{km})$. We wish to develop a method to infer submesoscale surface velocity and vertical velocity from \textbf{SWOT} surface sea height data.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.8\textwidth]{Figure/MITgcm_Channel.png}
+                \caption{A Surface Vorticity field from MITgcm simulation of the Southern Ocean. }
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+%------------------------------------------------
+
+\section{Methodology}
+
+\subsection{SQG Framework}
+
+\begin{frame}
+    \frametitle{Methodology --- SQG Baseline}
+    \begin{block}{Interior PV equation (zero-PV)}
+        \vspace{-0.5em}
+        \begin{equation}
+            \nabla_h^2 \psi + \frac{\partial}{\partial z}\!\left(\frac{f_0^2}{N^2}\frac{\partial \psi}{\partial z}\right) = 0
+        \end{equation}
+    \end{block}
+    \begin{block}{Surface boundary condition}
+        \vspace{-0.5em}
+        \begin{equation}
+            f_0 \left.\frac{\partial \psi}{\partial z}\right|_{z=0} = b_s, \qquad \psi \to 0 \text{ as } z\to -\infty
+        \end{equation}
+    \end{block}
+    \begin{itemize}
+        \item SSH gives surface buoyancy via geostrophic balance: $b_s \propto g\,\eta$.
+        \item The full interior flow $(\psi,\,\mathbf{u}_g)$ is determined by $b_s$ alone.
+    \end{itemize}
+\end{frame}
+
+\subsection{SWOT Data}
+\begin{frame}
+    \frametitle{SWOT Satellite}
+    In 2022, a new satellite called SWOT was launched by NASA, CNES to access the mesoscale and submesoscale dynamics of the ocean. SSH will be measured by the two \textbf{KaRin} (Ka-band Radar Interferometer) instruments. They will provide a 120 km width swath of coverage with a resolution of 2 km. 
+\end{frame}
+%------------------------------------------------
+
+\subsection{The $+1$ Correction}
+
+\begin{frame}
+    \frametitle{Methodology --- The \SQGp{} Model}
+    \framesubtitle{\cite{muraki1999}}
+    \begin{columns}[t]
+        \begin{column}{0.48\textwidth}
+            \begin{alertblock}{Limitation of SQG}
+                SQG is $\mathcal{O}(\mathrm{Ro}^0)$: captures geostrophic balance but \textbf{misses} ageostrophic corrections responsible for frontogenesis and vertical motion.
+            \end{alertblock}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\SQGp{} extension}
+                Expand in Rossby number,
+                \[
+                    \psi = \underbrace{\psi^{(0)}}_{\text{SQG}} + \mathrm{Ro}\,\psi^{(1)} + \cdots
+                \]
+                The $\mathcal{O}(\mathrm{Ro})$ correction is driven nonlinearly by the SQG base state.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \vspace{0.5em}
+    \begin{exampleblock}{Key advantage}
+        Yields a non-trivial vertical velocity $w$ and ageostrophic surface velocity --- all from SSH alone.
+    \end{exampleblock}
+\end{frame}
+
+%------------------------------------------------
+
+\subsection{Forward and Inverse Problem}
+
+\begin{frame}
+    \frametitle{Methodology --- Forward Map I: Vorticity}
+    \begin{block}{\SQGp{} vorticity decomposition}
+        \vspace{-0.5em}
+        \begin{equation}
+            \zeta = \underbrace{\nabla^2 \Phi^0}_{\zeta^0,\;\text{SQG}} +\; \mathrm{Ro}\underbrace{\bigl(\nabla^2 \Phi^1 + F_{yz}^1 - G_{xz}^1\bigr)}_{\zeta^1,\;\text{correction}}
+        \end{equation}
+    \end{block}
+    \begin{itemize}
+        \item $\Phi^0$: SQG streamfunction, determined by $\Phi^{0,s}$ with exponential vertical decay in spectral space.
+        \item $\Phi^1,\,F^1,\,G^1$: all nonlinear functions of $\Phi^{0,s}$ --- no new inputs needed.
+    \end{itemize}
+    \begin{block}{Cyclogeostrophic pressure correction \label{eq:cyclogeostrophic correction}}
+        \vspace{-0.5em}
+        \begin{equation}
+            \nabla^2 p^1 - f\zeta^1 = 2J(\Phi_x^{0,s},\, \Phi_y^{0,s})
+            \label{eq:cyclogeostrophic correction}
+        \end{equation}
+    \end{block}
+    The Jacobian on the right captures the \textbf{ageostrophic} feedback from the SQG base state.
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+    \frametitle{Methodology --- Forward Map II: SSH}
+    \begin{block}{First-order SSH}
+        From Eq.~\eqref{eq:cyclogeostrophic correction}, under hydrostatic balance,
+        \begin{equation}
+            \eta^1 = \mathcal{N}(\Phi^{0,s})
+        \end{equation}
+        where $\mathcal{N}$ is a nonlinear operator.
+    \end{block}
+    \begin{block}{Full model SSH}
+        \begin{equation}
+            \eta_{\mathrm{model}} = \underbrace{\Phi^{0,s}}_{\text{SQG}} + \epsilon\,\underbrace{\mathcal{N}(\Phi^{0,s})}_{\text{correction}}
+        \end{equation}
+    \end{block}
+    \vspace{0.5em}
+    $\eta_{\mathrm{model}}$ depends \emph{only} on the surface streamfunction $\Phi^{0,s}$ --- this is the key to the inversion.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Methodology --- The Inverse Problem}
+    \begin{block}{Control variable}
+        Everything in \SQGp{} is determined by $\Phi^{0,s}$. \textbf{Goal}: find $\Phi^{0,s}$ such that model SSH matches observations.
+    \end{block}
+    \begin{block}{Cost function}
+        \vspace{-0.5em}
+        \begin{equation}
+            \min_{\Phi^{0,s}}\; \bigl\| \eta_{\mathrm{obs}} - \eta_{\mathrm{model}}(\Phi^{0,s}) \bigr\|_2^2
+        \end{equation}
+    \end{block}
+    The optimization is done by using a limited-memory L-BFGS algorithm. The gradient is computed automatically through the python JAX library. 
+\end{frame}
+
+%------------------------------------------------
+
+\section{About the SWOT Data}
+
+\begin{frame}
+    \frametitle{About the SWOT Data --- Potential Challenges}
+    Since the ultimate goal is to apply this method to SWOT observations, there are several challenges to address.
+    \begin{alertblock}{Challenges}
+        \begin{itemize}
+            \item \textbf{SWOT observation errors}: The SSH retrieved from SWOT is not a perfect signal. The Ka-band Radar Interferometer is highly sensitive to random \emph{thermal noise} in the electronics, and other error sources (KaRIn roll, wet-troposphere delay, etc.) further contaminate the small-scale SSH field that \SQGp{} is most sensitive to. \cite{chelton2022}
+            \item \textbf{Non-steady signals}: \SQGp{} assumes a steady-state flow, but SWOT observes tides, internal waves, and transient eddies. These unsteady features cannot be captured by the \SQGp{} model and need to be filtered out.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Current Objective -- Benchmark}
+    \begin{block}{Objective}
+        Test the \SQGp{} inversion on a suite of \emph{synthetic} perturbations, each designed to mimic a specific class of ageostrophic signal.
+    \end{block}
+    \medskip
+    Running the inversion directly on SWOT data --- or even on a primitive-equation channel simulation --- conflates every source of non-SQG signal at once. Because the individual contributions cannot be disentangled, it is impossible to attribute errors to a particular mechanism or to design targeted, controlled experiments. \par
+
+    The final goal is to improve the current reversion method given conclusions draw from the benchmark results. 
+\end{frame}
+
+\begin{frame}
+    \frametitle{Data and Target Field}
+    \begin{itemize}
+        \item Use an SQG simulation from Prof.\ Smith as the balanced base field $\Phi^{0,s}_{\text{SQG}}$.
+        \item Apply the \SQGp{} forward operator to obtain a clean target SSH, then add an $\mathcal{O}(\text{Ro})$ perturbation: $\eta^{\text{true}} = \mathcal{N}^{\text{tot}}(\Phi^{0,s}_{\text{SQG}}) + p$.
+        \item Each perturbation $p$ is normalized so that $\text{rms}(p) = \text{Ro}\cdot\text{rms}(\Phi^{0,s}_{\text{SQG}})$ --- the initial cost is equal across cases, so the benchmark isolates the \emph{structure} of the signal rather than its amplitude.
+        \item Run the \SQGp{} inversion on each case and compare the recovered field against $\Phi^{0,s}_{\text{SQG}}$.
+    \end{itemize}
+    \medskip
+    Below I list the perturbation families of interest. I am still working on testing 
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+    \frametitle{Perturbation Families --- SQG-correlated \& IGW}
+    \begin{block}{Group A --- SQG-correlated structures}
+        \begin{itemize}
+            \item \textbf{Frontogenesis}: $p \propto |\nabla\psi|^2$, amplified at fronts and strain regions.
+            \item \textbf{Vorticity-aligned}: $p \propto \zeta = -\nabla^2\psi$ amplified inside vortex cores.
+        \end{itemize}
+    \end{block}
+    \begin{block}{Group B --- Inertia-gravity waves}
+        \begin{itemize}
+            \item \textbf{Monochromatic IGW}: a single plane wave $\cos(k_0(\cos\theta\, x + \sin\theta\, y))$ pointing a given position. 
+            \item \textbf{IGW packet}: superposition of 8 plane waves spanning from meso- to submesoscale ($k = 5\text{--}30$) with random phase. 
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+    \frametitle{Perturbation Families --- Noise}
+    \begin{block}{Group C --- Spectrally shaped white noise}
+        \begin{itemize}
+            \item \textbf{High-$k$ block}: white noise restricted to $k > k_c$, where $k_c$ is some cutoff thereshold. Mimicking instrument and submesoscale contamination.
+            \item \textbf{Low-$k$ block}: white noise restricted to $k < k_c$, testing sensitivity at the large-scale end of the spectrum.
+            \item \textbf{$K^{-n}$ spectrum}: noise reshaped so its energy decays as $K^{-n}$, where $n$ is some exponent. Mimicking the observed slope of the oceanic SSH spectrum.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Perturbation Setup --- SWOT errors}
+    \begin{block}{Group E --- SWOT-like errors}
+        \begin{itemize}
+            \item \textbf{KaRIn-like noise}: spectrally anisotropic noise that decorrelates faster in the cross-track direction than along-track --- the signature of KaRIn baseline error \cite{chelton2022,gaultier2016}.
+            \item \textbf{Roll error}: slowly-varying along-track amplitude modulating a domain-scale cross-track pattern, the spectral fingerprint of residual antenna roll \cite{gaultier2016,esteban-fernandez2017}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+    \frametitle{References}
+
+    \begin{thebibliography}{99}
+        \footnotesize
+
+        \bibitem[Muraki et~al., 1999]{muraki1999}
+            D.~J. Muraki, C.~Snyder, and R.~Rotunno (1999)
+            \newblock The next-order corrections to quasigeostrophic theory.
+            \newblock \emph{Journal of the Atmospheric Sciences} 56(11), 1547--1560.
+
+        \bibitem[Chelton et~al., 2022]{chelton2022}
+            D.~B. Chelton, R.~M. Samelson, and J.~T. Farrar (2022)
+            \newblock The effects of uncorrelated measurement noise on SWOT estimates of sea surface height, velocity, and vorticity.
+            \newblock \emph{Journal of Atmospheric and Oceanic Technology} 39(7).
+            \newblock doi:10.1175/JTECH-D-21-0167.1
+
+        \bibitem[Gaultier et~al., 2016]{gaultier2016}
+            L.~Gaultier, C.~Ubelmann, and L.-L. Fu (2016)
+            \newblock The challenge of using future SWOT data for oceanic field reconstruction.
+            \newblock \emph{Journal of Atmospheric and Oceanic Technology} 33(1), 119--126.
+            \newblock doi:10.1175/JTECH-D-15-0160.1
+
+        \bibitem[Esteban-Fern\'andez, 2017]{esteban-fernandez2017}
+            D.~Esteban-Fern\'andez (2017)
+            \newblock SWOT Project: Mission Performance and Error Budget.
+            \newblock JPL Document D-79084, Jet Propulsion Laboratory, California Institute of Technology.
+
+    \end{thebibliography}
+\end{frame}
+
+\end{document}

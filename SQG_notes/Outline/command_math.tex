@@ -1,0 +1,138 @@
+% Define \bb for \mathbb
+\newcommand{\bb}[1]{\mathbb{#1}}
+
+% Define \cal for \mathcal
+\newcommand{\mcal}[1]{\mathcal{#1}}
+
+\newcommand{\tbf}[1]{\textbf{\large #1}}
+
+\newcommand{\tit}[1]{\textit{#1}}
+
+\newcommand{\red}[1]{\color{red}}
+
+% p for partial
+\newcommand{\p}{\partial}
+
+% Define \f to take two arguments and print \frac{#1}{#2}
+\newcommand{\f}[2]{\frac{#1}{#2}}
+
+% Define \pp for ^{\prime} since \p is already taken and \ppp for double prime
+\newcommand{\pp}{^{\prime}}
+
+\newcommand{\ppp}{^{\prime \prime}}
+
+% Command for time of writing
+\newcommand{\timed}[2]{%
+    \vspace{10pt}
+    \par\noindent%
+    { \large
+      \textbf{Lecture Date:} #1% Insert the specified time
+    }
+      \par
+}
+
+% Define new commands for \mathcal letters
+\newcommand{\mcalA}{\mathcal{A}}
+\newcommand{\mcalB}{\mathcal{B}}
+\newcommand{\mcalC}{\mathcal{C}}
+\newcommand{\mcalD}{\mathcal{D}}
+\newcommand{\mcalE}{\mathcal{E}}
+\newcommand{\mcalF}{\mathcal{F}}
+\newcommand{\mcalG}{\mathcal{G}}
+\newcommand{\mcalH}{\mathcal{H}}
+\newcommand{\mcalI}{\mathcal{I}}
+\newcommand{\mcalJ}{\mathcal{J}}
+\newcommand{\mcalK}{\mathcal{K}}
+\newcommand{\mcalL}{\mathcal{L}}
+\newcommand{\mcalM}{\mathcal{M}}
+\newcommand{\mcalN}{\mathcal{N}}
+\newcommand{\mcalO}{\mathcal{O}}
+\newcommand{\mcalP}{\mathcal{P}}
+\newcommand{\mcalQ}{\mathcal{Q}}
+\newcommand{\mcalR}{\mathcal{R}}
+\newcommand{\mcalS}{\mathcal{S}}
+\newcommand{\mcalT}{\mathcal{T}}
+\newcommand{\mcalU}{\mathcal{U}}
+\newcommand{\mcalV}{\mathcal{V}}
+\newcommand{\mcalW}{\mathcal{W}}
+\newcommand{\mcalX}{\mathcal{X}}
+\newcommand{\mcalY}{\mathcal{Y}}
+\newcommand{\mcalZ}{\mathcal{Z}}
+
+% Define new commands for \mathbb letters
+\newcommand{\bbA}{\mathbb{A}}
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbD}{\mathbb{D}}
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbG}{\mathbb{G}}
+\newcommand{\bbH}{\mathbb{H}}
+\newcommand{\bbI}{\mathbb{I}}
+\newcommand{\bbJ}{\mathbb{J}}
+\newcommand{\bbK}{\mathbb{K}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbM}{\mathbb{M}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbO}{\mathbb{O}}
+\newcommand{\bbP}{\mathbb{P}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbT}{\mathbb{T}}
+\newcommand{\bbU}{\mathbb{U}}
+\newcommand{\bbV}{\mathbb{V}}
+\newcommand{\bbW}{\mathbb{W}}
+\newcommand{\bbX}{\mathbb{X}}
+\newcommand{\bbY}{\mathbb{Y}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+\newcommand{\bcapn}{\bigcap_{n=1}^{+\infty}}   % \bcapn for \bigcap_{n=1}^{\infty}
+\newcommand{\bcupn}{\bigcup_{n=1}^{+\infty}}   % \bcupn for \bigcup_{n=1}^{\infty}
+
+\newcommand{\bcapi}{\bigcap_{i=1}^{+\infty}}   % \bcapi for \bigcap_{i=1}^{\infty}
+\newcommand{\bcupi}{\bigcup_{i=1}^{+\infty}}   % \bcupi for \bigcup_{i=1}^{\infty}
+
+\newenvironment{enumerateletter}
+  {\begin{enumerate}[label=\alph{enumi})]}
+  {\end{enumerate}}
+
+\newenvironment{enumeratenum}
+{\begin{enumerate}[label=\arabic{enumi})]}
+{\end{enumerate}}
+
+
+\newcommand{\toinf}{\rightarrow \infty}
+
+\newcommand{\ind}{\mathbbm{1}}
+
+\newcommand{\BorelR}{\mathscr{B}(\bbR)} %Borel Set
+
+\newcommand{\intii}{\int_{-\infty}^{\infty}} % Integral from -∞ to ∞
+\newcommand{\intzi}{\int_{0}^{\infty}} % Integral from 0 to ∞
+
+\newcommand{\smalllimit}{\lim_{\substack{m(B) \rightarrow 0 \\ x \in B}}}
+
+\newcommand{\invisiblesection}[1]{%
+  \phantomsection%
+  % \stepcounter{section}%
+  \addcontentsline{toc}{section}{#1}%
+  }
+
+% Short for operatorname
+\newcommand{\opn}[1]{\operatorname{#1}}
+
+
+%% Some new command for relationships
+\newcommand{\qrq}{\quad \Rightarrow \quad}
+
+% Some Blackets
+\newcommand{\parens}[1]{\left( #1 \right)}
+\newcommand{\sqbrac}[1]{\left[ #1 \right]}
+
+\newcommand{\angbrac}[1]{\left\langle #1 \right\rangle}
+
+
+\newcommand{\st}{\text{subject to }} 
+
+\newcommand{\tra}[1]{\text{tr}(#1)}

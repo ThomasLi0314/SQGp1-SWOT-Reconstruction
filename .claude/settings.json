@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -)",
+      "Bash(python -c ':*)",
+      "Bash(python -c \"import json; nb=json.load\\(open\\('d:/Documents/College/Research/Oceangrophy/Shafer_Project/SQG_Simulations/Python_Spectral_Toy_model/Benchmark/High_k_benchmark/k_noise_benchmark.ipynb'\\)\\); [print\\(f'=== CELL {i} \\({c[\\\\\"cell_type\\\\\"]}\\) ===\\\\n' + ''.join\\(c['source']\\) + '\\\\n'\\) for i,c in enumerate\\(nb['cells']\\)]\")",
+      "Bash(python _patch_notebook.py)",
+      "Bash(rm _patch_notebook.py)",
+      "WebFetch(domain:journals.ametsoc.org)",
+      "WebSearch",
+      "WebFetch(domain:osu-wams-blogs-uploads.s3.amazonaws.com)"
+    ]
+  }
+}
