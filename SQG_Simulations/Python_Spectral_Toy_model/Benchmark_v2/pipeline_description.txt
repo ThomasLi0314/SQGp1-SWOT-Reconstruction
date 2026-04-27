@@ -1,0 +1,175 @@
+================================================================================
+Benchmark_v2 Pipeline — Description
+================================================================================
+
+Notebook: Benchmark_v2.ipynb
+Purpose:  Benchmark the SQG+1 inversion under different perturbation families
+          added to a "target" surface sea height (SSH), and evaluate how well
+          the underlying QG streamfunction can be recovered.
+
+
+--------------------------------------------------------------------------------
+1. SETUP
+--------------------------------------------------------------------------------
+
+Framework
+  - JAX (64-bit) with JIT and autodiff for forward model + gradients.
+  - Optimization via jaxopt.LBFGS.
+  - All 2D spectral operations (surface-only, no vertical grid).
+
+Domain
+  - Doubly periodic channel, Lx = Ly = 2*pi.
+  - Grid Nx = Ny = 128 (set by the loaded data file).
+  - Spectral grid: integer wavenumbers, Nyquist mode zeroed out.
+  - Derived fields: kx, ky, K, K2, inv_K2, mu = sqrt(Bu)*K, inv_mu.
+
+Non-dimensional parameters
+  - Bu       = 1.0         (Burger number)
+  - Ro       = 1e-1        (Rossby number; set per run)
+  - epsilon  = Ro          (SQG+1 expansion parameter)
+  - Peak wavenumber of input fields ~ K0 = 9.5 (Shafer simulation convention)
+
+
+--------------------------------------------------------------------------------
+2. INPUT DATA
+--------------------------------------------------------------------------------
+
+  - A .mat file from the Shafer SQG simulation is loaded via a file dialog.
+  - Key 'bout' contains 3D surface buoyancy; the last time snapshot is used.
+  - b_s is normalized by its max absolute value before any processing.
+
+
+--------------------------------------------------------------------------------
+3. TARGET FIELD CONSTRUCTION
+--------------------------------------------------------------------------------
+
+Step 1 - Recover QG surface streamfunction from surface buoyancy.
+  Under non-dimensional SQG:   b^s = d(psi)/dz at z = 0
+  In spectral space:           phi0_s_hat = b_s_hat * inv_mu
+  Then under QG:               eta_qg = psi^s = phi0_s
+
+Step 2 - Build the target SSH by applying the SQG+1 forward operator.
+  eta_tar = eta_qg + epsilon * eta^(1)
+  Implemented by:
+      eta_tar_hat = forward_ssh(phi0_s_hat, kx, ky, mu, inv_mu,
+                                K2, inv_K2, Bu, epsilon)
+  Forward model includes the cyclogeostrophic and vorticity corrections
+  (cyclogeo_term, vorticity_term in physics_functions.py).
+
+Step 3 - Diagnostic: surface vorticity zeta_tar computed from phi0_s_hat via
+  calculate_surface_u + spectral curl.
+
+
+--------------------------------------------------------------------------------
+4. PERTURBATION FAMILIES
+--------------------------------------------------------------------------------
+
+Perturbations are added directly to eta_tar in physical space:
+      eta_obs = eta_tar + perturbation
+
+Rms amplitude is normalized so that
+      rms(perturbation) = Ro * rms(eta_tar)
+
+Available families (one is selected per run):
+  - C1  (perturbation_setup_C1.py): low-pass perturbations, varied by
+        cutoff wavenumber kcut (e.g. kcut = 10, 15, 20, 30).
+  - C2  (perturbation_setup_C2.py): band-filtered perturbations.
+  - C3  (perturbation_setup_C3.py): spectral-slope-controlled perturbations.
+  - v2  (perturbation_setup_v2.py): combined/all-case builder.
+
+The output of each builder is a dict:
+      cases[name] = (perturbation, eta_obs)
+
+  *** Important modelling assumption (current limitation) ***
+  The perturbation is simply ADDED to eta_tar. This assumes superposition,
+  i.e. the target and perturbation fields do not dynamically couple. In
+  reality, SQG is nonlinear and target/perturbation advect each other; this
+  additive model is a linearization valid only for small perturbation
+  amplitudes or for interpreting the perturbation as observation noise.
+
+
+--------------------------------------------------------------------------------
+5. INVERSION
+--------------------------------------------------------------------------------
+
+Unknown:      phi0_s (surface streamfunction), flattened to a 1D vector.
+Initial guess: phi0_s_guess = ssh_qg (the QG streamfunction itself).
+
+Loss function (cost_function_fmin in cost_functions.py):
+      L(phi0) = || forward_ssh(phi0_hat) - eta_obs_hat ||^2
+  computed in spectral space against eta_obs_hat = fft2(eta_obs).
+
+Optimizer:
+  - jaxopt.LBFGS, maxiter = 10,000, tol = 1e-8.
+  - Manual iteration loop; loss + gradient norm checked every step.
+
+Stopping criteria (checked each iter):
+  - loss < 1e-5 * Ro^2                                (loss threshold)
+  - |grad| < 1e-2 * Ro^2                              (gradient threshold)
+  - loss ratio > 0.99 over log_every = 1000 steps     (stagnation)
+
+Outputs per case:
+  - phi0_s_optimals[name]  : recovered streamfunction (Nx, Ny)
+  - benchmark_results[name]: iters, elapsed, final_loss, final_grad,
+                             loss_history
+
+
+--------------------------------------------------------------------------------
+6. EVALUATION
+--------------------------------------------------------------------------------
+
+(a) Loss convergence
+    - semilogy loss-history plot per case, plus wall-clock bar chart.
+
+(b) SSH recovery (physical space)
+    - Forward phi0_opt through forward_ssh, compare to eta_tar.
+    - Report rms(target), rms(residual), relative error.
+    - Plot target / recovered / residual triptych per case.
+
+(c) Vorticity recovery (the physically meaningful QG quantity)
+    - Compute zeta_opt from phi0_opt via calculate_surface_u + spectral curl.
+    - Compare to zeta_tar (from the true QG streamfunction).
+    - Report relative rms vorticity error; bar chart across cases.
+
+(d) Spectral error decomposition
+    E(k) = < |zeta_opt_hat - zeta_QG_hat|^2 > / < |zeta_QG_hat|^2 >
+    azimuthally averaged in integer-k bins. Separates low-k (large-scale)
+    from high-k (small-scale) inversion skill.
+
+
+--------------------------------------------------------------------------------
+7. PERSISTENCE
+--------------------------------------------------------------------------------
+
+The notebook saves/loads a workspace .pkl via dill, containing:
+      benchmark_results, phi0_s_optimals, cases,
+      phi0_s, phi0_s_hat, grid (kx, ky, K, K2, inv_K2, mu, inv_mu),
+      Ro, epsilon, Bu, Nx, Ny, Lx, Ly, X, Y.
+This lets downstream notebooks reproduce plots without rerunning the
+inversion.
+
+
+--------------------------------------------------------------------------------
+8. EXTERNAL DEPENDENCIES (parent directory)
+--------------------------------------------------------------------------------
+
+  - physics_functions.py     : calculate_surface_u, forward_ssh,
+                               cyclogeo_term, vorticity_term
+  - cost_functions.py        : cost_function_fmin
+  - ssh_setup.py             : default synthetic SSH fallback
+  - perturbation_setup_C1/C2/C3/v2.py : perturbation builders
+
+
+--------------------------------------------------------------------------------
+9. KNOWN LIMITATIONS
+--------------------------------------------------------------------------------
+
+  1. Additive perturbation model (see Section 4) ignores nonlinear coupling
+     between target and perturbation.
+  2. Perturbations are non-QG by construction, so SQG+1 cannot drive the
+     loss to zero — final loss plateaus reflect model misfit, not optimizer
+     failure.
+  3. Initial guess is the true QG streamfunction itself, which is an
+     idealized scenario; in practice only noisy SSH observations would be
+     available.
+================================================================================

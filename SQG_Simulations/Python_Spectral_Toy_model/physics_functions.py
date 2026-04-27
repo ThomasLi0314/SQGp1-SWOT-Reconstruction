@@ -109,4 +109,7 @@ def forward_ssh(phi0_s_hat, kx, ky, mu, inv_mu, K2, inv_K2, Bu, epsilon):
     vort = vorticity_term(phi0_s_hat, mu, inv_mu, kx, ky, K2, Bu)
     p1_s_hat = -(vort + cyc) * inv_K2 # take twice integral. 
     eta_s_hat = phi0_s_hat + p1_s_hat * epsilon
+    # Strip spurious Nyquist from nonlinear aliasing
+    eta_s_hat = eta_s_hat.at[eta_s_hat.shape[0]//2, :].set(0.0)
+    eta_s_hat = eta_s_hat.at[:, eta_s_hat.shape[1]//2].set(0.0)
     return eta_s_hat
