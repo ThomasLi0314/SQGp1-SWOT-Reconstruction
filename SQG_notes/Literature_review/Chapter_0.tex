@@ -98,9 +98,80 @@
 
     Simulation shows that the formation of fronts is one of such path. 
 
-    \subsection{Leif N. Thomas et.al. 2005}
-    
+    \subsection{Ross et al. 2023}
+    To coarse-grain a high-resolution field $\hat{q}_\kappa$ onto a low-resolution grid, Ross et al. propose three filtering and coarse-graining operators. Let $\kappa$ denote the wavenumber, $\Delta x_{\text{lores}}$ the grid spacing of the coarse model, and define the cutoff $\kappa^c \equiv 2/3$ of the low-resolution Nyquist frequency.
+
+    \subsubsection{Operator 1: Spectral Truncation with Sharp Filter}
+    The first option applies the same quadruple-exponential filter used by \texttt{pyqg} for small-scale dissipation. It leaves small wavenumbers unchanged and attenuates wavenumbers above $\kappa^c$:
+    \begin{equation}
+        \hat{\bar{q}}_\kappa =
+        \begin{cases}
+            \hat{q}_\kappa, & \kappa < \kappa^c, \\
+            \hat{q}_\kappa \cdot e^{-23.6(\kappa - \kappa^c)^4 \Delta x_{\text{lores}}^4}, & \kappa \geq \kappa^c.
+        \end{cases}
+    \end{equation}
+    This is the most conservative choice, closest to no filtering at all, since it is already applied within the ocean model. \mn{``Operator 1'' = spectral truncation followed by this filter.}
+
+    \subsubsection{Operator 2: Spectral Truncation with Softer Gaussian Filter}
+    The second option applies a Gaussian filter to all remaining modes:
+    \begin{equation}
+        \hat{\bar{q}}_\kappa = \hat{q}_\kappa \cdot e^{-\kappa^2 (2 \Delta x_{\text{lores}})^2 / 24}.
+    \end{equation}
+    This choice follows Guan et al. (2022) and Pope (2000). By the filter-width definition of Lund (1997), this filter is twice as large as the grid size of the coarse model.
+
+    \subsubsection{Operator 3: Diffusion-Based Filtering with Real-Space Coarsening}
+    The third option is closer to the procedure used in ocean models. It applies \texttt{GCM-Filters} (Grooms et al. 2021; Loose et al. 2022), which approximates the spectral transfer function of a Gaussian filter using polynomials based on the Laplacian diffusion operator. The \texttt{pyqg} output is converted onto a Cartesian grid, and the filtered field is then coarse-grained in real space: to reduce the resolution by a factor $K$, the input field is averaged over non-overlapping $K \times K$ boxes.
+
+    \begin{remark}
+        A comparison of the effects of these three filtering and coarse-graining operators on PV and its subgrid forcing is shown in Figures 3 and 4 of Ross et al. (2023).
+    \end{remark}
+
+    \subsubsection{Performance Metrics (Chapter 4)}
+    Since the number of candidate parameterizations is too large to inspect manually, Ross et al. define a hierarchy of metrics. They split into \textbf{offline} metrics (evaluated on held-out testing sets of subgrid forcing data) and \textbf{online} metrics (computed by actually running parameterized low-resolution simulations and comparing them against high-resolution truth).
+
+    \paragraph{Offline Metrics.} Let $S$ denote the true subgrid forcing and $\hat{S}$ the parameterization's prediction. For each fluid layer:
+    \begin{enumerate}
+        \item \textbf{Coefficient of determination} ($R^2$):
+        \begin{equation}
+            R^2 = 1 - \frac{\mathbb{E}\!\left[(S - \hat{S})^2\right]}{\mathbb{E}\!\left[(S - \mathbb{E}[S])^2\right]}.
+        \end{equation}
+        $R^2 = 1$ for perfect predictions, $R^2 = 0$ when predictions are no better than the mean, and $R^2 < 0$ when worse than predicting the mean.
+
+        \item \textbf{Pearson correlation} ($\rho$):
+        \begin{equation}
+            \rho = \frac{\mathrm{Cov}(S, \hat{S})}{\sigma_S \, \sigma_{\hat{S}}}.
+        \end{equation}
+        $\rho \in [-1, 1]$. \mn{$\rho$ can stay high even when $R^2$ is negative --- e.g., predictions off by a large but consistent scaling factor.}
+    \end{enumerate}
+    These are evaluated on filtered/coarse-grained high-resolution data from both eddy and jet configurations, aggregated over time and space (or expressed as functions thereof). Power and energy-redistribution spectra of the predicted forcing are also visualized against ground truth.
+
+    \paragraph{Online Metrics.} A new low-resolution QG simulation is run for $10$ years (5 random seeds, both eddy and jet configurations) with the parameterization adding to the PV tendency at every time step. Distance metrics between low-resolution and high-resolution distributions are then computed and \emph{normalized by the corresponding distance for the unparameterized low-resolution simulation}, giving an interpretable similarity score.
+
+    \begin{enumerate}
+        \item \textbf{Spectral differences} (\texttt{spectral\_diff}). RMS difference between time-averaged power spectra and spectral fluxes:
+        \begin{equation}
+            \texttt{spectral\_diff}(\text{sim}_a, \text{sim}_b; f) \equiv \sqrt{\frac{1}{|\mathcal{K}|} \sum_{k \in \mathcal{K}} \left(f_{\text{sim}_a}(k) - f_{\text{sim}_b}(k)\right)^2},
+        \end{equation}
+        where $\mathcal{K}$ is a set of isotropic wavenumbers, log-spaced up to $2/3$ of the low-resolution Nyquist frequency. Computed for energy and enstrophy spectra in each layer and for spectral energy fluxes (KE flux, APE flux, APE generation, bottom drag) --- $8$ metrics total.
+
+        \item \textbf{Distribution differences} (\texttt{distrib\_diff}). Earth mover's (Wasserstein) distance between the empirical PDFs of state variables at the end of the simulation:
+        \begin{equation}
+            \texttt{distrib\_diff}(\text{sim}_a, \text{sim}_b; f) \equiv \int_{-\infty}^{\infty} \left| P_{\text{sim}_a}(f \leq x) - P_{\text{sim}_b}(f \leq x) \right| \, dx.
+        \end{equation}
+        Computed for the marginal distributions of $u$, $v$, $q$, kinetic-energy density $(u^2 + v^2)/2$, and enstrophy $\frac{1}{2}(\nabla \times \mathbf{u})^2$ in each layer --- $10$ metrics total. \mn{Visualizes ``climate'' --- long-term statistics --- not ``weather.''}
+
+        \item \textbf{Decorrelation time difference} (\texttt{decorr\_time}). The minimum time at which two simulations starting from nearby initial conditions decorrelate below a threshold $\delta$:
+        \begin{equation}
+            \texttt{decorr\_time}(\text{sim}_a, \text{sim}_b) \equiv \mathbb{E}_{q_0, \epsilon}\!\left[ \min_{t} \left\{ t : \mathrm{Corr}\!\left( q^{(t)}_{\text{sim}_a}(q_0), \, q^{(t)}_{\text{sim}_b}(q_0 + \epsilon) \right) \leq \delta \right\} \right],
+        \end{equation}
+        with $\delta = 0.5$ and $\epsilon$ a Gaussian perturbation of standard deviation $10^{-10}$. When the two simulations differ in resolution, the higher-resolution field is first filtered and coarse-grained using Operator 1 before the correlation is computed. \mn{Captures forecast skill --- ``weather'' --- rather than long-term climate.}
+    \end{enumerate}
+
+    \begin{remark}
+        The three online metrics correspond to the three panels of Figure 5 in Ross et al.\ (2023): (a) \texttt{spectral\_diff} as RMSE in spectral space, (b) \texttt{distrib\_diff} as the area between two PDFs, (c) \texttt{decorr\_time} as how quickly a parameterized low-resolution run diverges from its high-resolution reference. Together they probe model physics, climatology, and short-term forecast skill, respectively.
+    \end{remark}
 
 
-    
+
+
 \end{document}

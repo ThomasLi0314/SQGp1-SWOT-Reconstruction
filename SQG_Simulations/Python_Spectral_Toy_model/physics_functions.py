@@ -103,11 +103,21 @@ def calculate_surface_u(phi0_s_hat, mu, inv_mu, kx, ky, K2, inv_K2, epsilon, Bu)
     return u_surface, v_surface
 
 
-def forward_ssh(phi0_s_hat, kx, ky, mu, inv_mu, K2, inv_K2, Bu, epsilon):
-    """Full forward model: phi0_s_hat -> eta_s_hat (SSH in spectral space)."""
+def forward_ssh(phi0_s_hat, kx, ky, mu, inv_mu, K2, inv_K2, Bu, epsilon,
+                filter_lp=None):
+    """Full forward model: phi0_s_hat -> eta_s_hat (SSH in spectral space).
+
+    If `filter_lp` (a 2-D spectral mask, same shape as phi0_s_hat) is given,
+    the streamfunction is LP-projected before the (linear + nonlinear) SQG+1
+    operator is applied. This restricts the unknown to the band-limited
+    subspace the observation can constrain, preventing the optimizer from
+    accumulating high-k garbage in modes the data is silent on.
+    """
+    if filter_lp is not None:
+        phi0_s_hat = phi0_s_hat * filter_lp
     cyc = cyclogeo_term(phi0_s_hat, kx, ky)
     vort = vorticity_term(phi0_s_hat, mu, inv_mu, kx, ky, K2, Bu)
-    p1_s_hat = -(vort + cyc) * inv_K2 # take twice integral. 
+    p1_s_hat = -(vort + cyc) * inv_K2 # take twice integral.
     eta_s_hat = phi0_s_hat + p1_s_hat * epsilon
     # Strip spurious Nyquist from nonlinear aliasing
     eta_s_hat = eta_s_hat.at[eta_s_hat.shape[0]//2, :].set(0.0)

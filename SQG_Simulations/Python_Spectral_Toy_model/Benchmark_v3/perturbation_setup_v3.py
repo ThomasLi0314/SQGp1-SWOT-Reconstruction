@@ -109,7 +109,7 @@ def perturb_B2(eta_tar, X, Y, epsilon, rng_key):
 
     More physically realistic than B1 — resembles the continuum IGW field.
     """
-    wavenumbers = [5.0, 7.0, 10.0, 12.0, 15.0, 20.0, 25.0, 30.0]
+    wavenumbers = [5.0, 6.5, 7.0, 8.5, 10.0, 11.5, 13.0]
     N = len(wavenumbers)
     thetas  = [n * jnp.pi / N for n in range(N)]
     phases  = jax.random.uniform(rng_key, (N,), minval=0.0, maxval=2.0 * jnp.pi)
@@ -128,14 +128,14 @@ def perturb_C1(eta_tar, K, epsilon, rng_key, K_cut, s_slope=-2.0):
     (high-pass: low-k part removed).
 
     s_slope : float
-        Slope of the amplitude spectrum. s_slope = -1 reproduces the
+        Slope of the amplitude spectrum. s_slope = -2 reproduces the
         K^-2 energy spectrum used previously; s_slope = 0 gives flat
         (white) noise; positive values give blue noise.
     """
     Nx, Ny = eta_tar.shape
     noise_hat = jnp.fft.fft2(jax.random.normal(rng_key, (Nx, Ny)))
     K_safe = jnp.where(K > 0, K, 1.0)
-    amp = jnp.where(K > 0, K_safe ** s_slope, 0.0)
+    amp = jnp.where(K > 0, K_safe ** (s_slope / 2), 0.0)
     noise_hat = noise_hat * amp
     noise_hat = noise_hat.at[0, 0].set(0.0)
     # Keep only the high-k part (cut low k)
@@ -149,14 +149,14 @@ def perturb_C2(eta_tar, K, epsilon, rng_key, K_cut, s_slope=-2.0):
     (low-pass: high-k part removed).
 
     s_slope : float
-        Slope of the amplitude spectrum. s_slope = -1 reproduces the
+        Slope of the amplitude spectrum. s_slope = -2 reproduces the
         K^-2 energy spectrum used previously; s_slope = 0 gives flat
         (white) noise; positive values give blue noise.
     """
     Nx, Ny = eta_tar.shape
     noise_hat = jnp.fft.fft2(jax.random.normal(rng_key, (Nx, Ny)))
     K_safe = jnp.where(K > 0, K, 1.0)
-    amp = jnp.where(K > 0, K_safe ** s_slope, 0.0)
+    amp = jnp.where(K > 0, K_safe ** (s_slope / 2), 0.0)
     noise_hat = noise_hat * amp
     noise_hat = noise_hat.at[0, 0].set(0.0)
     # Keep only the low-k part (cut high k)
@@ -273,8 +273,8 @@ def build_all_perturbations(eta_tar, eta_tar_hat, kx, ky, K, K2, inv_K2,
         #                           eta_tar, eta_tar_hat, K2, epsilon),
         # "B1_mono_igw":        perturb_B1(
         #                           eta_tar, X, Y, epsilon),
-        # "B2_igw_packet":      perturb_B2(
-        #                           eta_tar, X, Y, epsilon, igw_key),
+        "B2_igw_packet":      perturb_B2(
+                                  eta_tar, X, Y, epsilon, igw_key),
         # Group C
         "C1_high_k_noise":    perturb_C1(
                                   eta_tar, K, epsilon, noise_key, K_cut=7.0, s_slope=-3.0),

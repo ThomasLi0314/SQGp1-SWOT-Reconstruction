@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where matlab *)",
+      "Bash(where octave *)",
+      "Bash(python -c \"import scipy.io as sio; d=sio.loadmat\\(r'D:\\\\Documents\\\\College\\\\Research\\\\Oceangrophy\\\\Shafer_Project\\\\SQGp1_Simulations\\\\Shafer_Code\\\\qg_plus1\\\\data_0508.mat'\\); print\\([k for k in d.keys\\(\\) if not k.startswith\\('__'\\)]\\); print\\({k: d[k].shape for k in d.keys\\(\\) if not k.startswith\\('__'\\)}\\)\")",
+      "Bash(\"D:/Program Files/MATLAB/bin/matlab.exe\" -batch \"test_iso\")",
+      "Bash(\"D:/Program Files/MATLAB/bin/matlab.exe\" -batch \"test_lowpass\")"
+    ]
+  }
+}
