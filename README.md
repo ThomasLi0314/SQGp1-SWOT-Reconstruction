@@ -49,7 +49,7 @@ Ryan's notes on this project. Introducing basics of SQGp1 model.
 My notes for this project.
 
 - [`Outline/`](Presentations_Notes/SQG_notes/Outline/)
-- [`Literature_review/`](Presentations_Notes/SQG_notes/Literature_review/) — As it's name suggest. This is Chapter 0 for my thesis.
+- [`Literature_review/`](Presentations_Notes/SQG_notes/Literature_review/) — As it's name suggest.
 - [`Chapter1_SQG/`](Presentations_Notes/SQG_notes/Chapter1_SQG/)
 - [`Chapter_2_SQG1/`](Presentations_Notes/SQG_notes/Chapter_2_SQG1/)
 - [`Chapter_3_SQG/`](Presentations_Notes/SQG_notes/Chapter_3_SQG/)
