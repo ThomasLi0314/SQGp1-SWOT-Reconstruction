@@ -1,0 +1,586 @@
+Generated using the official AMS LATEX template v6.1 two-column layout. This work has been submitted for
+publication. Copyright in this work may be transferred without further notice, and this version may no longer be
+accessible.
+The impact of two-dimensional filtering on white noise spectra in SWOT along-track
+observations
+Ryan Sh`ıji´e D`ua , Momme Hell b , Luc Lenainc , Fabrice Ardhuind A. B. Villas Bˆoasa
+a Department of Geophysics, Colorado School of Mines, Golden, CO, USA
+b Woods Hole Oceanographic Institution, Woods Hole, MA, USA
+c Scripps Institution of Oceanography, University of California San Diego, La Jolla, CA, USA
+d Univ. Brest, CNRS, IRD, Ifremer, Laboratoire d’Oc´eanographie Physique et Spatiale (LOPS), IUEM, Brest, France
+ABSTRACT: The Surface Water and Ocean Topography (SWOT) mission provides two-dimensional observations of sea surface height
+(SSH) at unprecedented spatial resolution, enabling exploration of ocean variability down to scales of𝑂(10 km). At these scales, however,
+interpreting SSH variability is challenging because ocean dynamical signals overlap with measurement noise, and their respective spectral
+signatures are not yet fully understood. Recent analyses of SWOT 2-km posting observations have shown that along-track spectra are red,
+with a power-law-like behavior at small scales and spectral slopes around or steeper than−1, with their magnitudes and slopes correlated
+with SWOT measurement noise. Here, we investigate the hypothesis that the red along-track spectra can arise from two-dimensional filtering
+and aliasing of spatially uncorrelated (white) noise. Using synthetic experiments, we show that the resulting one-dimensional along-track
+spectra exhibit red, power-law-like behavior at small scales, consistent with observations. The apparent spectral slope depends on the
+noise level, its cross-track variability, and the background ocean signal. This finding highlights the importance of carefully accounting
+for measurement noise and processing effects when interpreting SWOT spectra, and suggests that such a noise model should serve as a
+baseline null hypothesis for small-scale spectral analyses.
+1. Introduction
+The Surface Water Ocean Topography (SWOT) mission
+represents a major advancement in our ability to observe
+the ocean. It provides two-dimensional observations of
+sea surface height (SSH) at unprecedented spatial reso-
+lution, improving on traditional nadir altimeter observa-
+tions (Archer et al. 2025). The performance of SWOT
+exceeds the engineering requirements, allowing us to ob-
+serve smaller scales than expected prior to launch (Peral
+et al. 2024; Chelton 2024).
+High-quality global measurements from SWOT present
+exciting opportunities for oceanography, but, as with many
+new observing systems, they also extend into dynamic
+ranges that are not yet fully understood. Specifically,
+SWOT resolves SSH variability at small scales that is diffi-
+cult to interpret, because at scales of about𝑂(<30 km)the
+ocean consists of a complexsubmesoscale soupof balanced
+motions and internal gravity waves (IGWs, McWilliams
+2016). These turbulent ocean dynamics typically exhibit
+different spectral behaviors in the SSH field, such that
+for balanced motions we expect steep𝑘 −4 or𝑘 −5 power-
+law behavior (Charney 1971; Held et al. 1995), while
+for IGWs we expect shallower𝑘 −2 power-law behavior
+at small scales (Garrett and Munk 1972; Samelson and
+Farrar 2024). SWOT can even phase-resolve long ocean
+surface waves of𝑂(1km)(Ardhuin et al. 2024; Villas Bˆoas
+et al. 2025), which appear as local maxima in the spectra
+of SSH (Villas Bˆoas et al. 2022; Peral et al. 2024).
+Corresponding author: Ryan Sh`ıji´e D` u, ryan.du@mines.edu
+To interpret SWOT’s spectral slopes correctly, it is im-
+portant to quantify the measurement noise (Peral et al.
+2024; Chelton 2024), in particular at high wavenumbers,
+i.e., submesoscales, where noise might dominate the ocean
+dynamical signal (Wang et al. 2019; Chelton 2024). Recent
+studies indicate that measurement noise makes a major con-
+tribution to SWOT small-scale(𝑂(<50km))along-track
+spectra. For example, Zhang and Callies (2025) analyzed
+the spectral behavior of global SWOT SSH observations
+collected during the CAL/V AL phase and found that, in
+regions where balanced signals dominate, the small-scale
+SWOT 2-km along-track spectra are red, with a power-law
+slope steeper than−1. They also show that the magnitude
+and slope of the small-scale spectra are correlated with
+Significant Wave Height (SWH), which is related to the
+magnitude of the SWOT SSH noise (Peral et al. 2024).
+Adding to the complexity of SWOT measurement noise,
+Kachelein et al. (2025) showed that the small-scale slopes
+change across the swath, with flatter spectra at the swath
+edge, where SWOT noise is expected to be higher. How-
+ever, data and methodological uncertainties have thus far
+prevented us from determining whether the red spectra
+arise primarily from measurement noise or from ocean
+dynamics.
+The observed red behavior in SWOT small-scale spectra
+(𝑂(<50km))is surprising and contributes to the difficulty
+of separating noise from signal. It is generally expected
+that the SSH measurement noise is white at small scales.
+In fact, Peral et al. (2024) show that, in the SWOT 250-m
+posting, noise in the along-track spectra is white for scales
+1
+arXiv:2604.14009v1  [physics.ao-ph]  15 Apr 20262
+larger than 2 km, which are not affected by the on-board
+processing (OBP) (Peral 2021). To understand the effect
+of such small-scale white noise on our interpretation of
+SWOT data, we show how white noise can appear red in
+SWOT 2-km along-track spectra.
+In this manuscript, we explore the role of white noise in
+the along-track spectra from SWOT’s 2-km posting prod-
+uct using a series of synthetic experiments. We start from
+250-m posting data composed of a prescribed steep ocean
+dynamical signal plus two-dimensional white noise. The
+2-km posting data are generated from this field by two-
+dimensional filtering, and we investigate the resulting one-
+dimensional along-track spectra. This standard process-
+ing leads to the small-scale along-track spectra to appear
+power-law-like and red. With our synthetic experiments,
+we show how the apparent slope depends on the noise
+level, cross-track noise variation, and background ocean
+dynamics.
+The paper is organized as follows. Section 2 describes
+experiments that produce red spectra with slopes of−1 or
+steeper from simple ocean signals and white noise. We
+start with balanced ocean signals. Cross-track variation of
+SWOT noise is explored in Section 2b, and the Garrett–
+Munk continuum is used for the ocean signals in Section
+2c. Section 3 concludes and discusses future work.
+2. Experiments using synthetic SWOT data
+a. Red along-track spectra from filtering white noise
+We generate Gaussian random fields of size 50 km×
+500 km at 250-m posting (Yaglom 1987), mirroring one
+swath of the SWOT ground track, which has cross-track
+width of 50 km. The spectrum of this random field is com-
+posed of a two-dimensional Mat ´ern kernel at larger scale
+with a smoothness parameter𝜈=1.5 (Stein 1999, p. 49).
+Mat´ern kernels are commonly used in turbulence research
+to represent power-law behavior at high wavenumbers, and
+the low wavenumber transition prevents a singularity at the
+zero wavenumber. The along-track (as well as isotropic)
+spectral slope asymptotes to−4 at high wavenumbers, imi-
+tating the SSH fields of surface-buoyancy-driven balanced
+ocean motion (Held et al. 1995; Zhang and Callies 2025;
+D` u et al. 2025).
+At small scales, the field is dominated by noise uncor-
+related in space, which has a white (zero-slope) along-
+track spectrum. We explore many representative noise
+levels, where higher SWH correlates with higher noise
+levels (Peral et al. 2024). Dotted lines in Fig. 1 show the
+along-track spectra estimated by averaging over all tracks
+across the generated swath for 200 independent ensemble
+realizations. They all follow the Mat ´ern portion. For the
+2 m SWH case, the noise spectral level is based on scaling
+the SWOT prelaunch noise requirement:
+2× 15
+0.5 × 1
+2.32 cm2cpkm−1.(1)
+Here, 2 cm 2cpkm−1 is the magnitude of the white-noise
+portion of the SWOT prelaunch noise requirement, which
+is specified for SWH=2 m and wavenumbers less than
+1/15 cpkm. The factor 15/0.5 scales this noise floor to
+be appropriate for the 250-m posting data with Nyquist
+wavenumber 2 cpkm. Finally, we account for the fact that
+the SWOT noise magnitude is 2.3 times lower than the
+prelaunch requirement, according to preliminary studies
+on the SWOT noise (Chelton 2024; Peral et al. 2024).
+The noise for the higher SWH cases is scaled from the
+2 m SWH case using the corresponding total height error
+from the legend of Peral et al. (2024) Fig. 30a, for SWH
+values ranging from 2 m to 6 m. We acknowledge that the
+smoothing effect of the OBP is not accounted for in our
+experiments. The smoothing from the OBP in the 250-m
+posting data does not change our results significantly, as
+the additional Hamming filtering used to produce the 2-
+km posting product already attenuates the scales affected
+by the OBP (<2km) (Peral 2021). We ignore this effect
+for simplicity.
+To simulate the 2-km posting SWOT product, we follow
+the standard SWOT post-processing method. The SWOT
+2-km posting product is generated from the 250-m posting
+observations using a 17-point two-dimensional Hamming
+filter, which has a half-power filter cutoff wavelength of
+6.28 km (Chelton 2024). We mirror this process and gen-
+erate Hamming-filtered data by convolving our previously
+generated 250-m posting Gaussian random fields with the
+Hamming two-dimensional filter, and sampling the data
+every 2 km. Solid lines in Fig. 1 show the along-track
+spectra of the resulting 2-km posting field. The spectra
+now appear red at small scales. The transition from the
+steep to the flat portion of the spectra varies with the noise
+level, occurring at around 30 km for the highest noise level
+SWH=6 m and at 15 km for SWH=2 m. Note that these
+transition scales depend on the ocean signal and noise level,
+which are all synthetic in our experiments. They will de-
+pend on geographic and temporal variability in real SWOT
+data. Additionally, fields with smaller noise magnitude ap-
+pear to have steeper spectral slopes. Specifically, all slopes
+appear to be steeper than or equal to−1. Hence, following
+this mechanism, the observed spectral slopes depend on
+the SWOT measurement noise levels.
+It is worth exploring the reasons behind the red spec-
+tra at small-scales. First, the noise floors in the 2-km
+posting spectra are lower than those in the 250-m posting
+spectra. This is well explained in prior literature (Chelton
+et al. (2019, Appendix E), Wang et al. (2019), Chelton
+et al. (2022, Appendix A), and Chelton (2024, Fig. 1)).
+Fig. 1 reproduces this known effect by comparing one-3
+10□2 10□1 100
+Along-track wavenumber (cpkm)
+100
+101
+102
+103
+104
+105
+Power spectral density (cm2 cpkm□1)
+k□4
+k□1
+k□1.5
+30 km 6 km
+Along-track spectra
+2 3 4 5 6
+SWH (m)
+250-m posting
+2-km posting
+2-km 1D ﬁltered
+2-km dealiased
+Fig.1. Along-track spectra of the synthetic SSH field for several noise levels corresponding to different significant wave heights (SWH, colors).
+Dotted lines are along-track spectra for the 250-m posting data before Hamming filtering. Solid lines are along-track spectra for the 2-km posting
+data obtained by convolving with the 17-point two-dimensional Hamming filter used by SWOT. The darkest dash-dotted line is the anti-aliased
+two-dimensional Hamming filtered version. And the darkest dashed line is one-dimensional along-track filtering applied to the same synthetic
+250-m posting field (SWH=6 m case).
+dimensional along-track filtering (dashed line) and two-
+dimensional filtering (solid line) for the same random field
+considering SWH=6 m. This lower noise floor of the
+two-dimensionally filtered data, when combined with steep
+ocean dynamics spectra, appears redder than the version
+under only one-dimensional filtering. This behavior was
+expected by Fig. 1 in Chelton (2024). However, an ad-
+ditional effect contributes to the power-law-like behavior
+of the along-track spectra. Aliasing of the 2-km posting
+along-track spectra boosts the energy in the small scales,
+reshaping the spectrum so that it appears more like a red
+power law. Fig. 1 demonstrates the effect of aliasing: the
+dash-dotted line is the same along-track spectra without
+aliasing. We achieve this by calculating the spectra from
+the 250-m posting and discarding the high-wavenumber
+portion. The small scales roll off following the behavior
+of the Hamming filter, as expected (Chelton 2024, Fig.
+1). This is in contrast to the 2-km posting spectra, which
+appear to continue the power-law-like behavior until the
+Nyquist wavenumber. In particular, between 4 and 8 km,
+the aliased spectra appear to have slopes steeper than−1,
+even if the unfiltered signal contains only white noise (see
+black dashed line in Fig. 3). This is a consequence of alias-
+ing the Hamming filter’s spectral roll-off. Therefore, Fig. 1
+supports the interpretation that the observed−1 or steeper
+small-scale slopes in SWOT data can arise from filtering
+and aliasing of two-dimensional white noise superposed
+on steep ocean spectra.
+Note that the along-track spectra can be calculated an-
+alytically, without the need for Monte Carlo simulations.
+By Fourier-transform properties, the spectrum of the field
+after two-dimensional convolution filtering is the product
+of the two-dimensional Hamming-filter spectrum and the
+base-field isotropic spectrum. The along-track spectrum
+is then given by the integral of this two-dimensional spec-
+trum over the cross-track direction (B¨ uhler et al. 2014).
+The effect of aliasing on the spectra can be worked out
+analytically as well (Dutykh 2016).
+b. Accounting for cross-track variation in the noise level
+SWOT’s noise is known to vary in the cross-track di-
+rection (Peral et al. 2024; Kachelein et al. 2025). We
+explore this effect using SWOT-based data from Fig. 30a
+of Peral et al. (2024). Here, the variance of the noise is
+scaled across track, while keeping the total noise variance
+unchanged. We then convolve the data using the same
+two-dimensional Hamming filter and discard the along-
+track lines within 2.5 km of the boundaries to ensure that
+the Hamming filter does not use padded data.
+The cross-track averaged spectra do not appear to change
+in any statistically significant way from the constant noise
+case. The cross-track variation of noise does not alter the
+shape of small-scale spectra shown in Fig. 1. We do not
+explore the cross-track averaged spectra further.
+When along-track spectra are not averaged across track,
+changes in spectral slope become apparent due to the cross-
+track varying noise level (Kachelein et al. 2025). Fig. 2
+shows the along-track spectra of the SWH=4 m case in
+bins of 5 km in the cross-track direction, sampled with
+2×10 3 ensemble members to maintain a small uncertainty4
+in the diagnosed spectra. The result mirrors Fig. 1, tracks
+closest to nadir have the shallowest slope at small-scales,
+as they have the largest noise, while spectra at the swath
+center have the steepest slope, due to weaker noise (Peral
+et al. 2024, Fig. 30a). The cross-track change in slope can
+be large, ranging from−1 to−1.5 given a uniform SWH.
+The resulting spectral slopes are flatter than those reported
+by Kachelein et al. (2025) and likely due to differences
+in the chosen ocean signal. Our analysis assumes a steep
+balanced dynamical spectrum, whereas Kachelein et al.
+(2025) likely contains substantial IGW energy typical for
+the California region. We explore the effect of an IGW
+continuum as the ocean signal next.
+c. Using the Garrett–Munk continuum as the ocean signal
+We now analyze the SWOT spectral slope behavior when
+we use the Garrett–Munk continuum (GM, Garrett and
+Munk (1972)) as the ocean signal. SWOT might resolve
+parts of the GM spectrum for certain times and locations,
+though the magnitude of the associated SSH signature re-
+mains highly uncertain (Samelson and Farrar 2024, and
+references therein). We prescribe the two-dimensional
+GM spectra to be proportional to eq.(22) and eq.(24) of
+Samelson and Farrar (2024):
+|𝐾| 2
+(|𝐾| 2 +𝐶) 2
+1
+|𝐾| ,(2)
+where𝐶is a constant that determines the wavenumber of
+the spectral maximum (Samelson and Farrar 2024, Fig. 2),
+|𝐾|is the magnitude of the wavenumber vector, and the
+1/|𝐾|factor accounts for the conversion from the isotropic
+spectra to the two-dimensional spectra. The spectral shape
+is admittedly too simple, as it corresponds to the SSH
+spectrum for one vertical mode. It is nevertheless adequate
+for our purposes, since our primary interest is in the power-
+law behavior at high wavenumbers. To account for the
+uncertainty in our understanding of the SSH manifestation
+of the GM continuum, we consider spectral amplitudes
+scaled by factors of 1, 3, 10, and 30, roughly equidistant in
+log space. The dotted lines in Fig. 3 show the along-track
+spectra of the synthetic GM-like signal and noise separately
+with no filtering (250-m posting data) (Samelson and Farrar
+2024, Fig. 3). As a visual reference, the SWOT prelaunch
+noise requirement is also added in solid gray (Samelson
+and Farrar 2024, eq. (15)). At large scales, the along-
+track spectra are white, differing from the blue behavior
+in the isotropic GM spectra shown in Samelson and Farrar
+(2024), Fig. 2a. This is due to the superposition of multiple
+waves propagating in directions different from the along-
+track direction, as discussed in Samelson and Farrar (2024).
+This difference between the isotropic spectra and along-
+track spectra is another example of how along-track spectra
+can significantly distort the two-dimensional picture. The
+along-track spectra recover a𝑘 −2 spectral slope for scales
+smaller than 100 km, consistent with the GM prediction,
+as shown by the colored dotted lines in Fig. 3. We choose
+the noise level corresponding to a SWH value of 3 m, as
+shown by the black dotted line in Fig. 3. However, this
+set of experiments implicitly explores other noise levels,
+since the results only depend on the relative magnitude of
+the ocean dynamical signal to the noise floor.
+The along-track spectra of the 2-km posting product,
+produced after two-dimensional Hamming filtering, are
+shown as solid and dashed colored lines in Fig. 3. The total
+(GM plus noise) spectra (solid lines) show spectral slopes
+steeper or shallower than−2, depending on the relative
+strength of the GM continuum and the noise. The black
+dashed line is the noise floor in the 2-km posting product.
+We clearly see the effect of the aliasing producing a𝑘 −1
+spectrum for scales between 4 km and 8 km.
+However, our experiments show that a𝑘 −2 behavior
+does notnecessarily imply a GM continuum. When the
+along-track spectra of the GM continuum are examined in
+the absence of noise (colored dashed lines), they do not
+exhibit a clear power-law regime, and can be considerably
+steeper at high wavenumbers. We therefore caution against
+interpreting a𝑘 −2 slope in SWOT 2-km along-track spectra
+as a direct signature of the GM continuum.
+3. Conclusion and recommendations
+We reproduced along-track spectra with slopes at small
+scales (𝑂(<30km)) close to or steeper than−1 using three
+ingredients: a steep large-scale spectrum, two-dimensional
+spatially uncorrelated (white) noise, and standard SWOT
+2-km filtering and posting. Our analyses show that a lower
+noise level relative to the ocean signal produces steeper
+apparent slopes at small-scales (Fig. 1, 2, and 3), consistent
+with analyses of observed SWOT 2-km along-track spectra
+(Zhang and Callies 2025; Kachelein et al. 2025).
+These noise-model experiments (Fig. 1) help to clarify
+the interpretation of SWOT data. Red along-track spectra
+at small-scales should not, by themselves, imply red spectra
+in two dimensions. Rather, they can result from white two-
+dimensional noise, through two-dimensional Hamming fil-
+tering, aliasing due to the 2-km posting, and the compu-
+tation of one-dimensional along-track spectra from the fil-
+tered two-dimensional field, as it is common practice for
+spectral analysis of SWOT data. Compared to studies that
+model SWOT noise as red in two dimensions, our inter-
+pretation is more consistent with current understanding of
+SWOT measurement noise and the SWOT 250-m posting
+data (Peral et al. 2024; Huang and Wang 2026). While
+this is not the only mechanism to produce red spectra at
+small-scales, we suggest the outlined noise model as a
+baseline null hypothesis, against which interpretations of
+ocean physics in SWOT data should be based when analyz-
+ing one-dimensional spectra from two-dimensional filtered
+data.5
+10□1
+Along-track wavenumber (cpkm)
+10□1
+100
+101
+102
+Power spectral density (cm2 cpkm□1)
+k□1
+k□1.5
+30 km 6 km
+Along-track spectra for 5 km cross-track strips
+20 40
+Cross-track distance
+from nadir (km)
+Fig.2. Along-track spectra of the 2-km posting product with cross-track-varying noise in 5 km cross-track slices. The prescribed noise follows
+the SWH=4 m case in Fig. 30a of Peral et al. (2024). There are nine lines in total since we do not use the edge 2.5 km, where the Hamming filter
+needs padded data.
+10□2 10□1 100
+Along-track wavenumber (cpkm)
+10□2
+10□1
+100
+101
+102
+103
+Power spectral density (cm2 cpkm□1)
+k□2
+k□1
+30 km 6 km
+250-m noise ﬂoor
+2-km noise ﬂoor
+Along-track spectra with GM continuum
+250-m: GM only
+2-km: GM only
+2-km: GM+noise
+SWOT prelauch noise requirement
+Fig.3. Along-track spectra for experiments using the Garrett–Munk (GM) spectra as the ocean-signal. We include white noise corresponding
+to SWH of 3 m. The colors represent different (artificial) GM levels, with the spectral magnitudes scaled by a factor of 3, 10, and 30 relative to
+the lowest level (light to dark green). The gray solid line shows the SWOT prelaunch noise requirement as a visual reference. All dotted lines are
+along-track spectra of the 250-m posting data before Hamming filtering. The colored dotted lines show the GM-only part, and the black dotted lines
+show the noise-only part. All solid and dashed lines are along-track spectra of the 2-km posting data after two-dimensional Hamming filtering.
+The colored dashed lines show the GM-only spectra, the black dashed line shows the noise-only spectra, and the colored solid lines show the total
+spectra (GM plus noise).
+In conclusion, our results call for caution when interpret-
+ing one-dimensional along-track spectra at scales smaller
+than 30 km. Because the apparent noise floorandslope
+depend strongly on the two-dimensional filter applied, it
+might be beneficial to use two-dimensional diagnostics on
+theunsmoothed250-m product when targeting sub-30 km
+signals. Careful modeling of the SWOT noise has direct
+implications for optimization and machine-learning stud-
+ies (Xiao et al. 2023; Tr´eboutte et al. 2023; Bertrand et al.
+2026). The SSH noise model sets key likelihood weights
+(Wunsch 1996; Stein 1999) and hence has a substantial
+impact on the output.6
+Finally, a global time-varying prediction of the noise-
+driven slope still requires better constraints on both ocean
+signal variability and SWOT’s (linear and nonlinear) noise
+amplitude, which is correlated with properties of ocean sur-
+face waves (Peral et al. 2015; Wang et al. 2019; Boh´e 2023;
+Peral et al. 2024; Huang and Wang 2026). The SWH ob-
+served from SWOT shows substantial submesoscale vari-
+ability in the sea state, driven by wave-current interactions,
+surface winds, and wave groups (Villas Bˆoas et al. 2025).
+Sea state variability might manifest as variability in SWOT
+SSH noise, potentially at meso– and submesoscales. In
+particular, the spectral convolution in the non-linear noise
+model of Peral et al. (2015) is related to wave groups and the
+surface envelope spectrum (De Carlo et al. 2023). The in-
+fluence of wave-current interactions suggests that the mag-
+nitude of SSH noise may be correlated with the true SSH
+signal at submesoscales. Future work could explore using
+two-dimensional SWOT observations of SWH to inform
+SSH measurement noise, with particular focus on meso–
+and submesoscale variability (Boh´e et al. 2025).7
+Acknowledgments.We thank Tatsu Monkman for sus-
+tained discussion about SWOT SSH noise. We also ac-
+knowledge Tom Farrar, Jinbo Wang, and Shafer Smith for
+providing feedback on draft versions of this paper. We
+do not imply their endorsement. RSD, LL, MH, and
+ABVB are supported by NASA award 80NSSC24K1647
+through the SWOT Science Team. ABVB received ad-
+ditional support from the ONR MURI program (Grant
+N00014-24-1-2554). LL received support from NASA
+award 80NSSC23K0985. AI tools have been used for de-
+veloping the software used in this paper. The authors are
+fully responsible for the scientific content and integrity of
+this paper.
+Data availability statement.The code for the experi-
+ments of this paper is available athttps://github.com/
+Empyreal092/SWOT_noise_1D2D. A final version of the
+code will be released with a DOI upon acceptance.
+References
+Archer, M., J. Wang, P. Klein, G. Dibarboure, and L.-L. Fu, 2025:
+Wide-swath satellite altimetry unveils global submesoscale ocean
+dynamics.Nature,640 (8059), 691–696, https://doi.org/10.1038/
+s41586-025-08722-8.
+Ardhuin, F., B. Molero, A. Boh´e, F. Nouguier, F. Collard, I. Houghton,
+A. Hay, and B. Legresy, 2024: Phase-Resolved Swells Across Ocean
+Basins in SWOT Altimetry Data: Revealing Centimeter-Scale Wave
+Heights Including Coastal Reflection.Geophysical Research Letters,
+51 (16), e2024GL109 658, https://doi.org/10.1029/2024GL109658.
+Bertrand, V., J. Le Sommer, V. Vianna Zaia De Almeida, A. Samson,
+and E. Cosme, 2026: A robust minimization-based framework for cy-
+clogeostrophic ocean surface current retrieval.Ocean Science,22 (1),
+241–255, https://doi.org/10.5194/os-22-241-2026.
+Boh´e, A., 2023: A complete theoretical derivation of the level of ran-
+dom height noise in interferometric unfocused SAR swath altimetry.
+IEEE Transactions on Geoscience and Remote Sensing,61, 1–29,
+https://doi.org/10.1109/TGRS.2023.3290850.
+Boh´e, A., and Coauthors, 2025: Measuring Significant Wave Height
+fields in two dimensions at kilometric scales with SWOT.IEEE Trans-
+actions on Geoscience and Remote Sensing, 1–1, https://doi.org/
+10.1109/TGRS.2025.3551605.
+B¨ uhler, O., J. Callies, and R. Ferrari, 2014: Wave–vortex decomposition
+of one-dimensional ship-track data.Journal of Fluid Mechanics,756,
+1007–1026, https://doi.org/10.1017/jfm.2014.488.
+Charney, J. G., 1971: Geostrophic Turbulence.Journal of the At-
+mospheric Sciences,28 (6), 1087–1095, https://doi.org/10.1175/
+1520-0469(1971)028⟨1087:GT⟩2.0.CO;2.
+Chelton, D. B., 2024: A Postlaunch Update on the Effects of Instrumen-
+tal Measurement Errors on SWOT Estimates of Sea Surface Height,
+Velocity, and Vorticity.Journal of Atmospheric and Oceanic Technol-
+ogy,41 (9), 865–888, https://doi.org/10.1175/JTECH-D-24-0035.1.
+Chelton, D. B., R. M. Samelson, and J. T. Farrar, 2022: The Ef-
+fects of Uncorrelated Measurement Noise on SWOT Estimates
+of Sea Surface Height, Velocity, and Vorticity.Journal of Atmo-
+spheric and Oceanic Technology,39 (7), 1053–1083, https://doi.org/
+10.1175/JTECH-D-21-0167.1.
+Chelton, D. B., M. G. Schlax, R. M. Samelson, J. T. Farrar, M. J.
+Molemaker, J. C. McWilliams, and J. Gula, 2019: Prospects for
+future satellite estimation of small-scale variability of ocean surface
+velocity and vorticity.Progress in Oceanography,173, 256–350,
+https://doi.org/10.1016/j.pocean.2018.10.012.
+De Carlo, M., F. Ardhuin, A. Ollivier, and A. Nigou, 2023: Wave Groups
+and Small Scale Variability of Wave Heights Observed by Altimeters.
+Journal of Geophysical Research: Oceans,128 (8), e2023JC019 740,
+https://doi.org/10.1029/2023JC019740.
+D` u, R. S., K. S. Smith, and O. B¨ uhler, 2025: Next-Order Bal-
+anced Model Captures Submesoscale Physics and Statistics.Jour-
+nal of Physical Oceanography,55 (10), 1679–1697, https://doi.org/
+10.1175/JPO-D-24-0146.1.
+Dutykh, D., 2016: arXiv:1606.05432. A brief introduction to
+pseudo-spectral methods: Application to diffusion problems. arXiv,
+https://doi.org/10.48550/arXiv.1606.05432.
+Garrett, C., and W. Munk, 1972: Space-Time scales of internal
+waves.Geophysical Fluid Dynamics,3 (3), 225–264, https://doi.org/
+10.1080/03091927208236082.
+Held, I. M., R. T. Pierrehumbert, S. T. Garner, and K. L. Swanson, 1995:
+Surface quasi-geostrophic dynamics.Journal of Fluid Mechanics,
+282, 1–20, https://doi.org/10.1017/S0022112095000012.
+Huang, M., and J. Wang, 2026: A post-launch assessment of the noise
+level of the 2 Ka-band Radar Interferometer from SWOT. submitted.
+Kachelein, L., and Coauthors, 2025: Sub-100 km Ocean Processes
+Revealed by Structure Functions of SWOT Sea Surface Height and In
+Situ Observing Network.Journal of Geophysical Research: Oceans,
+130 (11), e2025JC022 639, https://doi.org/10.1029/2025JC022639.
+McWilliams, J. C., 2016: Submesoscale currents in the ocean.Proceed-
+ings of the Royal Society A: Mathematical, Physical and Engineering
+Sciences,472 (2189), 20160 117, https://doi.org/10.1098/rspa.2016.
+0117.
+Peral, E., 2021: KaRIn: Ka-band Radar Interferometer On-Board Pro-
+cessor (OBP) Algorithm Theoretical Basis Document (ATBD). Tech.
+Rep. D-79130, Revision B, JPL.
+Peral, E., E. Rodr´ıguez, and D. Esteban-Fern´andez, 2015: Impact of Sur-
+face Waves on SWOT’s Projected Ocean Accuracy.Remote Sensing,
+7 (11), 14 509–14 529, https://doi.org/10.3390/rs71114509.
+Peral, E., and Coauthors, 2024: KaRIn, the Ka-Band Radar Interfer-
+ometer of the SWOT Mission: Design and in-Flight Performance.
+IEEE Transactions on Geoscience and Remote Sensing,62, 1–27,
+https://doi.org/10.1109/TGRS.2024.3405343.
+Samelson, R. M., and J. T. Farrar, 2024: Models of the Sea Sur-
+face Height Expression of the Internal-Wave Continuum.Journal
+of Physical Oceanography,54 (10), 2099–2117, https://doi.org/
+10.1175/JPO-D-23-0178.1.
+Stein, M. L., 1999:Interpolation of Spatial Data. Springer Se-
+ries in Statistics, Springer, New York, NY, https://doi.org/10.1007/
+978-1-4612-1494-6.
+Tr´eboutte, A., E. Carli, M. Ballarotta, B. Carpentier, Y. Faug `ere, and
+G. Dibarboure, 2023: KaRIn noise reduction using a convolutional
+neural network for the SWOT ocean products.Remote Sensing,15 (8),
+2183, https://doi.org/10.3390/rs15082183.
+Villas B ˆoas, A. B., L. Lenain, B. D. Cornuelle, S. T. Gille, and
+M. R. Mazloff, 2022: A Broadband View of the Sea Surface8
+Height Wavenumber Spectrum.Geophysical Research Letters,49 (4),
+e2021GL096 699, https://doi.org/10.1029/2021GL096699.
+Villas B ˆoas, A. B., G. Marechal, and A. Boh ´e, 2025: Observing In-
+teractions Between Waves, Winds, and Currents From SWOT.Geo-
+physical Research Letters,52 (17), e2024GL114 331, https://doi.org/
+10.1029/2024GL114331.
+Wang, J., L.-L. Fu, H. S. Torres, S. Chen, B. Qiu, and D. Menemenlis,
+2019: On the Spatial Scales to be Resolved by the Surface Water
+and Ocean Topography Ka-Band Radar Interferometer.Journal of
+Atmospheric and Oceanic Technology,36 (1), 87–99, https://doi.org/
+10.1175/JTECH-D-18-0119.1.
+Wunsch, C., 1996:The Ocean Circulation Inverse Problem.
+Cambridge University Press, Cambridge, https://doi.org/10.1017/
+CBO9780511629570.
+Xiao, Q., D. Balwada, C. S. Jones, M. Herrero-Gonz ´alez, K. S. Smith,
+and R. Abernathey, 2023: Reconstruction of Surface Kinemat-
+ics From Sea Surface Height Using Neural Networks.Journal of
+Advances in Modeling Earth Systems,15 (10), e2023MS003 709,
+https://doi.org/10.1029/2023MS003709.
+Yaglom, A. M., 1987:Correlation Theory of Stationary and Related
+Random Functions: Volume I: Basic Results. Springer New York.
+Zhang, X., and J. Callies, 2025: Assessing Submesoscale Sea Surface
+Height Signals From the SWOT Mission.Journal of Geophysical
+Research: Oceans,130 (10), e2025JC022 879, https://doi.org/10.
+1029/2025JC022879.

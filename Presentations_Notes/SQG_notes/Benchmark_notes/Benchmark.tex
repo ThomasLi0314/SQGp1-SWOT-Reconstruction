@@ -1,0 +1,110 @@
+\documentclass[../SQG_notes.tex]{subfiles}
+
+
+\begin{document}
+    \section{Benchmark}
+
+    \subsection{Version 2}
+    I design the following groups of perturbation to test the SQG+1 model. Just to recall, from the SQG simulation obtain 
+    \[ \eta_{qg} = \phi^0_{qg}\]
+    The target field is constructed by 
+    \[ \eta_{tar} = \eta_{qg} + \epsilon\mcalN(\phi^0_{qg})\]
+    Which is essentially QG field adding the cyclogeostrophic adjustment. QG simulation is just a source for a physical streamfunction. The observed field is 
+    \[ \eta_{obs} = \eta_{tar} + \eta_{per}\]
+    Where $\eta_{per} \sim O(\epsilon)$ is the observation error, I design several types of perturbations.
+    All perturbations are normalized so that the RMS of the perturbation matches the Rossby number times the RMS of the target field:
+    \[ \text{rms}(\eta_{per}) = \epsilon \cdot \text{rms}(\eta_{tar}) \]
+    Before normalization, the spatial mean is removed to avoid a DC offset. Given an unnormalized perturbation $\eta_{per}$, the final perturbation is
+    \[ \eta_{per} = \frac{\epsilon \cdot \text{rms}(\eta_{tar})}{\text{rms}(\eta_{per} - \langle \eta_{per} \rangle)} \left(\eta_{per} - \langle \eta_{per} \rangle \right) \]
+    where $\langle \cdot \rangle$ denotes the spatial mean. This ensures every benchmark case starts with the same cost function value, so the comparison isolates the \emph{structure} of the perturbation rather than its amplitude.
+
+    \subsubsection*{Next Step}
+    Currnetly, the scale of the perturbation is same as the cyclogeostrophic adjustment. That is 
+    \[ \mcalO(\eta_{per}) = \mcalO(\text{Ro})\]
+    What I should actually do is seperate the scale of them two : 
+    \begin{itemize}
+        \item Compute the system Rossby number : 
+        \[ \epsilon = \text{Ro}_{sys} = \frac{\langle u \rangle}{f L_d}\]
+        Where $\langle u \rangle$ computes the mean veloctiy as the characteristic velocity scale and $L_d$ is the deformation radius.
+        \item Compute the Rossby number scale for the perturbation : 
+        \[ \text{Ro} = \frac{\xi_{rms}}{f}\]
+    \end{itemize}
+    In the simulation setup, fix $\epsilon$ based on the field. Alter the $\text{Ro}$ to test influence of the scale of the perturbation. $\text{Ro}$ can even be larger than $1$. 
+
+    \subsubsection{Group A: Structure-correlated perturbations}
+    These perturbations are deterministic and spatially correlated with the SQG field.
+    \begin{itemize}
+        \item \textbf{A1 --- Zero perturbation (control).} Just nothing, the initial loss function for this case should be machine precision. 
+
+        \item \textbf{A2 --- Frontogenesis-correlated.} Proportional to $|\nabla \psi|^2$, which is large at fronts and strain regions:
+        \[ \eta_{per} = \left(\frac{\partial \psi}{\partial x}\right)^2 + \left(\frac{\partial \psi}{\partial y}\right)^2 \]
+        where the derivatives are computed spectrally:
+        $\widehat{\psi_x} = i k_x \hat{\psi}$, \quad $\widehat{\psi_y} = i k_y \hat{\psi}$.
+
+        \item \textbf{A3 --- Vorticity-aligned.} Proportional to the SQG surface relative vorticity $\zeta = -\nabla^2 \psi$:
+        \[ \eta_{per} = \zeta\]
+        This perturbation is strong inside vortex cores.
+    \end{itemize}
+
+    \subsubsection{Group B: Inertia--gravity waves}
+    These perturbations mimic the balanced--unbalanced superposition common in altimetric observations.
+    \begin{itemize}
+        \item \textbf{B1 --- Monochromatic plane wave.} A single plane wave with wavenumber $k_0 = 10$ and propagation direction $\theta = \pi/4$:
+        \[ \eta_{per} = \cos\!\bigl(k_0 (\cos\theta\, x + \sin\theta\, y)\bigr) \]
+
+        \item \textbf{B2 --- IGW wave packet.} A superposition of $N = 8$ plane waves with wavenumbers spanning mesoscale to submesoscale ($k_n \in \{5, 7, 10, 12, 15, 20, 25, 30\}$), uniformly spaced directions $\theta_n = n\pi / N$, and random phases $\varphi_n \sim \mathcal{U}(0, 2\pi)$:
+        \[ \eta_{per} = \frac{1}{N} \sum_{n=1}^{N} \cos\!\bigl(k_n (\cos\theta_n\, x + \sin\theta_n\, y) + \varphi_n\bigr) \]
+    \end{itemize}
+
+    \subsubsection{Group C: Stochastic noise}
+    These perturbations are built from white noise $\hat{w}(\mathbf{k}) = \mathcal{F}\{w(x,y)\}$ where $w \sim \mathcal{N}(0,1)$, shaped spectrally to select different wavenumber bands.
+    \begin{itemize}
+        \item \textbf{C1 --- Small Scale High k noise.} White noise restricted to $K > K_{cut}$
+        \[ \hat{\eta_{per}}(\mathbf{k}) = \begin{cases} \hat{w}(\mathbf{k}), & K > K_{cut} \\ 0, & \text{otherwise} \end{cases} \]
+        Note that high-wavenumber correspond to small scale.
+
+        \item \textbf{C2 --- Large Scale Low k noise.} White noise restricted to $K < K_{cut}$, with the DC component zeroed:
+        \[ \hat{\eta_{per}}(\mathbf{k}) = \begin{cases} \hat{w}(\mathbf{k}), & 0 < K < K_{cut} \\ 0, & \text{otherwise} \end{cases} \]
+
+        \item \textbf{C3 --- Red noise ($K^{-2}$ energy spectrum).} White noise multiplied by $K^{-1}$ in spectral space, producing an energy spectrum $\propto K^{-2}$:
+        \[ \hat{\eta_{per}}(\mathbf{k}) = \frac{\hat{w}(\mathbf{k})}{K}, \qquad K > 0; \qquad \hat{\eta_{per}}(\mathbf{0}) = 0 \]
+    \end{itemize}
+
+    \subsubsection{Group E: SWOT-like instrument and geometry errors}
+    These perturbations emulate error patterns characteristic of the SWOT satellite altimeter.
+    \begin{itemize}
+        \item \textbf{E1 --- KaRIn-like anisotropic noise.} White noise shaped by an anisotropic power spectral density that decorrelates faster in the cross-track direction ($y$) than along-track ($x$). With decorrelation wavenumber $k_c = 10$:
+        \[ \hat{\eta_{per}}(k_x, k_y) = \frac{\hat{w}(k_x, k_y)}{\sqrt{1 + (k_y / k_c)^2}}, \qquad \hat{\eta_{per}}(\mathbf{0}) = 0 \]
+        The amplitude transfer function suppresses high cross-track wavenumbers while leaving along-track wavenumbers unfiltered, reproducing the spectral anisotropy of KaRIn interferometer baseline errors.
+
+        % \item \textbf{E2 --- Roll-error proxy.} Mimics residual antenna roll error as a slowly-varying along-track function $\alpha(x)$ Based on a white noise spectrum with a defined spectral slope, we investigated the impact on optimization by applying various cutoff frequenciesmultiplied by the lowest cross-track cosine mode:
+        % \[ \eta_{per}(x,y) = \alpha(x) \cdot \cos\!\left(\frac{2\pi\, n_\perp\, y}{L_y}\right) \]
+        % where $n_\perp = 1$ (one wavelength across the swath) and $\alpha(x)$ is constructed from $M = 3$ low-frequency along-track wavenumbers with random amplitudes $a_m \sim \mathcal{N}(0,1)$ and phases $\varphi_m \sim \mathcal{U}(0, 2\pi)$:
+        % \[ \alpha(x) = \sum_{m=1}^{M} a_m \cos\!\left(\frac{2\pi\, m\, x}{L_x} + \varphi_m\right) \]
+        % The result is concentrated at low $k_x$ ($\leq M$) and a single $k_y = n_\perp$, the spectral fingerprint of a roll error.
+    \end{itemize}
+
+    \subsection{Version 4}
+    In this version, we implement the noise model introduced by D\`u et al. (2026), which demonstrates that the power-law (red) spectra observed in small-scale along-track SWOT data are an artifact of the instrumental data processing pipeline rather than inherently red measurement noise. 
+    
+    To accurately mimic this signature, the perturbation simulates the physical processing of the satellite observations. First, spatially uncorrelated two-dimensional white Gaussian noise $\eta_{\text{HR}}$ is generated on a high-resolution grid representing the 250-m posting:
+    \begin{equation}
+        \eta_{\text{HR}}(x, y) \sim \mathcal{N}(0, \sigma^2)
+    \end{equation}
+    where the variance $\sigma^2$ corresponds to the expected SWOT noise level. 
+    
+    Next, this field is convolved with a two-dimensional Hamming filter $H(x,y)$ (replicating the 17-point filter with a 6.28~km cutoff used in SWOT processing):
+    \begin{equation}
+        \tilde{\eta}_{\text{HR}}(x, y) = (\eta_{\text{HR}} * H)(x, y)
+    \end{equation}
+    
+    Finally, the filtered field is subsampled (aliased) onto the coarser 2-km target grid $\eta_{\text{LR}}$ by taking every $M$-th point in both dimensions, where $M = \Delta x_{\text{LR}} / \Delta x_{\text{HR}} = 8$:
+    \begin{equation}
+        \eta_{\text{LR}}(i, j) = \tilde{\eta}_{\text{HR}}(Mi, Mj)
+    \end{equation}
+    This discrete sampling of the filtered white noise naturally reproduces the steepened spectral slopes characteristic of the along-track measurements.
+
+    \subsection{Setup of the Benchmark}
+    Fix the number of iteration after stop, compare the final loss and the inversion error. 
+
+\end{document}
