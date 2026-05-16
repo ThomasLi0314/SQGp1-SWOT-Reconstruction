@@ -23,3 +23,8 @@ Simulation_Results/
 *.mp4
 *.png
 *.npz
+
+# =======================
+# Claude Code
+# =======================
+.claude/
